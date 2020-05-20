@@ -1,0 +1,37 @@
+table, #pager
+{
+	border-spacing:0px;
+	margin-left: 10%;
+}
+
+table
+{
+	border: 0px;
+}
+
+th
+{
+	border-width: 2px;
+	border-style: outset;
+	background-color: silver;
+}
+
+#pager a
+{
+	margin-left: 3px;
+}
+
+#pager a:hover, tbody tr:hover
+{
+	background-color: silver;
+}
+
+th a:hover, tbody td:hover
+{
+	background-color: gray;
+}
+
+tfoot tr, tfoot td
+{
+	border-style: none;
+}

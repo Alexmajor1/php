@@ -1,0 +1,19 @@
+#RegForm
+{
+	width: max-content;
+	margin-top: 20%;
+	margin-left: 43%;
+}
+
+#RegForm *
+{
+	margin-top: 2px;
+}
+
+.SendButton
+{
+	display: flex;
+	width: inherit;
+	align-self: center;
+	font-size: 12px;
+}

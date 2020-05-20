@@ -1,0 +1,41 @@
+/* modules */
+@import "modules/table.css";
+@import "modules/menu.css";
+/* pages */
+@import "pages/main.css";
+@import "pages/registration.css";
+@import "pages/cabinet.css";
+/* main */
+p
+{
+	font-size: 16px;
+}
+
+.flex-row
+{
+	display: flex;
+	flex-direction:row;
+	margin-bottom:10px;
+}
+
+.flex-col
+{
+	display: flex;
+	flex-direction:column;
+}
+
+#content
+{
+	width: auto;
+	height: auto;
+}
+
+.margin
+{
+	margin: 0px;
+}
+
+.mt20
+{
+	margin-top: 20px;
+}
