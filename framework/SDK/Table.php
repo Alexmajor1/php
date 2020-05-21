@@ -5,10 +5,14 @@ class Table
 {
 	public $html;
 	private $db;
+	private $cfg;
+	private $path;
 	
-	function __construct($value, $db)
+	function __construct($value, $db, $cfg)
 	{
+		$this->cfg = $cfg;
 		$this->db = $db;
+		$this->path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template');
 		if(key_exists('fields', $value))
 			$data = $this->tableDB($value);
 		else
@@ -20,6 +24,7 @@ class Table
 				'rowCount' => $data[1]
 			]);
 		$this->html = $value;
+		
 	}
 	
 	function tableArr($value)
@@ -46,11 +51,16 @@ class Table
 		if(!empty($head_sort))
 			$value['rows'] = $this->tableArrSort($value['rows'], $head_sort);
 		
+		$file = fopen($this->path.'/modules/tableHeader.html', "r");
+		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
+		
 		foreach($value['headers'] as $key => $val)
-		{
-			if(count($head_sort) == 0)
-				$str .= "<th><a href = \"$pageLink&$key=desc\">$val</a></th>\n";
-			else{
+		{			
+			$html1 = $html;
+			if(count($head_sort) == 0){
+				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc", $val], $html1);
+				$str .= $html1."\n";
+			}else{
 				$str1 = '';
 				foreach($value['headers'] as $key1 => $val1)
 				{
@@ -77,7 +87,8 @@ class Table
 						}
 					}
 				}
-				$str .= "<th><a href = \"$pageLink$str1\">$val</a></th>\n";
+				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, $str1, $val], $html1);
+				$str .= $html1."\n";
 			}
 		}
 		
@@ -89,21 +100,34 @@ class Table
 		$end = $num*$value['pager']['pageSize'];
 		$start = $end-$value['pager']['pageSize'];
 		
+		$file1 = fopen($this->path.'/modules/tableRow.html', "r");
+		$html1 = fread($file1, filesize($this->path.'/modules/tableRow.html'));
+		
+		$file2 = fopen($this->path.'/modules/tableCol.html', "r");
+		$html2 = fread($file2, filesize($this->path.'/modules/tableCol.html'));
+		
+		$str = '';
 		for($i=$start;$i<$end;$i++)
 		{
 			$row = $value['rows'][$i];
-			$str .= "<tr>\n";
-			
+			$str1 = '';
 			foreach($row as $val)
 			{
 				if(!is_array($val)) 
 				{
-					$str .= "<td>$val</td>\n";
+					$html21 = $html2;
+					$html21 = str_ireplace('{value}', $val, $html21);
+					
+					$str1 .= "$html21\n";
 				} else {
 					$this->fields($val);
 				}
 			}
-			$str .= "<tr>\n";
+			$html11 = $html1;
+			$html11 = str_ireplace('{cols}', $str1, $html11);
+			
+			$str .= "$html11\n";
+			
 		}
 		$count = sizeof($value['rows']);
 		$value['rows'] = $str;
@@ -140,19 +164,26 @@ class Table
 		
 		$rows = $this->db->DataQuery($sql);
 		
+		$file = fopen($this->path.'/modules/tableHeader.html', "r");
+		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
+		
 		if(!key_exists('headers', $value[$value['mode']]))
 		{
 			$tmp = $this->db->FieldsDescriptors();
 			foreach($tmp as $val)
 			{
+				$html1 = $html;
+				$html1 = str_ireplace([/*'{pageLink}', '{sort}',*/'{value}'], [/*$pageLink, "&$key=desc",*/$val], $html1);
 				$val1 = $val->name;
 				$value['headers'] = $val1;
-				$str .= "<th>$val1</th>";
+				$str .= $html1;
 			}
 		} else {
 			foreach($value[$value['mode']]['headers'] as $val)
 			{
-				$str .= "<th>$val</th>";
+				$html1 = $html;
+				$html1 = str_ireplace([/*'{pageLink}', '{sort}',*/'{value}'], [/*$pageLink, "&$key=desc",*/ $val], $html1);
+				$str .= $html1;
 			}
 		}
 		$req = new Request(null);
@@ -169,19 +200,34 @@ class Table
 			$sql .= " limit $page";
 		}
 		$value['headers'] = $str;
+		
+		$file1 = fopen($this->path.'/modules/tableRow.html', "r");
+		$html1 = fread($file1, filesize($this->path.'/modules/tableRow.html'));
+		
+		$file2 = fopen($this->path.'/modules/tableCol.html', "r");
+		$html2 = fread($file2, filesize($this->path.'/modules/tableCol.html'));
+		
 		$str = '';
 		foreach($rows as $id => $row)
 		{
-			$str .= '<tr>';
+			$str1 = '';
 			foreach($row as $key => $val)
 			{
 				$cell = $val;
+				
 				if($value[$value['mode']]['types']){
 					$cell = $this->fieldsDB(['value' => $val, 'id' => $id, 'key' => $key, 'type' => $value[$value['mode']]['types'][$key]]);
 				}
-				$str .= "<td>$cell</td>\n";
+				
+				$html21 = $html2;
+				$html21 = str_ireplace('{value}', $cell, $html21);
+				
+				$str .= "$html21\n";
 			}
-			$str .= '</tr>';
+			$html11 = $html1;
+			$html11 = str_ireplace('{cols}', $str1, $html11);
+			
+			$str .= "$html11\n";
 		}
 		$value['rows'] = $str;
 		$count = sizeof($rows);
@@ -193,12 +239,17 @@ class Table
 		$req = new Request();
 		$type = $data['type'];
 		
+		if($type['name'] != 'text') {
+			$file = fopen($this->path.'/modules/'.$type['name'].'.html', "r");
+			$html = fread($file, filesize($this->path.'/modules/'.$type['name'].'.html'));
+		}
+		
 		switch($type['name']) {
 			case 'text': $res = $data['value'];break;
 			case 'link': {
-				$res = '<a href = "'.$req->get('alias').$data['type']['url'].$data['id'].'">'.$data['value'].'</a>';
+				$res = str_ireplace(['{target}','{name}'], [$req->get('alias').$data['type']['url'].$data['id'],$data['value']], $html);
 				}break;
-			case 'image': $res = '<img src = "'.$data['value'].'">';break;
+			case 'image': $res = str_ireplace('{link}', $data['value'], $html);break;
 		}
 		
 		return $res;
@@ -214,6 +265,12 @@ class Table
 		
 		if($pageCount == 1) return '';
 		
+		$file1 = fopen($this->path.'/modules/tablePager.html', "r");
+		$html1 = fread($file1, filesize($this->path.'/modules/tablePager.html'));
+		
+		$file2 = fopen($this->path.'/modules/link.html', "r");
+		$html2 = fread($file2, filesize($this->path.'/modules/link.html'));
+		
 		$str = '<div id="pager" class="block">';
 		$pageLink = '';
 		
@@ -228,9 +285,15 @@ class Table
 		}
 		 
 		for($i=1;$i<=$pageCount;$i++)
-			$str .= "<a href=\"$pageLink&page=$i\">$i</a>";
+		{
+			$html21 = $html2;
+			$html21 = str_ireplace(['{target}','{name}'], ["$pageLink&page=$i",$i], $html21);
+			$str .= $html21;
+		}
+		$html11 = $html1;
+		$html11 = str_ireplace('{pagesLinks}', $str, $html11);
 		
-		return $str.'</div>';
+		return $html11;
 	}
 	
 	function tableArrSort($rows, $sort)

@@ -165,7 +165,7 @@ class Loader
 	
 	function table($value)
 	{
-		$table = new Table($value, $this->db);
+		$table = new Table($value, $this->db, $this->cfg);
 		return $table->html;
 	}
 	
