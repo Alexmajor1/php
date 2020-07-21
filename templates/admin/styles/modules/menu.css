@@ -1,0 +1,15 @@
+ol
+{
+	list-style-type: none;
+	background-color: silver;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+li:hover
+{
+	background-color: gray;
+	font-weight: bold;
+}

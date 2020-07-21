@@ -8,6 +8,8 @@ class AdminController extends Controller
 {
 	function main()
 	{
+		$this->addConfig(['site_template', 'admin']);
+		
 		$settings = $this->getProperty('session');
 		
 		$sess = new Session($this->db, $settings);
