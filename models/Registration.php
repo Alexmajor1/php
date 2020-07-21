@@ -7,11 +7,13 @@ class Registration
 	private $password;
 	private $role;
 	private $model;
+	private $db;
 	
-	function __construct($data)
+	function __construct($db, $data)
 	{
 		$this->model = new User($db);
-		$this->user = $data['user'];
+		$this->db = $db;
+		$this->user = $data['login'];
 		$this->password = $data['password'];
 		$this->role = $data['role'];
 	}
@@ -56,18 +58,18 @@ class Registration
 		return 'ok';
 	}
 	
-	function execute($db)
+	function execute()
 	{
 		if($this->CheckUser()) return 'this login is not available';
 		if($res = $this->CheckPassword() !== 'ok') return $res;
 		
-		$role = new Role(this->db);
-		$role_id = $role->read(['id_role'], ['role_name' => $this->role])[0];
+		$role = new Role($this->db);
+		$role_id = $role->read(['id_Role'], ['role_name' => $this->role])[0];
 		
 		return $this->model->create([
 					'user_name' => $this->user, 
 					'user_password' => md5($this->password), 
-					'user_role' => $role_id['id_role']
+					'user_role' => $role_id[0]
 				]);
 	}
 }

@@ -22,7 +22,8 @@ class MainController extends Controller
 			$sess->create();
 			$this->toPage('cabinet');
 		}
-		if($this->page->name == 'authorization' and $req->post('User'))
+		
+		if((strcmp($this->page->name, 'authorization') == 0) and $req->post('User'))
 		{
 			$valid = new Validator($req->post());
 			
@@ -43,11 +44,14 @@ class MainController extends Controller
 			{
 				$sess = new Session($this->db, $this->getProperty('session'), $auth->user);
 				$sess->create();
-				if($sess->getRole() == 'Admin')
+				
+				if(strcmp($sess->getRole(), 'Admin') == 0)
 				{
 					$this->toPage('admin/main');
 				}
-				else $this->toPage('cabinet');
+				else{
+					$this->toPage('cabinet');
+				}
 			} else
 			{
 				$this->toPage('main');
@@ -59,23 +63,23 @@ class MainController extends Controller
 	{
 		$req = new Request();
 		
-		if($this->page->name == 'registration' and $req->post('user'))
+		if((strcmp($this->page->name, 'registration') == 0) and $req->post('login'))
 		{
 			$valid = new Validator($req->post());
-			if($valid->sql('user') or $valid->sql('password'))
+			if($valid->sql('login') or $valid->sql('password'))
 			{
-				echo 'sql injection has detected';
+				$this->mods['form']['fields']['status']['text'] = 'sql injection has detected';
 				return;
 			}
 			
-			$reg = new Registration($req->post());
+			$reg = new Registration($this->db, $req->post());
 			
-			if($res = $reg->execute($this->db))
+			if($res = $reg->execute())
 			{
-				if(is_string($res)) echo $res; else $this->toPage('main');
+				if(is_string($res)) {$this->mods['form']['fields']['status']['text'] = $res;} else {$this->toPage('main');}
 			} else
 			{
-				echo 'error';
+				$this->mods['form']['fields']['status']['text'] = 'error';
 			}
 		}
 	}
@@ -87,6 +91,8 @@ class MainController extends Controller
 		$sess = new Session($this->db, $settings);
 		$sess->close();
 		
+		session_destroy();
+		
 		$this->toPage('main');
 	}
 	
@@ -95,7 +101,6 @@ class MainController extends Controller
 		$settings = $this->getProperty('session');
 		
 		$sess = new Session($this->db, $settings);
-		
 		if($sess->getLogin() == '') $this->toPage('main');
 		
 		$cab = new Cabinet($sess, $this->mods);

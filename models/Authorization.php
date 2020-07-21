@@ -50,13 +50,16 @@ class Authorization
 		{
 			$sess = new Session($this->db, $cfg);
 			$usr = $sess->get_user_id();
-			return ($this->user != null);
+			$this->user = $usr;
+			
+			return ($usr != null);
 		}
 		if(is_null($usr))
 		{
 			$this->user = $this->model->read(
 				['id_user'], 
-				['user_name' => $this->user, 'user_password' => md5($this->password)])[0][0];	
+				['user_name' => $this->user, 'user_password' => md5($this->password)]);	
+			
 			return ($this->user != null);
 		} else return false;
 	}

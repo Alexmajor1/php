@@ -32,7 +32,7 @@ $modules = [
 			'headers' => ['Форумы'],
 			'source' => 'forums',
 			'types' => [
-				['name' => 'link', 'url' => '&theme=']
+				['name' => 'link', 'url' => '&forum=']
 			],
 		],
 		'alt' => [
@@ -40,7 +40,7 @@ $modules = [
 			'source' => 'themes',
 			'relation' => 'forum_id',
 			'types' => [
-				['name' => 'link', 'url' => '&topic=']
+				['name' => 'link', 'url' => '&theme=']
 			],
 		],
 		'data' => [
@@ -54,6 +54,7 @@ $modules = [
 	],
 	'form' => [
 		'target' => 'index.php?page=cabinet',
+		'method' => 'POST',
 		'id' => 'editor_form',
 		'class' => 'forumEditor',
 		'fields' => [

@@ -23,7 +23,7 @@ $modules = [
 				'id' => 'PasswordLabel',
 				'style' => 'font-size: 16px;'
 			],
-			'roles_group' => [
+			'role' => [
 				'field_type' => 'group',
 				'id' => 'roles',
 				'type' => 'radio',

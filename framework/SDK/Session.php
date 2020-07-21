@@ -34,8 +34,8 @@ class Session
 			{
 				$sess_id .= substr($chars, rand(1, $len)-1, 1);
 			}
-			
-			$sql = "INSERT INTO ".$this->options['source']."(session_key, session_user) VALUES(\"$sess_id\", ".$this->user.")";
+			print_r($this->user[0]);
+			$sql = "INSERT INTO ".$this->options['source']."(session_key, session_user) VALUES(\"$sess_id\", ".$this->user[0][0].")";
 			$res = $this->db->ChangeQuery($sql);
 			
 			if(!$res)
@@ -71,13 +71,14 @@ class Session
 	function getLogin()
 	{
 		$sql = 'SELECT user_name FROM users WHERE id_user = '.$this->user;
+		
 		return $this->db->ValueQuery($sql);
 	}
 	
 	function getRole()
 	{
 		$sql = 'SELECT role_name FROM roles WHERE id_role in 
-				(SELECT user_role FROM users WHERE id_user = '.$this->user.')';
+				(SELECT user_role FROM users WHERE id_user = '.$this->user[0][0].')';
 		
 		return $this->db->ValueQuery($sql);
 	}

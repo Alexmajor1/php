@@ -18,10 +18,11 @@ class Application
 		$req = new Request();
 		$page = explode('page=', $this->alias->decode($req->get('alias')))[1];
 		
-		if(stripos($page, '/'))
-			$ctrl = 'controllers\\'.explode('/', $page)[0];
+		if(stripos($page, '/') > 0)
+			$ctrl = 'controllers\\'.explode('/', ucfirst($page))[0].'Controller';
 		else
 			$ctrl = 'controllers\\'.$this->cfg->getSetting('controller');
+		
 		$this->ctrl = new $ctrl($this->alias);
 	}
 	
@@ -91,6 +92,8 @@ class Application
 		if($this->ctrl->page->name != 'main')
 		{
 			$method = $this->ctrl->page->name;
+			if(stripos($method, '\\') > 0)
+				$method = explode('\\', $method)[1];
 			
 			$this->ctrl->$method();
 		}

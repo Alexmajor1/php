@@ -52,11 +52,14 @@ class DB
 		foreach($data as $field => $value)
 		{
 			$fields .= "$field, ";
-			$values .= "$value, ";
+			if(!is_numeric($value)) {
+				$values .= "\"$value\", ";
+			} else {
+				$values .= "$value, ";
+			}
 		}
-		
-		$fields = substr_replace($fields, ')', strlen($fields),1);
-		$values = substr_replace($values, ')', strlen($values),1);
+		$fields = substr_replace($fields, ')', strlen($fields)-2,1);
+		$values = substr_replace($values, ')', strlen($values)-2,1);
 		
 		$this->sql .= "$fields VALUES$values";
 		return $this;

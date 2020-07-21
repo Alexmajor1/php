@@ -149,7 +149,7 @@ class Table
 	function tableDB($value)
 	{
 		$str = '';
-		$sql = 'select '.$value['fields'].' from '.$value[$value['mode']]['source'];
+		$sql = 'select id, '.$value['fields'].' from '.$value[$value['mode']]['source'];
 		
 		if(key_exists('relation',$value[$value['mode']]))
 		{
@@ -213,16 +213,18 @@ class Table
 			$str1 = '';
 			foreach($row as $key => $val)
 			{
-				$cell = $val;
+				if($key !== 0) {
+					$cell = $val;
+					
+					if($value[$value['mode']]['types']){
+						$cell = $this->fieldsDB(['value' => $val, 'id' => $row[0], 'type' => $value[$value['mode']]['types'][$key-1]]);
+					}
 				
-				if($value[$value['mode']]['types']){
-					$cell = $this->fieldsDB(['value' => $val, 'id' => $id, 'key' => $key, 'type' => $value[$value['mode']]['types'][$key]]);
+					$html21 = $html2;
+					$html21 = str_ireplace('{value}', $cell, $html21);
+				
+					$str .= "$html21\n";
 				}
-				
-				$html21 = $html2;
-				$html21 = str_ireplace('{value}', $cell, $html21);
-				
-				$str .= "$html21\n";
 			}
 			$html11 = $html1;
 			$html11 = str_ireplace('{cols}', $str1, $html11);
@@ -271,7 +273,7 @@ class Table
 		$file2 = fopen($this->path.'/modules/link.html', "r");
 		$html2 = fread($file2, filesize($this->path.'/modules/link.html'));
 		
-		$str = '<div id="pager" class="block">';
+		$str = '';
 		$pageLink = '';
 		
 		foreach($_REQUEST as $key => $val)

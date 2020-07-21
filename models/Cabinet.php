@@ -26,34 +26,35 @@ class Cabinet
 			$author = $req->post('author');
 			$message = $req->post('message');
 			
-			if($req->get('topic')){
+			if($req->get('theme')){
 				$topic = new Topic($db);
 				$topic->create([
-					'theme_id' => $req->get('topic'),
+					'theme_id' => $req->get('theme'),
 					'user_id' => $author,
 					'name' => $message
 				]);
-			} else if($req->get('theme')){
+			} else if($req->get('forum')){
 				$theme = new Theme($db);
 				$theme->create([
-					'forum_id' => $req->get('theme'),
+					'forum_id' => $req->get('forum'),
 					'user_id' => $author,
 					'name' => $message
 				]);
 			} else {
+				echo 'forum';
 				$forum = new Forum($db);
-				$forum->create([
+				$res = $forum->create([
 					'user_id' => $author,
 					'name' => $message
 				]);
 			}
 		}
-		if(key_exists('topic', $req->get())){
+		if(key_exists('theme', $req->get())){
 			$this->mods['table']['mode'] = 'data';
-			$this->mods['table']['data']['value'] = $req->get('topic');
-		} else if(key_exists('theme', $req->get())){
+			$this->mods['table']['data']['value'] = $req->get('theme');
+		} else if(key_exists('forum', $req->get())){
 			$this->mods['table']['mode'] = 'alt';
-			$this->mods['table']['alt']['value'] = $req->get('theme');
+			$this->mods['table']['alt']['value'] = $req->get('forum');
 		} else {
 			$this->mods['table']['mode'] = 'main';
 		}

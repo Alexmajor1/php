@@ -44,15 +44,6 @@ class Controller
 		$this->page->html->draw($this->conf, $this->alias, $this->mods);
 	}
 	
-	function logout()
-	{
-		session_destroy();
-		
-		$header = $this->db->ValueQuery("SELECT name FROM aliases WHERE page=\"index.php?page=main\"");
-		
-		header("location:$header");
-	}
-	
 	function toPage($name)
 	{
 		$header = $this->alias->encode('index.php?page='.$name);
