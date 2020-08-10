@@ -24,14 +24,17 @@ class Loader
 	{
 		$this->page->LoadLayout($this->cfg);
 		$this->page->LoadView($view, $this->cfg);
+		$page = explode('\\', $this->page->name);
+		
 		if($this->cfg->getSetting('site_template') != '')
 		{
-			$temp = new Template($this->cfg, $this->page->name);
+			
+			$temp = new Template($this->cfg, end($page));
 			$temp->apply($this->page->getView());
 			$this->page->updView($temp->content);
 			$this->page->LoadModules($this->modules);
 		} else {
-			$temp = new Template('default', $this->page->name);
+			$temp = new Template('default', end($page));
 			$temp->apply($this->page->getView());
 			$this->page->updView($temp->content);
 			$this->page->LoadModules($this->modules);
@@ -63,110 +66,11 @@ class Loader
 		return $value;
 	}
 	
-	function menu($key, $value)
+	function plugin($key, $value)
 	{
-		if(is_array($value['menuitems']))
-		{
-			$str = '';
-			foreach($value['menuitems'] as $set => $val)
-			{
-				$link = $this->db->ValueQuery("SELECT name FROM aliases WHERE page=\"".$val['url']."\"");
-				$str .= "<li><a href=\"$link\">".$val['caption'].'</a></li>';
-			}
-		}else{
-			$sql = 'SELECT '.$value['menuitems'].'_name FROM '.$value['menuitems'].'s';
-			$data = $this->db->DataQuery($sql);
-			$str = '';
-			foreach($data as $set=>$val)
-			{
-				$link = $this->db->ValueQuery("SELECT name FROM aliases WHERE page=\"".$val['url']."\"");
-				$str .= "<li><a href=\"$link\">".$val['caption'].'</a></li>';
-			}
-		}
-		$value['menuitems'] = $str;
-		return $value;
-	}
-	
-	function form($key, $value)
-	{
-		$res = '';
-		
-		foreach($value['fields'] as $key => $field)
-		{
-			$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/'.$field['field_type'].'.html', "r");
-			$html = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/'.$field['field_type'].'.html'));
-			
-			$field['name'] = $key;
-			
-			if($field['field_type'] == 'group') {
-				$res1 = '';
-				
-				if(is_array($field['groupitems']))
-				{	
-					foreach($field['groupitems'] as $item)
-					{
-						$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/groupItem.html', "r");
-						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/groupItem.html'));
-						
-						foreach($item as $id1 => $item1)
-							$html1 = str_ireplace('{'.$id1.'}', $item1, $html1);
-							
-						$res1 .= $html1;
-					}
-					
-					$field['groupitems'] = $res1;
-					
-				} else {
-					
-					$sql = 'SELECT '.$field['groupitems'].'_name FROM '.$field['groupitems'].'s';
-					$data = $this->db->DataQuery($sql);
-					
-					foreach($data as $id => $item)
-					{
-						$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/groupItem.html', "r");
-						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/groupItem.html'));
-						
-						$res1 = str_ireplace(['{type}', '{value}'], [$field['type'],$item[0]], $html1);
-						
-						if($item[0] != 'Admin') $field['groupitems'] .= $res1;
-					}
-				}
-			}
-			
-			foreach($field as $id => $item)
-				$html = str_ireplace('{'.$id.'}', $item, $html);
-				
-			$res .= $html;
-		}
-		
-		$value['fields'] = $res;
-		
-		return $value;
-	}
-	
-	function listbox($key, $value)
-	{
-		$res = '';
-		
-		foreach($value['listitems'] as $item)
-		{
-			$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/listItem.html', "r");
-			$html = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/listItem.html'));
-			
-			$html = str_ireplace(['{name}', '{value}'], [$item['name'],$item['value']], $html);
-			
-			$res .= $html;
-		}
-		
-		$value['listitems'] = $res;
-		
-		return $value;
-	}
-	
-	function table($value)
-	{
-		$table = new Table($value, $this->db, $this->cfg);
-		return $table->html;
+		$name = '\\Plugins\\'.$key;
+		$plugin = new $name(['value' => $value, 'db' => $this->db, 'cfg' => $this->cfg]);
+		return $plugin->show();
 	}
 	
 	function LoadContent()

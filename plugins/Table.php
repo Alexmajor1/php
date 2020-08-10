@@ -1,28 +1,31 @@
 <?php
-namespace framework;
+namespace Plugins;
 
-class Table
+use framework\Plugin;
+use framework\Request;
+
+class Table extends Plugin
 {
-	public $html;
 	private $db;
 	private $cfg;
 	private $path;
 	
-	function __construct($value, $db, $cfg)
+	function generate()
 	{
-		$this->cfg = $cfg;
-		$this->db = $db;
+		$this->cfg = $this->data['cfg'];
+		$this->db = $this->data['db'];
 		$this->path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template');
-		if(key_exists('fields', $value))
-			$data = $this->tableDB($value);
+		if(key_exists('fields', $this->data['value']))
+			$data = $this->tableDB($this->data['value']);
 		else
-			$data = $this->tableArr($value);
+			$data = $this->tableArr($this->data['value']);
 		$value = $data[0];
-		if(key_exists('pager', $value))
+		if(key_exists('pager', $this->data['value']))
 			$value['pager'] = $this->tablePager([
-				'pageSize' => $value['pager']['pageSize'],
+				'pageSize' => $this->data['value']['pager']['pageSize'],
 				'rowCount' => $data[1]
 			]);
+		
 		$this->html = $value;
 		
 	}

@@ -36,14 +36,7 @@ class Html
 				
 			}
 			
-			switch($key)
-			{
-				case 'table':$value = $this->ldr->table($value);;break;
-				case 'group':$value = $this->ldr->group($key, $value, 'radio');;break;
-				case 'menu':$value = $this->ldr->menu($key, $value);break;
-				case 'listbox':$value = $this->ldr->listbox($key, $value);break;
-				case 'form':$value = $this->ldr->form($key, $value);break;
-			}
+			if(in_array($key, $cfg->GetSetting('plugins'))) $value = $this->ldr->plugin($key, $value);
 			
 			$this->ldr->GetModule($key, $value);
 		}
@@ -56,7 +49,8 @@ class Html
 		}
 		
 		$this->ldr->setConfig($cfg);
-		$this->ldr->GetContent($this->page->name);
+		$page = explode('\\', $this->page->name);
+		$this->ldr->GetContent(end($page));
 		$this->ldr->LoadContent();
 	}
 }

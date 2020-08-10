@@ -61,7 +61,16 @@ class Application
 				{
 					$this->ctrl->logout();
 				}
-				$this->data = $_SERVER['DOCUMENT_ROOT']."".$this->ctrl->getProperty('base')."/templates/".$this->ctrl->getProperty('site_template')."/kernel/cfg/".$req->get['page'].".php";
+				
+				$page = explode('/', $req->get['page']);
+				
+				if(count($page) > 1){
+					$tmpl = $page[0];
+				} else {
+					$tmpl = $this->ctrl->getProperty('site_template');
+				}
+				
+				$this->data = $_SERVER['DOCUMENT_ROOT']."".$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
 			};
 			break;
 			case 'alias':
@@ -79,7 +88,15 @@ class Application
 					$this->ctrl->logout();
 				}
 				
-				$this->data = $_SERVER['DOCUMENT_ROOT'].'/'.$this->ctrl->getProperty('base')."/templates/".$this->ctrl->getProperty('site_template')."/kernel/cfg/".explode('page=', $page)[1].".php";
+				$page = explode('/', explode('page=', $page)[1]);
+				
+				if(count($page) > 1){
+					$tmpl = $page[0];
+				} else {
+					$tmpl = $this->ctrl->getProperty('site_template');
+				}
+				
+				$this->data = $_SERVER['DOCUMENT_ROOT'].'/'.$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
 			};
 			break;
 		}

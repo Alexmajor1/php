@@ -32,4 +32,11 @@ $database = [
 	'password' => '',
 	'db' => 'mydatabase'
 ];
+
+$plugins = [
+	'table',
+	'menu',
+	'listbox',
+	'form'
+]
 ?>
