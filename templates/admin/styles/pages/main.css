@@ -33,31 +33,14 @@ header #txt
 	width: 60%;
 }
 
-#testImage
-{
-	width: 100%;
-	height: 100%;
-}
-
 .contact
 {
 	width: 100%;
 	align-items: center;
 }
 
-#EntryPanel .Password, .Remember, .Submit
-{
-	margin-left: 5px;
-	justify-content: center;
-}
-
 .Label
 {
 	height: 50%;
 	align-self: center;
-}
-
-#auth
-{
-	margin-bottom:10px;
 }

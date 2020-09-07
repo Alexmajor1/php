@@ -60,9 +60,9 @@ $modules = [
 				'class' => 'Submit flex-col',
 				'id' => 'SubmitBtn'
 			],
-			'stat' => [
+			'status' => [
 				'field_type' => 'text',
-				'class' => 'Status flex-col',
+				'class' => 'Status flex-col margin',
 				'id' => 'StatusLabel',
 				'text' => ''
 			]

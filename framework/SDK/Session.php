@@ -15,8 +15,7 @@ class Session
 		$this->user = $id;
 		
 		if($id == ''){
-			$sql = "SELECT session_user FROM ".$options['source']." WHERE session_key = \"".$req->cookie($options['key']).'"';
-			$this->user = $db->ValueQuery($sql);
+			$this->user = $db->select($options['source'], ['session_user' => 'session_user'])->where(['session_key' => $req->cookie($options['key'])], '')->value();
 		}
 	}
 	
@@ -34,9 +33,8 @@ class Session
 			{
 				$sess_id .= substr($chars, rand(1, $len)-1, 1);
 			}
-			print_r($this->user[0]);
-			$sql = "INSERT INTO ".$this->options['source']."(session_key, session_user) VALUES(\"$sess_id\", ".$this->user[0][0].")";
-			$res = $this->db->ChangeQuery($sql);
+			
+			$res = $this->db->insert($this->options['source'], ['session_key' => $sess_id,'session_user' => $this->user[0][0]])->change();
 			
 			if(!$res)
 			{
@@ -53,9 +51,7 @@ class Session
 		
 		setcookie($this->options['key'], null, -1);
 		
-		$sql = "DELETE FROM ".$options['source']." WHERE session_key = \"".$req->cookie($options['key']).'"';
-		$res = $this->db->ChangeQuery($sql);
-		
+		$res = $this->db->delete($options['source'])->where(['session_key' => $req->cookie($options['key'])], '')->ChangeQuery($sql);
 	}
 	
 	function get_user_id()
@@ -70,24 +66,17 @@ class Session
 	
 	function getLogin()
 	{
-		$sql = 'SELECT user_name FROM users WHERE id_user = '.$this->user;
-		
-		return $this->db->ValueQuery($sql);
+		return $this->db->select('users', ['user_name' => 'user_name'])->where(['id' => $this->user[0][0]], '')->value();
 	}
 	
 	function getRole()
 	{
-		$sql = 'SELECT role_name FROM roles WHERE id_role in 
-				(SELECT user_role FROM users WHERE id_user = '.$this->user[0][0].')';
-		
-		return $this->db->ValueQuery($sql);
+		return $this->db->select('roles, users', ['role_name' =>'role_name'])->where(['users.id' => $this->user[0][0], 'id_role' => ['user_role']], 'AND')->value();
 	}
 	
 	function getPermissions()
 	{
-		$sql = 'SELECT rule_name FROM ruless WHERE id_rule in 
-				(SELECT user_role FROM users WHERE id_user = '.$this->user.')';
-		return $this->db->ValueQuery($sql);
+		return $this->db->select('rules, users', ['rule_name' => 'rule_name'])->where(['Rule_role' => ['user_role'], 'users.id' => $this->user[0][0]], 'AND')->all();
 	}
 }
 ?>

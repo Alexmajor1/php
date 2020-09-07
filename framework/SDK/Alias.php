@@ -52,8 +52,7 @@ class Alias
 	
 	function tableEncode($data)
 	{
-		$sql = 'SELECT name FROM '.$this->cfg->getSetting('alias')['source']." WHERE page = \"$data\"";
-		$alias = $this->db->ValueQuery($sql);
+		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['name' => 'name'])->where(['page' => $data], '')->value();
 			
 		if($alias)
 		{
@@ -83,7 +82,7 @@ class Alias
 	function tableDecode($data)
 	{
 		$sql = 'SELECT page FROM '.$this->cfg->getSetting('alias')['source'].' WHERE name = "'.$data.'"';
-		$alias = $this->db->ValueQuery($sql);
+		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['page' => 'page'])->where(['name' => $data], '')->value();
 			
 		if($alias)
 		{

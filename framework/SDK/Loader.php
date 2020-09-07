@@ -55,8 +55,7 @@ class Loader
 				$value[$elem.'items'] .= $value[$elem.'items'].'<input type="'.$elem.'" name="'.$elem.$val[0].'" value="'.$val[1].'">'.$val[1];
 			}
 		}else{
-			$sql = 'SELECT '.$value[$elem.'items'].'_name FROM '.$value[$elem.'items'].'s';
-			$data = $this->db->DataQuery($sql);
+			$data = $this->db->select($value[$elem.'items'].'s', [$value[$elem.'items'].'_name' => $value[$elem.'items'].'_name'])->all();
 			$value[$elem.'items'] .= 's'; 
 			foreach($data as $set => $val)
 			{	

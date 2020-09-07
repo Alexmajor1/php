@@ -1,7 +1,9 @@
 <?php
 namespace models;
+
 use framework\Request;
 use framework\Session;
+use framework\Validator;
 
 class Authorization
 {
@@ -43,6 +45,20 @@ class Authorization
 			setcookie('token', $token);
 	}
 	
+	function validate($data)
+	{
+		$valid = new Validator($data);
+		
+		return $valid->sql('User') or $valid->sql('Password');
+	}
+	
+	function isAdmin($conf)
+	{
+		$sess = new Session($this->db, $conf, $this->user);
+		$sess->create();
+		return strcmp($sess->getRole(), 'Admin') == 0;
+	}
+	
 	function Execute($cfg)
 	{
 		$usr = null;
@@ -57,9 +73,8 @@ class Authorization
 		if(is_null($usr))
 		{
 			$this->user = $this->model->read(
-				['id_user'], 
-				['user_name' => $this->user, 'user_password' => md5($this->password)]);	
-			
+				['id'], 
+				['user_name' => $this->user, 'user_password' => md5($this->password)]);
 			return ($this->user != null);
 		} else return false;
 	}

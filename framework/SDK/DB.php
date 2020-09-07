@@ -106,7 +106,9 @@ class DB
 		
 		foreach($conditions as $field => $value)
 		{
-			if(is_string($value))
+			if(is_array($value))
+				$this->sql .= " $field=".$value[0]." $operation";
+			elseif(!is_numeric($value))
 				$this->sql .= " $field=\"$value\" $operation";
 			else
 				$this->sql .= " $field=$value $operation";

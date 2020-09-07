@@ -1,6 +1,10 @@
 <?php
 include_once "config\\settings.php";
-$files = [scandir("templates\\default\\kernel\\cfg"), scandir("controllers")];
+
+$tmpls = array('default','admin');
+$arr1 = scandir("templates\\default\\kernel\\cfg");
+$arr2 = scandir("templates\\admin\\kernel\\cfg");
+$files = [array($arr1, $arr2), scandir("controllers")];
 
 function str_rand()
 {
@@ -72,7 +76,7 @@ function fileStorage($source, $files)
 	fclose($aliases);
 }
 
-function tableStorage($source, $files, $ConData)
+function tableStorage($source, $files, $ConData, $tmpls)
 {
 	include_once "framework\\SDK\\DB.php";
 	
@@ -80,10 +84,42 @@ function tableStorage($source, $files, $ConData)
 	
 	for($i=0;$i<count($files[0]);$i++)
 	{
-		echo $files[0][$i].'<br>';
-		if(!is_dir($files[0][$i]))
+		if(is_array($files[0][$i]))
 		{
-			include_once "templates\\default\\kernel\\cfg\\".$files[0][$i];
+			for($j=0;$j<count($files[0][$i]);$j++)
+			{
+				if(!is_dir($files[0][$i][$j]))
+				{
+					include_once 'templates\\'.$tmpls[$i].'\\kernel\\cfg\\'.$files[0][$i][$j];
+					
+					if(isset($target))
+					{
+						$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"$target\"");
+							
+						if($res == null)
+						{
+							$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"$target\")");
+						}
+					}
+					
+					foreach($modules as $value)
+					{
+						if(key_exists('target', $value))
+						{
+							$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$value['target']."\"");
+							
+							if($res == null)
+							{
+								$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"".$value['target']."\")");
+							}
+						}
+					}
+				}
+			}
+		}
+		elseif(!is_dir($files[0][$i]))
+		{
+			include_once "templates\\default\\kernel\\cfg".$files[0][$i];
 			
 			if(isset($target))
 			{
@@ -91,7 +127,7 @@ function tableStorage($source, $files, $ConData)
 					
 				if($res == null)
 				{
-					$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"index.php?alias=".str_rand()."\",\"$target\")");
+					$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"$target\")");
 				}
 			}
 			
@@ -103,7 +139,7 @@ function tableStorage($source, $files, $ConData)
 					
 					if($res == null)
 					{
-						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"index.php?alias=".str_rand()."\",\"".$value['target']."\")");
+						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"".$value['target']."\")");
 					}
 				}
 			}
@@ -112,7 +148,6 @@ function tableStorage($source, $files, $ConData)
 	
 	for($i=0;$i<count($files[1]);$i++)
 	{
-		echo $files[1][$i].'<br>';
 		if(!is_dir($files[1][$i]))
 		{
 			$file = fopen("controllers\\".$files[1][$i],"r");
@@ -127,11 +162,11 @@ function tableStorage($source, $files, $ConData)
 					
 					if(strpos($alias, 'page')) $alias = explode('=', $alias)[1];
 					
-					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"$alias\"");
+					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"index.php?page=$alias\"");
 					
 					if($res == null)
 					{
-						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"index.php?alias=".str_rand()."\",\"$alias\")");
+						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"index.php?page=$alias\")");
 					}
 				}
 			}
@@ -145,6 +180,6 @@ function tableStorage($source, $files, $ConData)
 switch($alias['storage'])
 {
 	case 'file': fileStorage($alias['source'], $files);break;
-	case 'table': tableStorage($alias['source'], $files, $database);break;
+	case 'table': tableStorage($alias['source'], $files, $database, $tmpls);break;
 }
 ?>

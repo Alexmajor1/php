@@ -18,8 +18,8 @@ class Application
 		$req = new Request();
 		$page = explode('page=', $this->alias->decode($req->get('alias')))[1];
 		
-		if(stripos($page, '/') > 0)
-			$ctrl = 'controllers\\'.explode('/', ucfirst($page))[0].'Controller';
+		if(stripos($page, '\\') > 0)
+			$ctrl = 'controllers\\'.explode('\\', ucfirst($page))[0].'Controller';
 		else
 			$ctrl = 'controllers\\'.$this->cfg->getSetting('controller');
 		
@@ -62,7 +62,7 @@ class Application
 					$this->ctrl->logout();
 				}
 				
-				$page = explode('/', $req->get['page']);
+				$page = explode('\\', $req->get['page']);
 				
 				if(count($page) > 1){
 					$tmpl = $page[0];
@@ -88,7 +88,7 @@ class Application
 					$this->ctrl->logout();
 				}
 				
-				$page = explode('/', explode('page=', $page)[1]);
+				$page = explode('\\', explode('page=', $page)[1]);
 				
 				if(count($page) > 1){
 					$tmpl = $page[0];
@@ -102,6 +102,17 @@ class Application
 		}
 		
 		$this->addData();
+		
+		$rule = $this->ctrl->rule;
+		if($rule != '')
+		{
+			$rule = 'rules\\'.$rule;
+			
+			$check = new $rule($this->ctrl);
+			$check->execute();
+			$this->ctrl = $check->ctrl;
+		}
+			
 	}
 	
 	function run()
@@ -111,7 +122,7 @@ class Application
 			$method = $this->ctrl->page->name;
 			if(stripos($method, '\\') > 0)
 				$method = explode('\\', $method)[1];
-			
+			if($method == 'main') $method = 'index';
 			$this->ctrl->$method();
 		}
 		$this->ctrl->generate();

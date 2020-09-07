@@ -10,6 +10,7 @@ class Controller
 	public $page;
 	public $alias;
 	private $html;
+	public $rule = '';
 	
 	function __construct($data)
 	{
@@ -42,6 +43,11 @@ class Controller
 	function generate()
 	{
 		$this->page->html->draw($this->conf, $this->alias, $this->mods);
+	}
+	
+	function getError($err)
+	{
+		setcookie('error', $err, time()+1);
 	}
 	
 	function toPage($name)

@@ -3,7 +3,6 @@ namespace Controllers;
 
 use framework\Controller;
 use framework\Request;
-use framework\Validator;
 use framework\Session;
 
 use models\Authorization;
@@ -12,6 +11,8 @@ use models\Cabinet;
 
 class MainController extends Controller
 {
+	public $rule = 'CabinetRule';
+	
 	function authorization()
 	{
 		$req = new Request();
@@ -25,15 +26,13 @@ class MainController extends Controller
 		
 		if((strcmp($this->page->name, 'authorization') == 0) and $req->post('User'))
 		{
-			$valid = new Validator($req->post());
-			
-			if($valid->sql('User') or $valid->sql('Password'))
-			{
-				echo 'sql injection has detected';
-				return;
-			}
-			
 			$auth = new Authorization($req, $this->db);
+			
+			if($auth->validate($req->post()))
+			{
+				$this->getError('sql injection has detected');
+				$this->toPage('main');
+			}
 			
 			if($auth->remember)
 			{
@@ -42,12 +41,9 @@ class MainController extends Controller
 			
 			if($auth->Execute($this->getProperty('session')))
 			{
-				$sess = new Session($this->db, $this->getProperty('session'), $auth->user);
-				$sess->create();
-				
-				if(strcmp($sess->getRole(), 'Admin') == 0)
+				if($auth->isAdmin($this->getProperty('session')))
 				{
-					$this->toPage('admin/main');
+					$this->toPage('admin\\\\main');
 				}
 				else{
 					$this->toPage('cabinet');
@@ -65,14 +61,13 @@ class MainController extends Controller
 		
 		if((strcmp($this->page->name, 'registration') == 0) and $req->post('login'))
 		{
-			$valid = new Validator($req->post());
-			if($valid->sql('login') or $valid->sql('password'))
+			$reg = new Registration($this->db, $req->post());
+			
+			if($auth->validate($req->post()))
 			{
 				$this->mods['form']['fields']['status']['text'] = 'sql injection has detected';
 				return;
 			}
-			
-			$reg = new Registration($this->db, $req->post());
 			
 			if($res = $reg->execute())
 			{

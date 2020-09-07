@@ -1,6 +1,8 @@
 <?php
 namespace models;
 
+use framework\Validator;
+
 class Registration
 {
 	private $user;
@@ -56,6 +58,13 @@ class Registration
 		}
 		
 		return 'ok';
+	}
+	
+	function validate($data)
+	{
+		$valid = new Validator($data);
+		
+		return $valid->sql('User') or $valid->sql('Password');
 	}
 	
 	function execute()
