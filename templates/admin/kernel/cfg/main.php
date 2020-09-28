@@ -1,6 +1,6 @@
 <?php
 $name = "admin\main";
-$template = "admin\main";
+$template = "main";
 $target = "index.php?page=admin\main";
 $modules = [
 	'header' => [

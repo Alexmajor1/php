@@ -19,9 +19,9 @@ class Page
 		$this->layout = new Layout($cfg);
 	}
 	
-	function LoadView($file, $cfg)
+	function LoadView($cfg)
 	{
-		$this->view = new View($file, $cfg);
+		$this->view = new View($cfg);
 	}
 	
 	function getView()

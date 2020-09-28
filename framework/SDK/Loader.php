@@ -20,16 +20,16 @@ class Loader
 		$this->cfg = $cfg;
 	}
 	
-	function GetContent($view)
+	function GetContent()
 	{
 		$this->page->LoadLayout($this->cfg);
-		$this->page->LoadView($view, $this->cfg);
+		$this->page->LoadView($this->cfg);
 		$page = explode('\\', $this->page->name);
 		
 		if($this->cfg->getSetting('site_template') != '')
 		{
 			
-			$temp = new Template($this->cfg, end($page));
+			$temp = new Template($this->cfg);
 			$temp->apply($this->page->getView());
 			$this->page->updView($temp->content);
 			$this->page->LoadModules($this->modules);

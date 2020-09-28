@@ -48,6 +48,7 @@ class Table extends Plugin
 				{
 					case 'asc':$head_sort[$key] = SORT_ASC;break;
 					case 'desc':$head_sort[$key] = SORT_DESC;break;
+					default: $head_sort[$key] = SORT_DESC;
 				}
 			}
 		
@@ -75,6 +76,7 @@ class Table extends Plugin
 							{
 								case SORT_ASC:$str1 .= "&$key1=desc";break;
 								case SORT_DESC:$str1 .= "&$key1=asc";break;
+								default:$str1 .= "&$key1=asc";
 							}
 						}else{
 							$str1 .= "&$key1=desc";
@@ -86,6 +88,7 @@ class Table extends Plugin
 							{
 								case SORT_ASC:$str1 .= "&".($key1+1)."=asc";break;
 								case SORT_DESC:$str1 .= "&".($key1+1)."=desc";break;
+								default:$str1 .= "&".($key1+1)."=asc";
 							}
 						}
 					}
@@ -151,44 +154,64 @@ class Table extends Plugin
 	
 	function tableDB($value)
 	{
+		$pageLink = $_REQUEST['alias'];
 		$str = '';
-		$sql = 'select id, '.$value['fields'].' from '.$value[$value['mode']]['source'];
+		$head_sort = array();
+		$sql = 'select '.$value['fields'].' from '.$value[$value['mode']]['source'];
 		
 		if(key_exists('relation',$value[$value['mode']]))
 		{
 			$sql .= ' where '.$value[$value['mode']]['relation'].'='.$value[$value['mode']]['value'];
 		}
 		
-		$order = 'order by ';
+		$order = ' order by ';
 		foreach($_REQUEST as $key => $val)
 			if($val == 'asc' or $val == 'desc')
 				$order .= "$key $val,";
-		if(strlen($order)> 9) $sql .= $order;
+		
+		if(strlen($order)> 10) $sql .= mb_substr($order, 0, -1);
 		
 		$rows = $this->db->DataQuery($sql);
+		$tmp = $this->db->FieldsDescriptors();
 		
 		$file = fopen($this->path.'/modules/tableHeader.html', "r");
 		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
 		
 		if(!key_exists('headers', $value[$value['mode']]))
-		{
-			$tmp = $this->db->FieldsDescriptors();
-			foreach($tmp as $val)
+			foreach($tmp as $key => $val)
 			{
 				$html1 = $html;
-				$html1 = str_ireplace([/*'{pageLink}', '{sort}',*/'{value}'], [/*$pageLink, "&$key=desc",*/$val], $html1);
+				$key = $tmp[$key]-name;
+				
+				if(key_exists($key, $_REQUEST))
+					switch($_REQUEST[$key]){
+						case 'asc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);;break;
+						case 'desc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=asc",$val], $html1);;break;
+					}
+				else
+					$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);
+				
 				$val1 = $val->name;
 				$value['headers'] = $val1;
 				$str .= $html1;
 			}
-		} else {
-			foreach($value[$value['mode']]['headers'] as $val)
+		else
+			foreach($value[$value['mode']]['headers'] as $key => $val)
 			{
 				$html1 = $html;
-				$html1 = str_ireplace([/*'{pageLink}', '{sort}',*/'{value}'], [/*$pageLink, "&$key=desc",*/ $val], $html1);
+				$key = $tmp[$key]->name;
+				
+				if(key_exists($key, $_REQUEST))
+					switch($_REQUEST[$key]){
+						case 'asc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);;break;
+						case 'desc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=asc",$val], $html1);;break;
+					}
+				else
+					$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);
+				
 				$str .= $html1;
 			}
-		}
+		
 		$req = new Request(null);
 		$num = '';
 		if(key_exists('page', $req->get()))
@@ -216,18 +239,16 @@ class Table extends Plugin
 			$str1 = '';
 			foreach($row as $key => $val)
 			{
-				if($key !== 0) {
-					$cell = $val;
-					
-					if($value[$value['mode']]['types']){
-						$cell = $this->fieldsDB(['value' => $val, 'id' => $row[0], 'type' => $value[$value['mode']]['types'][$key-1]]);
-					}
+				$cell = $val;
 				
-					$html21 = $html2;
-					$html21 = str_ireplace('{value}', $cell, $html21);
-				
-					$str .= "$html21\n";
+				if($value[$value['mode']]['types']){
+					$cell = $this->fieldsDB(['value' => $val, 'id' => $row[0], 'type' => $value[$value['mode']]['types'][$key]]);
 				}
+			
+				$html21 = $html2;
+				$html21 = str_ireplace('{value}', $cell, $html21);
+			
+				$str1 .= "$html21\n";
 			}
 			$html11 = $html1;
 			$html11 = str_ireplace('{cols}', $str1, $html11);

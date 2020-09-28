@@ -32,12 +32,37 @@ class Model
 		
 		if(!empty($where)) $res->where($where,'AND');
 		
-		return $res->all();
+		return $res->change();
 	}
 	
 	function delete($where)
 	{
 		return $this->db->delete($this->table)->where($where, 'AND')->change();
+	}
+	
+	function editor($mods, $fields){
+		$req = new Request();
+		
+		if($req->get('mode') == 'delete')
+			return $this->delete(['id' => $req->get('id')]);
+		elseif($req->get('id')){
+			$data = $this->read($fields, ['id' => $req->get('id')])[0];
+			
+			foreach($fields as $key=>$value)
+				$mods['form']['fields'][explode('_',$value)[1]]['value'] = $data[$key];
+			
+			return $mods;
+		}elseif($req->get('name')){
+			$data = array();
+			foreach($fields as $value)
+				$data[$value] = $req->get(explode('_',$value)[1]);
+			
+			if($req->get('id')){
+				return $this->update($data,['id' => $req->get('id')]);
+			}else{
+				return $this->create($data);
+			}
+		}
 	}
 }
 ?>

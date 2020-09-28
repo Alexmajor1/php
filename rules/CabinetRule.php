@@ -8,7 +8,7 @@ class CabinetRule extends Rule
 {
 	function execute()
 	{
-		if($this->ctrl->page->name == 'cabinet')
+		if($this->ctrl->getProperty('name') == 'cabinet')
 		{
 			$settings = $this->ctrl->getProperty('session');
 			

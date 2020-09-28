@@ -63,7 +63,7 @@ class MainController extends Controller
 		{
 			$reg = new Registration($this->db, $req->post());
 			
-			if($auth->validate($req->post()))
+			if($reg->validate($req->post()))
 			{
 				$this->mods['form']['fields']['status']['text'] = 'sql injection has detected';
 				return;

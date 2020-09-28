@@ -3,6 +3,7 @@
 @import "modules/menu.css";
 /* pages */
 @import "pages/main.css";
+@import "pages/users.css";
 /* main */
 p
 {

@@ -49,8 +49,7 @@ class Html
 		}
 		
 		$this->ldr->setConfig($cfg);
-		$page = explode('\\', $this->page->name);
-		$this->ldr->GetContent(end($page));
+		$this->ldr->GetContent();
 		$this->ldr->LoadContent();
 	}
 }

@@ -33,8 +33,9 @@ class Application
 		$this->ctrl->addConfig(['name', $name]);
 		$this->ctrl->addConfig(['modules', $modules]);
 		
-		$this->ctrl->getModules();
 		$this->ctrl->getPage();
+		
+		$this->ctrl->getModules();
 		
 		if(isset($target))
 		{
@@ -101,18 +102,20 @@ class Application
 			break;
 		}
 		
-		$this->addData();
-		
 		$rule = $this->ctrl->rule;
 		if($rule != '')
 		{
 			$rule = 'rules\\'.$rule;
 			
 			$check = new $rule($this->ctrl);
+			$check->path = $this->data;
 			$check->execute();
 			$this->ctrl = $check->ctrl;
+			$this->data = $check->path;
 		}
-			
+		
+		$this->addData();
+		
 	}
 	
 	function run()

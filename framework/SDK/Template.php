@@ -5,8 +5,10 @@ class Template
 {
 	public $content;
 	
-	function __construct($cfg, $page)
+	function __construct($cfg)
 	{
+		$page = $cfg->getSetting('template');
+		
 		$temp = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/'.$page.'.html', "r");
 		$this->content = fread($temp, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/'.$page.'.html'));
 	}

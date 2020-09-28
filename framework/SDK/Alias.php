@@ -67,6 +67,7 @@ class Alias
 		$file = fopen((__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php', 'r');
 		$aliasesDB = fread($file, filesize((__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php'));
 		$aliases = split(';', $aliasesDB);
+		$data = array();
 		
 		for($i=0;$i<count($aliases);$i++)
 		{
@@ -76,7 +77,7 @@ class Alias
 			}
 		}
 		
-		return $data;
+		return (!empty($data))?$data:false;
 	}
 	
 	function tableDecode($data)
@@ -89,7 +90,7 @@ class Alias
 			return $alias;
 		}
 		
-		return '';
+		return false;
 	}
 }
 ?>
