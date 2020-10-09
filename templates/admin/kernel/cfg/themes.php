@@ -1,33 +1,34 @@
 <?php
-$name = "admin\users";
-$template = "users";
-$target = "index.php?page=admin\users";
+$name = "admin\\themes";
+$template = "themes";
+$target = "index.php?page=admin\themes";
 $modules = [
 	'header' => [
 		'size' => '1',
 		'class' => 'margin',
 		'id' => 'CaptionText',
 		'align' => 'center',
-		'text' => 'Users'
+		'text' => 'Themes'
 	],
 	'table' => [
-		'id' => 'users',
-		'class' => 'usersTable',
+		'id' => 'themes',
+		'class' => 'themesTable',
 		'style' => 'font-size: 16px;',
 		'border' => '1',
-		'caption' => 'Users',
+		'caption' => 'Themes',
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, User_name, User_role',
+		'fields' => 'id, forum_id, user_id, name',
 		'mode' => 'main',
 		'main' => [
-			'headers' => ['ИД', 'имя', 'роль'],
-			'source' => 'users',
+			'headers' => ['ИД', 'форум', 'автор', 'название'],
+			'source' => 'themes',
 			'types' => [
 				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
 				['name' => 'text'],
+				['name' => 'text'],
+				['name' => 'link', 'url' => '&mode=form&id='],
 			],
 		],
 	],
@@ -36,14 +37,14 @@ $modules = [
 			'target' => 'mailto: asvelat@gmail.com',
 			'class' => 'WebMasterMail',
 			'id' => 'MailAddress',
-			'name' => 'webmaster'
+			'name' => 'webmaster',
 		],
 		'insert' => [
-			'target' => 'index.php?page=admin\\\\users',
+			'target' => 'index.php?page=admin\\\\themes',
 			'params' => '&mode=form',
-			'name' => 'add user',
+			'name' => 'add theme',
 			'style' => 'margin-left:10%'
-		],
+		]
 	],
 ];
 ?>

@@ -48,20 +48,30 @@ class Model
 		elseif($req->get('id')){
 			$data = $this->read($fields, ['id' => $req->get('id')])[0];
 			
-			foreach($fields as $key=>$value)
-				$mods['form']['fields'][explode('_',$value)[1]]['value'] = $data[$key];
+			foreach($fields as $key=>$value){ 
+				$mods['form']['fields'][$value]['value'] = $data[$key];
+			}
+			
+			$mods['form']['fields']['id'] = [
+				'field_type' => 'hidden',
+				'name' => 'id',
+				'value' => $req->get('id'),
+			];
 			
 			return $mods;
-		}elseif($req->get('name')){
+		}elseif(count($req->post())>0){
 			$data = array();
 			foreach($fields as $value)
-				$data[$value] = $req->get(explode('_',$value)[1]);
+				$data[$value] = $req->post($value);
 			
-			if($req->get('id')){
-				return $this->update($data,['id' => $req->get('id')]);
+			if($req->post('id')){
+				echo 'update';
+				return $this->update($data,['id' => $req->post('id')]);
 			}else{
+				echo 'create';
 				return $this->create($data);
 			}
+			echo 'loose';
 		}
 	}
 }

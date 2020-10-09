@@ -1,29 +1,29 @@
 <?php
-$name = "admin\users";
-$template = "users";
-$target = "index.php?page=admin\users";
+$name = "admin\\rules";
+$template = "rules";
+$target = "index.php?page=admin\\rules";
 $modules = [
 	'header' => [
 		'size' => '1',
 		'class' => 'margin',
 		'id' => 'CaptionText',
 		'align' => 'center',
-		'text' => 'Users'
+		'text' => 'Rules'
 	],
 	'table' => [
-		'id' => 'users',
-		'class' => 'usersTable',
+		'id' => 'rules',
+		'class' => 'rulesTable',
 		'style' => 'font-size: 16px;',
 		'border' => '1',
-		'caption' => 'Users',
+		'caption' => 'Rules',
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, User_name, User_role',
+		'fields' => 'id, Rule_name, Rule_role',
 		'mode' => 'main',
 		'main' => [
-			'headers' => ['ИД', 'имя', 'роль'],
-			'source' => 'users',
+			'headers' => ['ИД', 'Название', 'роль'],
+			'source' => 'rules',
 			'types' => [
 				['name' => 'text'],
 				['name' => 'link', 'url' => '&mode=form&id='],
@@ -39,9 +39,9 @@ $modules = [
 			'name' => 'webmaster'
 		],
 		'insert' => [
-			'target' => 'index.php?page=admin\\\\users',
+			'target' => 'index.php?page=admin\\\\rules',
 			'params' => '&mode=form',
-			'name' => 'add user',
+			'name' => 'add rule',
 			'style' => 'margin-left:10%'
 		],
 	],

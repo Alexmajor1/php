@@ -14,6 +14,8 @@ class CabinetRule extends Rule
 			
 			$sess = new Session($this->ctrl->db, $settings);
 			if($sess->getLogin() == '') $this->ctrl->toPage('main');
+		} else {
+			$this->ctrl->mods =[];
 		}
 	}
 }

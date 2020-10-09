@@ -56,6 +56,7 @@ class Authorization
 	{
 		$sess = new Session($this->db, $conf, $this->user);
 		$sess->create();
+		
 		return strcmp($sess->getRole(), 'Admin') == 0;
 	}
 	

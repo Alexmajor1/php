@@ -123,6 +123,7 @@ class Application
 		if($this->ctrl->page->name != 'main')
 		{
 			$method = $this->ctrl->page->name;
+			
 			if(stripos($method, '\\') > 0)
 				$method = explode('\\', $method)[1];
 			if($method == 'main') $method = 'index';

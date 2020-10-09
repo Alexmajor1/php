@@ -87,10 +87,14 @@ class DB
 		
 		foreach($data as $field => $value)
 		{
-			$this->sql .= " $field=$value,";
+			if(!is_numeric($value)){
+				$this->sql .= " $field=\"$value\",";
+			} else {
+				$this->sql .= " $field=$value,";
+			}
 		}
 		
-		$this->sql = substr_replace($this->sql, '', strlen($this->sql),1);
+		$this->sql = substr_replace($this->sql, '', strlen($this->sql)-1,1);
 		return $this;
 	}
 	

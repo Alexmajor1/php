@@ -27,7 +27,7 @@ class Controller
 	
 	function getModules()
 	{
-		$this->mods = $this->conf->getSetting('modules');
+		$this->mods = array_merge($this->conf->getSetting('modules'), $this->mods);
 	}
 	
 	function getPage()

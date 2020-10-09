@@ -1,33 +1,34 @@
 <?php
-$name = "admin\users";
-$template = "users";
-$target = "index.php?page=admin\users";
+$name = "admin\\topics";
+$template = "topics";
+$target = "index.php?page=admin\topics";
 $modules = [
 	'header' => [
 		'size' => '1',
 		'class' => 'margin',
 		'id' => 'CaptionText',
 		'align' => 'center',
-		'text' => 'Users'
+		'text' => 'Topics'
 	],
 	'table' => [
-		'id' => 'users',
-		'class' => 'usersTable',
+		'id' => 'topics',
+		'class' => 'themesTable',
 		'style' => 'font-size: 16px;',
 		'border' => '1',
-		'caption' => 'Users',
+		'caption' => 'Topics',
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, User_name, User_role',
+		'fields' => 'id, theme_id, user_id, name',
 		'mode' => 'main',
 		'main' => [
-			'headers' => ['ИД', 'имя', 'роль'],
-			'source' => 'users',
+			'headers' => ['ИД', 'тема', 'автор', 'название'],
+			'source' => 'topics',
 			'types' => [
 				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
 				['name' => 'text'],
+				['name' => 'text'],
+				['name' => 'link', 'url' => '&mode=form&id='],
 			],
 		],
 	],
@@ -39,9 +40,9 @@ $modules = [
 			'name' => 'webmaster'
 		],
 		'insert' => [
-			'target' => 'index.php?page=admin\\\\users',
+			'target' => 'index.php?page=admin\\\\topics',
 			'params' => '&mode=form',
-			'name' => 'add user',
+			'name' => 'add topic',
 			'style' => 'margin-left:10%'
 		],
 	],

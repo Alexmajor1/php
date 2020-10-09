@@ -1,6 +1,6 @@
 <?php
 $name = "admin\users";
-$template = "edit.users";
+$template = "form.users";
 $target = "index.php?page=admin\users";
 $modules = [
 	'header' => [
@@ -10,37 +10,19 @@ $modules = [
 		'align' => 'center',
 		'text' => 'Edit user'
 	],
-	'menu' => [
-		'id' => 'mainmenu',
-		'menuitems' => [
-			'homePage' =>
-			[
-				'caption' => 'home page',
-				'url' => 'index.php?page=admin\\\\main'
-			],
-			'users' => [
-				'caption' => 'users',
-				'url' => 'index.php?page=admin\\\\users'
-			],
-			'logout' => [
-				'caption' => 'logout',
-				'url' => 'index.php?page=logout'
-			],
-		]
-	],
 	'form' => [
-		'target' => 'index.php?page=admin\users',
+		'target' => 'index.php?page=admin\\\\users',
 		'method' => 'POST',
 		'id' => 'editor_form',
 		'class' => 'UserEditor',
 		'fields' => [
-			'name' => [
+			'User_name' => [
 				'field_type' => 'edit',
 				'id' => 'user_name',
 				'class' => 'user-name flex-row',
 				'name' => 'name'
 			],
-			'role' => [
+			'User_role' => [
 				'field_type' => 'edit',
 				'id' => 'user_role',
 				'class' => 'user-role flex-row',

@@ -1,33 +1,33 @@
 <?php
-$name = "admin\users";
-$template = "users";
-$target = "index.php?page=admin\users";
+$name = "admin\\forums";
+$template = "forums";
+$target = "index.php?page=admin\forums";
 $modules = [
 	'header' => [
 		'size' => '1',
 		'class' => 'margin',
 		'id' => 'CaptionText',
 		'align' => 'center',
-		'text' => 'Users'
+		'text' => 'Forums'
 	],
 	'table' => [
-		'id' => 'users',
-		'class' => 'usersTable',
+		'id' => 'forums',
+		'class' => 'forumsTable',
 		'style' => 'font-size: 16px;',
 		'border' => '1',
-		'caption' => 'Users',
+		'caption' => 'Forums',
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, User_name, User_role',
+		'fields' => 'id, user_id, name',
 		'mode' => 'main',
 		'main' => [
-			'headers' => ['ИД', 'имя', 'роль'],
-			'source' => 'users',
+			'headers' => ['ИД', 'автор', 'название'],
+			'source' => 'forums',
 			'types' => [
 				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
 				['name' => 'text'],
+				['name' => 'link', 'url' => '&mode=form&id='],
 			],
 		],
 	],
@@ -39,9 +39,9 @@ $modules = [
 			'name' => 'webmaster'
 		],
 		'insert' => [
-			'target' => 'index.php?page=admin\\\\users',
+			'target' => 'index.php?page=admin\\\\forums',
 			'params' => '&mode=form',
-			'name' => 'add user',
+			'name' => 'add forum',
 			'style' => 'margin-left:10%'
 		],
 	],

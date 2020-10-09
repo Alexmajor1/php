@@ -10,23 +10,32 @@ $modules = [
 		'align' => 'center',
 		'text' => 'Admin panel'
 	],
-	'menu' => [
-		'id' => 'mainmenu',
-		'menuitems' => [
-			'homePage' =>
-			[
-				'caption' => 'home page',
-				'url' => 'index.php?page=admin\\\\main'
-			],
-			'users' => [
-				'caption' => 'users',
-				'url' => 'index.php?page=admin\\\\users'
-			],
-			'logout' => [
-				'caption' => 'logout',
-				'url' => 'index.php?page=logout'
-			],
-		]
+	'text' => [
+		'users' => [
+			'class' => 'margin',
+			'id' => 'UsersText',
+			'align' => 'center'
+		],
+		'roles' => [
+			'class' => 'margin',
+			'id' => 'RolesText',
+			'align' => 'center'
+		],
+		'forums' => [
+			'class' => 'margin',
+			'id' => 'ForumsText',
+			'align' => 'center'
+		],
+		'themes' => [
+			'class' => 'margin',
+			'id' => 'ThemesText',
+			'align' => 'center'
+		],
+		'topics' => [
+			'class' => 'margin',
+			'id' => 'TopicsText',
+			'align' => 'center'
+		],
 	],
 	'link' => [
 		'WebMaster' => [

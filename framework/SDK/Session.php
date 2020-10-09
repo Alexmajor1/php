@@ -71,7 +71,7 @@ class Session
 	
 	function getRole()
 	{
-		return $this->db->select('roles, users', ['role_name' =>'role_name'])->where(['users.id' => $this->user[0][0], 'id_role' => ['user_role']], 'AND')->value();
+		return $this->db->select('roles, users', ['role_name' =>'role_name'])->where(['users.id' => $this->user[0][0], 'roles.id' => ['user_role']], 'AND')->value();
 	}
 	
 	function getPermissions()

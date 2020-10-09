@@ -3,6 +3,7 @@ namespace Plugins;
 
 use framework\Plugin;
 use framework\Request;
+use framework\Alias;
 
 class Form extends Plugin
 {
