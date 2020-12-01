@@ -16,6 +16,11 @@ th
 	background-color: silver;
 }
 
+th a
+{
+	width:100%;
+}
+
 #pager a
 {
 	margin-left: 3px;
@@ -26,7 +31,7 @@ th
 	background-color: silver;
 }
 
-th a:hover, tbody td:hover
+th:hover, tbody td:hover
 {
 	background-color: gray;
 }

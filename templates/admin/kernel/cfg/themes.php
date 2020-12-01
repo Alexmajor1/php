@@ -19,11 +19,13 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, forum_id, user_id, name',
+		'fields' => 'themes.id, forums.name, users.User_name, themes.name',
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['ИД', 'форум', 'автор', 'название'],
-			'source' => 'themes',
+			'source' => 'themes, forums, users',
+			'relation' => 'themes.user_id',
+			'value' => 'users.id',
 			'types' => [
 				['name' => 'text'],
 				['name' => 'text'],

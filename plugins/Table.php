@@ -172,7 +172,11 @@ class Table extends Plugin
 		if(strlen($order)> 10) $sql .= mb_substr($order, 0, -1);
 		
 		$rows = $this->db->DataQuery($sql);
-		$tmp = $this->db->FieldsDescriptors();
+		
+		if(!key_exists('headers', $value[$value['mode']]))
+			$tmp = $this->db->FieldsDescriptors();
+		else
+			$tmp = $value[$value['mode']]['headers'];
 		
 		$file = fopen($this->path.'/modules/tableHeader.html', "r");
 		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
@@ -181,7 +185,7 @@ class Table extends Plugin
 			foreach($tmp as $key => $val)
 			{
 				$html1 = $html;
-				$key = $tmp[$key]-name;
+				$key = $tmp[$key]->name;
 				
 				if(key_exists($key, $_REQUEST))
 					switch($_REQUEST[$key]){
@@ -199,7 +203,7 @@ class Table extends Plugin
 			foreach($value[$value['mode']]['headers'] as $key => $val)
 			{
 				$html1 = $html;
-				$key = $tmp[$key]->name;
+				$key = $tmp[$key];
 				
 				if(key_exists($key, $_REQUEST))
 					switch($_REQUEST[$key]){
@@ -237,12 +241,19 @@ class Table extends Plugin
 		foreach($rows as $id => $row)
 		{
 			$str1 = '';
+			
 			foreach($row as $key => $val)
 			{
 				$cell = $val;
 				
 				if($value[$value['mode']]['types']){
-					$cell = $this->fieldsDB(['value' => $val, 'id' => $row[0], 'type' => $value[$value['mode']]['types'][$key]]);
+					$cell = $this->fieldsDB([
+						'value' => $val, 
+						'id' => $row[0], 
+						'type' => $value[$value['mode']]['types'][$key]
+					]);
+					
+					if($cell == '') continue;
 				}
 			
 				$html21 = $html2;
@@ -264,6 +275,7 @@ class Table extends Plugin
 	{
 		$req = new Request();
 		$type = $data['type'];
+		if($type['name'] == 'hide') return '';
 		
 		if($type['name'] != 'text') {
 			$file = fopen($this->path.'/modules/'.$type['name'].'.html', "r");

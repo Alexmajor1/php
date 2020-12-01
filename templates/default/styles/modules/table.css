@@ -16,6 +16,11 @@ th
 	background-color: silver;
 }
 
+th a
+{
+	width:100%;
+}
+
 #pager a
 {
 	margin-left: 3px;

@@ -26,12 +26,13 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'name',
+		'fields' => 'id, name',
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['Форумы'],
 			'source' => 'forums',
 			'types' => [
+				['name' => 'hide'],
 				['name' => 'link', 'url' => '&forum=']
 			],
 		],
@@ -40,6 +41,7 @@ $modules = [
 			'source' => 'themes',
 			'relation' => 'forum_id',
 			'types' => [
+				['name' => 'hide'],
 				['name' => 'link', 'url' => '&theme=']
 			],
 		],
@@ -48,6 +50,7 @@ $modules = [
 			'source' => 'topics',
 			'relation' => 'theme_id',
 			'types' => [
+				['name' => 'hide'],
 				['name' => 'text']
 			],
 		]
