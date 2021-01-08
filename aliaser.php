@@ -2,9 +2,13 @@
 include_once "config\\settings.php";
 
 $tmpls = array('default','admin');
-$arr1 = scandir("templates\\default\\kernel\\cfg");
-$arr2 = scandir("templates\\admin\\kernel\\cfg");
-$files = [array($arr1, $arr2), scandir("controllers")];
+$files = array();
+foreach($tmpls as $tmpl)
+{
+	$dir = scandir("templates\\$tmpl\\kernel\\cfg");
+	foreach($dir as $file)
+		$files[] = "templates\\$tmpl\\kernel\\cfg\\$file";
+}
 
 function str_rand()
 {
@@ -22,20 +26,15 @@ function str_rand()
 
 function fileStorage($source, $files)
 {
-	$aliases = fopen("aliases\\$source".".php","r");
-	
 	$data = array();
 	
-	for($i=0;$i<count($files[0]);$i++)
+	array_push($data, 'index.php?page=main');
+	
+	foreach($files as $file)
 	{
-		if(!is_dir($files[0][$i]))
+		if(!is_dir($file))
 		{
-			include_once "views\\page\\cfg\\".$files[0][$i];
-			
-			if(isset($target))
-			{
-				array_push($data, $target);
-			}
+			include_once $file;
 			
 			foreach($modules as $value)
 			{
@@ -47,26 +46,9 @@ function fileStorage($source, $files)
 		}
 	}
 	
-	for($i=0;$i<count($files[1]);$i++)
-	{
-		if(!is_dir($files[1][$i]))
-		{
-			$file = fopen("controllers\\".$files[1][$i],"r");
-			while(!feof($file))
-			{
-				$str = fgets($file);
-				if(strpos($str, 'header'))
-				{
-					$alias = str_replace("');", '', split(':', $str)[1]);
-					array_push($data, $alias);
-				}
-			}
-			
-			fclose($file);
-		}
-	}
-	
 	array_unique($data);
+	
+	$aliases = fopen("aliases\\$source".".php","a+");
 	
 	foreach($data as $value)
 	{
@@ -82,98 +64,41 @@ function tableStorage($source, $files, $ConData, $tmpls)
 	
 	$db = new framework\DB($ConData);
 	
-	for($i=0;$i<count($files[0]);$i++)
+	echo 'index.php?page=main<br>';
+	$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"index.php?page=main\"");
+	
+	if($res == null)
 	{
-		if(is_array($files[0][$i]))
+		echo 'ADD<br>';
+		$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand().'","index.php?page=main")');
+	}
+	
+	foreach($files as $file)
+	{
+		if(!is_dir($file))
 		{
-			for($j=0;$j<count($files[0][$i]);$j++)
-			{
-				if(!is_dir($files[0][$i][$j]))
-				{
-					include_once 'templates\\'.$tmpls[$i].'\\kernel\\cfg\\'.$files[0][$i][$j];
-					
-					if(isset($target))
-					{
-						$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"$target\"");
-							
-						if($res == null)
-						{
-							$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"$target\")");
-						}
-					}
-					
-					foreach($modules as $value)
-					{
-						if(key_exists('target', $value))
-						{
-							$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$value['target']."\"");
-							
-							if($res == null)
-							{
-								$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"".$value['target']."\")");
-							}
-						}
-					}
-				}
-			}
-		}
-		elseif(!is_dir($files[0][$i]))
-		{
-			include_once "templates\\default\\kernel\\cfg".$files[0][$i];
+			echo $file.'<br>';
 			
-			if(isset($target))
-			{
-				$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"$target\"");
-					
-				if($res == null)
-				{
-					$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"$target\")");
-				}
-			}
+			include_once $file;
 			
 			foreach($modules as $value)
 			{
+				
 				if(key_exists('target', $value))
 				{
-					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$value['target']."\"");
+					echo $value['target'].'<br>';
+					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$value['target'].'"');
 					
 					if($res == null)
 					{
-						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"".$value['target']."\")");
+						echo 'ADD<br>';
+						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand().'","'.$value['target'].'")');
 					}
 				}
 			}
 		}
 	}
 	
-	for($i=0;$i<count($files[1]);$i++)
-	{
-		if(!is_dir($files[1][$i]))
-		{
-			$file = fopen("controllers\\".$files[1][$i],"r");
-			while(!feof($file))
-			{
-				$str = fgets($file);
-				
-				if(strpos($str, '$this->toPage'))
-				{
-					
-					$alias = trim(str_ireplace("('", "", str_ireplace("');", "", explode('toPage', $str)[1])));
-					
-					if(strpos($alias, 'page')) $alias = explode('=', $alias)[1];
-					
-					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"index.php?page=$alias\"");
-					
-					if($res == null)
-					{
-						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand()."\",\"index.php?page=$alias\")");
-					}
-				}
-			}
-			
-			fclose($file);
-		}
-	}
 	echo 'finish';
 }
 
