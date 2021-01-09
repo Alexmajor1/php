@@ -14,6 +14,18 @@ $layout = [
 	]
 ];
 
+$assets = [
+	"path" => "assets",
+	"scripts" => [
+		"dir" => "scripts",
+		"name" => "script"
+	],
+	"styles" => [
+		"dir" => "styles",
+		"name" => "style"
+	]
+];
+
 $alias = [
 	"mode" => "alias",
 	"storage" => "table",
