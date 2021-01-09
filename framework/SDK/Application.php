@@ -16,7 +16,11 @@ class Application
 		$this->alias = new Alias($this->cfg, $this->db);
 		
 		$req = new Request();
-		$page = explode('page=', $this->alias->decode($req->get('alias')))[1];
+		if(!key_exists('page', $req->get())||!key_exists('alias', $req->get())){
+			$page = 'main';
+		} else {
+			$page = explode('page=', $this->alias->decode($req->get('alias')))[1];
+		}
 		
 		if(stripos($page, '\\') > 0)
 			$ctrl = 'controllers\\'.explode('\\', ucfirst($page))[0].'Controller';
@@ -56,14 +60,19 @@ class Application
 		{
 			case 'page':
 			{
-				if(!key_exists('page', $req->get)) header('location:index.php?page=main');
-				$this->ctrl->addConfig(['page',$req->get('page')]);
-				if($req->get['page'] == 'logout')
-				{
-					$this->ctrl->logout();
+				if(!key_exists('page', $req->get())){
+					$this->ctrl->addConfig(['page','main']);
+					
+					$page = 'page=main';
+				} else {
+					$this->ctrl->addConfig(['page',$req->get('page')]);
+					if($req->get['page'] == 'logout')
+					{
+						$this->ctrl->logout();
+					}
+					
+					$page = explode('\\', $req->get['page']);
 				}
-				
-				$page = explode('\\', $req->get['page']);
 				
 				if(count($page) > 1){
 					$tmpl = $page[0];
@@ -78,11 +87,10 @@ class Application
 			{
 				if(!key_exists('alias', $req->get()))
 				{
-					$main = $this->alias->encode('index.php?page=main');
-					header("location: $main");
+					$page = 'page=main';
+				} else {
+					$page = $this->alias->decode($req->get('alias'));
 				}
-		
-				$page = $this->alias->decode($req->get('alias'));
 				
 				if(explode('page=', $page)[1] == 'logout')
 				{

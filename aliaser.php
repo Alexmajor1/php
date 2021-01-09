@@ -28,8 +28,6 @@ function fileStorage($source, $files)
 {
 	$data = array();
 	
-	array_push($data, 'index.php?page=main');
-	
 	foreach($files as $file)
 	{
 		if(!is_dir($file))
@@ -63,15 +61,6 @@ function tableStorage($source, $files, $ConData, $tmpls)
 	include_once "framework\\SDK\\DB.php";
 	
 	$db = new framework\DB($ConData);
-	
-	echo 'index.php?page=main<br>';
-	$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"index.php?page=main\"");
-	
-	if($res == null)
-	{
-		echo 'ADD<br>';
-		$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand().'","index.php?page=main")');
-	}
 	
 	foreach($files as $file)
 	{
