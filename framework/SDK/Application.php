@@ -16,7 +16,8 @@ class Application
 		$this->alias = new Alias($this->cfg, $this->db);
 		
 		$req = new Request();
-		if(!key_exists('page', $req->get())||!key_exists('alias', $req->get())){
+		
+		if((!key_exists('page', $req->get()))&&(!key_exists('alias', $req->get()))){
 			$page = 'main';
 		} else {
 			$page = explode('page=', $this->alias->decode($req->get('alias')))[1];
