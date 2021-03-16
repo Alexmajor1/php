@@ -12,6 +12,8 @@ class Layout
 	function __construct($cfg)
 	{
 		$this->title = $cfg->GetSetting('title');
+		$assets = new Assets(cfg);
+		
 		$this->style = 'templates/'.$cfg->GetSetting('site_template').'/styles/'.$cfg->GetSetting('layout')['style'].'.css';
 		$this->scripts = $cfg->GetSetting('layout')['scripts'];
 		$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/layouts/'.$cfg->getSetting('layout')['name'].'.html', "r");

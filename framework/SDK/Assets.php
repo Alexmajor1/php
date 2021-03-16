@@ -29,7 +29,7 @@ class Assets
 		$this->css = fopen($css_file, 'w+');
 		
 		$js_path = $root_path.'/'.$dirs['scripts']['dir'];
-		$js_file = $js_path.'/'.$dirs['scripts']['dir'];
+		$js_file = $js_path.'/'.$dirs['scripts']['name'];
 		$this->js = fopen($js_file, 'w+');
 	}
 	
