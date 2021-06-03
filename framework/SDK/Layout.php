@@ -12,9 +12,10 @@ class Layout
 	function __construct($cfg)
 	{
 		$this->title = $cfg->GetSetting('title');
-		$assets = new Assets(cfg);
+		$assets = new Assets($cfg);
+		$assets->generate();
 		
-		$this->style = 'templates/'.$cfg->GetSetting('site_template').'/styles/'.$cfg->GetSetting('layout')['style'].'.css';
+		$this->style = 'assets/css/'.$cfg->GetSetting('layout')['style'].'.css';
 		$this->scripts = $cfg->GetSetting('layout')['scripts'];
 		$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/layouts/'.$cfg->getSetting('layout')['name'].'.html', "r");
 		$this->content = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/layouts/'.$cfg->getSetting('layout')['name'].'.html'));
@@ -25,12 +26,8 @@ class Layout
 	{
 		$this->content = str_replace('{title}', $this->title, $this->content);
 		$this->content = str_replace('{style}', $this->style, $this->content);
-		$str = '';
-		foreach($this->scripts as $value)
-		{
-			$str .= "<script src=\"templates/".$this->cfg->GetSetting('site_template')."/scripts/$value.js\"></script>";
-		}
-		$this->content = str_replace('{scripts}', $str, $this->content);
+		
+		$this->content = str_replace('{scripts}', '<script src="assets/js/script.js"></script>', $this->content);
 		$temp->SetTarget($cfg->getSetting('target'));
 		$this->content = str_replace('{content}', $temp->content, $this->content);
 	}

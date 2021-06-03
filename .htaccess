@@ -7,3 +7,7 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ ./index.php?alias=$1 [L]
+
+<FilesMatch ".(css|js)$">
+	Header append Cache-Control "no-store, no-cache, must-revalidate"
+</FilesMatch>

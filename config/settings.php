@@ -17,11 +17,11 @@ $layout = [
 $assets = [
 	"path" => "assets",
 	"scripts" => [
-		"dir" => "scripts",
+		"dir" => "js",
 		"name" => "script"
 	],
 	"styles" => [
-		"dir" => "styles",
+		"dir" => "css",
 		"name" => "style"
 	]
 ];
