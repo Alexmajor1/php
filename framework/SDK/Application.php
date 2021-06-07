@@ -111,16 +111,30 @@ class Application
 			break;
 		}
 		
-		$rule = $this->ctrl->rule;
-		if($rule != '')
+		if(isset($this->ctrl->rule))
 		{
-			$rule = 'rules\\'.$rule;
-			
-			$check = new $rule($this->ctrl);
-			$check->path = $this->data;
-			$check->execute();
-			$this->ctrl = $check->ctrl;
-			$this->data = $check->path;
+			$rule = $this->ctrl->rule;
+			if($rule != '')
+			{
+				$rule = 'rules\\'.$rule.'Rule';
+				
+				$check = new $rule($this->ctrl);
+				$check->path = $this->data;
+				$check->execute();
+				$this->ctrl = $check->ctrl;
+				$this->data = $check->path;
+			}
+		}
+		
+		if(isset($this->ctrl->widget))
+		{
+			$name = $this->ctrl->widget;
+			if($name != '')
+			{
+				$class = 'widgets\\'.$name.'Widget';
+				$widget = new $class($this->ctrl->getProperty('widgets')[strtolower($name)]);
+				$this->ctrl->mods = $widget->execute($this->ctrl->mods);
+			}
 		}
 		
 		$this->addData();

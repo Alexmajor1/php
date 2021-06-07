@@ -32,8 +32,9 @@ class Alias
 	
 	function fileEncode($data)
 	{
-		$file = fopen((__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php', 'r');
-		$aliasesDB = fread($file, filesize((__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php'));
+		$path = (__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php';
+		$file = fopen($path, 'r');
+		$aliasesDB = fread($file, filesize($path));
 		$aliases = split(';', $aliasesDB);
 		
 		foreach($data as $key => $value)
@@ -64,8 +65,9 @@ class Alias
 	
 	function fileDecode($data)
 	{
-		$file = fopen((__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php', 'r');
-		$aliasesDB = fread($file, filesize((__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php'));
+		$path = (__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php';
+		$file = fopen($path, 'r');
+		$aliasesDB = fread($file, filesize($path));
 		$aliases = split(';', $aliasesDB);
 		$data = array();
 		

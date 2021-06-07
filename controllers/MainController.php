@@ -11,7 +11,7 @@ use models\Cabinet;
 
 class MainController extends Controller
 {
-	public $rule = 'CabinetRule';
+	public $rule = 'Cabinet';
 	
 	function authorization()
 	{

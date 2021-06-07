@@ -12,7 +12,8 @@ use models\Topic;
 
 class AdminController extends Controller
 {
-	public $rule = 'AdminRule';
+	public $rule = 'Admin';
+	public $widget = 'Menu';
 	
 	function index()
 	{

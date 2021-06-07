@@ -33,68 +33,38 @@ class Assets
 		$this->js = fopen($js_file, 'w+');
 	}
 	
-	function generate()
+	function fileAppend($path)
 	{
-		if(file_exists($this->tmp.'/styles/style.css'))
+		if(file_exists($path))
 		{
-			$file = fopen($this->tmp.'/styles/style.css', 'r');
-			$code = fread($file, filesize($this->tmp.'/styles/style.css'));
-			fwrite($this->css, $code);
-			fclose($file);
-		}
-		
-		if(file_exists($this->tmp.'/styles/pages/'.$this->page.'.css'))
-		{
-			$file = fopen($this->tmp.'/styles/pages/'.$this->page.'.css', 'r');
-			$code = fread($file, filesize($this->tmp.'/styles/pages/'.$this->page.'.css'));
-			fwrite($this->css, $code);
-			fclose($file);
-		}
-		
-		foreach($this->modules as $module)
-		{
-			if(file_exists($this->tmp.'/styles/modules/'.$module.'.css'))
-			{
-				$file = fopen($this->tmp.'/styles/modules/'.$module.'.css', 'r');
-				$code = fread($file, filesize($this->tmp.'/styles/modules/'.$module.'.css'));
+			$file = fopen($path, 'r');
+			$code = fread($file, filesize($path));
+			
+			if(strpos($path,'.css'))
 				fwrite($this->css, $code);
-				fclose($file);
-			}
-		}
-		fclose($this->css);
-		
-		if(file_exists($this->tmp.'/scripts/script.js'))
-		{
-			$file = fopen($this->tmp.'/scripts/script.js', 'r');
-			$code = fread($file, filesize($this->tmp.'/scripts/script.js'));
-			fwrite($this->js, $code);
-			fclose($file);
-		}
-		
-		if(file_exists($this->tmp.'/scripts/pages/'.$this->page.'.js'))
-		{
-			$file = fopen($this->tmp.'/scripts/pages/'.$this->page.'.js', 'r');
-			$code = fread($file, filesize($this->tmp.'/scripts/pages/'.$this->page.'.js'));
-			fwrite($this->js, $code);
-			fclose($file);
-		}
-		
-		foreach($this->modules as $module)
-		{
-			if(file_exists($this->tmp.'/scripts/modules/'.$module.'.js'))
-			{
-				$file = fopen($this->tmp.'/scripts/modules/'.$module.'.js', 'r');
-				$code = fread($file, filesize($this->tmp.'/scripts/modules/'.$module.'.js'));
+			else
 				fwrite($this->js, $code);
-				fclose($file);
-			}
+			fclose($file);
 		}
-		fclose($this->js);
 	}
 	
-	function clear()
+	function generate()
 	{
+		$this->fileAppend($this->tmp.'/styles/style.css');
+		$this->fileAppend($this->tmp.'/styles/pages/'.$this->page.'.css');
 		
+		foreach($this->modules as $module)
+			$this->fileAppend($this->tmp.'/styles/modules/'.$module.'.css');
+		
+		fclose($this->css);
+		
+		$this->fileAppend($this->tmp.'/scripts/script.js');
+		$this->fileAppend($this->tmp.'/scripts/pages/'.$this->page.'.js');
+		
+		foreach($this->modules as $module)
+			$this->fileAppend($this->tmp.'/scripts/modules/'.$module.'.js');
+		
+		fclose($this->js);
 	}
 }
 ?>

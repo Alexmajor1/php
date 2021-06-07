@@ -17,8 +17,9 @@ class Layout
 		
 		$this->style = 'assets/css/'.$cfg->GetSetting('layout')['style'].'.css';
 		$this->scripts = $cfg->GetSetting('layout')['scripts'];
-		$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/layouts/'.$cfg->getSetting('layout')['name'].'.html', "r");
-		$this->content = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/layouts/'.$cfg->getSetting('layout')['name'].'.html'));
+		$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/layouts/'.$cfg->getSetting('layout')['name'].'.html';
+		$file = fopen($path, "r");
+		$this->content = fread($file, filesize($path));
 		$this->cfg = $cfg;
 	}
 	
