@@ -13,7 +13,7 @@ use models\Topic;
 class AdminController extends Controller
 {
 	public $rules = ['Admin'];
-	public $widgets = ['Menu'];
+	public $widgets = ['Menu', 'footer'];
 	
 	function index()
 	{
