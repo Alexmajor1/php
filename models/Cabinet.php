@@ -19,7 +19,7 @@ class Cabinet
 		return in_array($this->UserPermissions, $permission, true);
 	}
 	
-	function forumUpdate($req, $db)
+	function forumUpdate($req)
 	{
 		if(key_exists('author', $req->post()))
 		{
@@ -27,14 +27,14 @@ class Cabinet
 			$message = $req->post('message');
 			
 			if($req->get('theme')){
-				$topic = new Topic($db);
+				$topic = new Topic();
 				$topic->create([
 					'theme_id' => $req->get('theme'),
 					'user_id' => $author,
 					'name' => $message
 				]);
 			} else if($req->get('forum')){
-				$theme = new Theme($db);
+				$theme = new Theme();
 				$theme->create([
 					'forum_id' => $req->get('forum'),
 					'user_id' => $author,
@@ -42,7 +42,7 @@ class Cabinet
 				]);
 			} else {
 				echo 'forum';
-				$forum = new Forum($db);
+				$forum = new Forum();
 				$res = $forum->create([
 					'user_id' => $author,
 					'name' => $message

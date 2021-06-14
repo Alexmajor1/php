@@ -13,8 +13,9 @@ class AdminRule extends Rule
 		
 		$settings = $this->ctrl->getProperty('session');
 		
-		$sess = new Session($this->ctrl->db, $settings);
-		if($sess->getLogin() == '') $this->ctrl->toPage('main');
+		$sess = new Session($settings);
+		
+		if(strcmp($sess->getLogin(), '') == 0) $this->ctrl->toPage('main');
 		
 		$arr = explode('cfg/', $this->path);
 		

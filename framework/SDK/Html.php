@@ -4,12 +4,10 @@ namespace framework;
 class Html
 {
 	private $ldr;
-	private $page;
 	
-	function __construct($page, $db)
+	function __construct($page)
 	{
-		$this->page = $page;
-		$this->ldr = new Loader($this->page, $db);
+		$this->ldr = new Loader($page);
 	}
 	
 	function draw($cfg, $alias, $mods)

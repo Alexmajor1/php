@@ -91,5 +91,12 @@ $widgets =[
 			],
 		]
 	],
+	'footer' => [
+		'id' => 'footer',
+		'target' => 'mailto: asvelat@gmail.com',
+		'class' => 'WebMasterMail',
+		'id' => 'MailAddress',
+		'name' => 'webmaster'
+	]
 ];
 ?>

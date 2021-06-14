@@ -12,7 +12,7 @@ class CabinetRule extends Rule
 		{
 			$settings = $this->ctrl->getProperty('session');
 			
-			$sess = new Session($this->ctrl->db, $settings);
+			$sess = new Session($settings);
 			if($sess->getLogin() == '') $this->ctrl->toPage('main');
 		} else {
 			$this->ctrl->mods =[];

@@ -12,8 +12,8 @@ class Application
 	function __construct($conf)
 	{
 		$this->cfg = new Config($conf);
-		$this->db = new DB($this->cfg->getSetting('database'));
-		$this->alias = new Alias($this->cfg, $this->db);
+		$this->db = DB::getInstance($this->cfg->getSetting('database'));
+		$this->alias = new Alias($this->cfg);
 		
 		$req = new Request();
 		
@@ -109,31 +109,36 @@ class Application
 				$this->data = $_SERVER['DOCUMENT_ROOT'].'/'.$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
 			};
 			break;
+			echo 'route';
 		}
 		
-		if(isset($this->ctrl->rule))
+		if(isset($this->ctrl->rules))
 		{
-			$rule = $this->ctrl->rule;
-			if($rule != '')
+			foreach($this->ctrl->rules as $rule)
 			{
-				$rule = 'rules\\'.$rule.'Rule';
-				
-				$check = new $rule($this->ctrl);
-				$check->path = $this->data;
-				$check->execute();
-				$this->ctrl = $check->ctrl;
-				$this->data = $check->path;
+				if($rule != '')
+				{
+					$rule = 'rules\\'.$rule.'Rule';
+					
+					$check = new $rule($this->ctrl);
+					$check->path = $this->data;
+					$check->execute();
+					$this->ctrl = $check->ctrl;
+					$this->data = $check->path;
+				}
 			}
 		}
 		
-		if(isset($this->ctrl->widget))
+		if(isset($this->ctrl->widgets))
 		{
-			$name = $this->ctrl->widget;
-			if($name != '')
+			foreach($this->ctrl->widgets as $name)
 			{
-				$class = 'widgets\\'.$name.'Widget';
-				$widget = new $class($this->ctrl->getProperty('widgets')[strtolower($name)]);
-				$this->ctrl->mods = $widget->execute($this->ctrl->mods);
+				if($name != '')
+				{
+					$class = 'widgets\\'.$name.'Widget';
+					$widget = new $class($this->ctrl->getProperty('widgets')[strtolower($name)]);
+					$this->ctrl->mods = $widget->execute($this->ctrl->mods);
+				}
 			}
 		}
 		
@@ -150,6 +155,7 @@ class Application
 			if(stripos($method, '\\') > 0)
 				$method = explode('\\', $method)[1];
 			if($method == 'main') $method = 'index';
+			
 			$this->ctrl->$method();
 		}
 		$this->ctrl->generate();

@@ -4,13 +4,11 @@ namespace framework;
 class Loader
 {
 	private $cfg;
-	private $db;
 	private $page;
 	private $modules;
 	
-	function __construct($page, $db)
+	function __construct($page)
 	{
-		$this->db = $db;
 		$this->page = $page;
 		$this->modules = array();
 	}
@@ -68,7 +66,7 @@ class Loader
 	function plugin($key, $value)
 	{
 		$name = '\\Plugins\\'.$key;
-		$plugin = new $name(['value' => $value, 'db' => $this->db, 'cfg' => $this->cfg]);
+		$plugin = new $name(['value' => $value, 'db' => DB::getInstance(), 'cfg' => $this->cfg]);
 		return $plugin->show();
 	}
 	

@@ -9,12 +9,10 @@ class Registration
 	private $password;
 	private $role;
 	private $model;
-	private $db;
 	
 	function __construct($db, $data)
 	{
-		$this->model = new User($db);
-		$this->db = $db;
+		$this->model = new User();
 		$this->user = $data['login'];
 		$this->password = $data['password'];
 		$this->role = $data['role'];
@@ -72,7 +70,7 @@ class Registration
 		if($this->CheckUser()) return 'this login is not available';
 		if($res = $this->CheckPassword() !== 'ok') return $res;
 		
-		$role = new Role($this->db);
+		$role = new Role();
 		$role_id = $role->read(['id_Role'], ['role_name' => $this->role])[0];
 		
 		return $this->model->create([

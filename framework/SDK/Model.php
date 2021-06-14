@@ -6,9 +6,9 @@ class Model
 	private $db;
 	private $table;
 	
-	function __construct($db)
+	function __construct()
 	{
-		$this->db = $db;
+		$this->db = DB::getInstance();
 		$this->table = strtolower(explode('\\', get_called_class())[1]).'s';
 	}
 	

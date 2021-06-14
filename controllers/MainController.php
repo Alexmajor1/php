@@ -11,7 +11,8 @@ use models\Cabinet;
 
 class MainController extends Controller
 {
-	public $rule = 'Cabinet';
+	public $rules = ['Cabinet'];
+	public $widgets = ['footer'];
 	
 	function authorization()
 	{
@@ -19,14 +20,14 @@ class MainController extends Controller
 		
 		if(key_exists('token', $req->cookie()))
 		{
-			$sess = new Session($this->db, $this->getProperty('session'), $auth->getUserByToken());
+			$sess = new Session($this->getProperty('session'), $auth->getUserByToken());
 			$sess->create();
 			$this->toPage('cabinet');
 		}
 		
 		if((strcmp($this->page->name, 'authorization') == 0) and $req->post('User'))
 		{
-			$auth = new Authorization($req, $this->db);
+			$auth = new Authorization($req);
 			
 			if($auth->validate($req->post()))
 			{
@@ -61,7 +62,7 @@ class MainController extends Controller
 		
 		if((strcmp($this->page->name, 'registration') == 0) and $req->post('login'))
 		{
-			$reg = new Registration($this->db, $req->post());
+			$reg = new Registration($req->post());
 			
 			if($reg->validate($req->post()))
 			{
@@ -83,7 +84,7 @@ class MainController extends Controller
 	{
 		$settings = $this->getProperty('session');
 		
-		$sess = new Session($this->db, $settings);
+		$sess = new Session($settings);
 		$sess->close();
 		
 		session_destroy();
@@ -95,13 +96,13 @@ class MainController extends Controller
 	{
 		$settings = $this->getProperty('session');
 		
-		$sess = new Session($this->db, $settings);
+		$sess = new Session($settings);
 		if($sess->getLogin() == '') $this->toPage('main');
 		
 		$cab = new Cabinet($sess, $this->mods);
 		$req = new Request();
 		
-		$cab->forumUpdate($req, $this->db);
+		$cab->forumUpdate($req);
 		$this->mods = $cab->mods;
 	}
 }

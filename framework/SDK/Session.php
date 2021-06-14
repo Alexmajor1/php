@@ -7,15 +7,15 @@ class Session
 	private $options;
 	private $user;
 	
-	function __construct($db, $options, $id = '')
+	function __construct($options, $id = '')
 	{
-		$this->db = $db;
+		$this->db = DB::getInstance();
 		$this->options = $options;
 		$req = new Request();
 		$this->user = $id;
 		
 		if($id == ''){
-			$this->user = $db->select($options['source'], ['session_user' => 'session_user'])->where(['session_key' => $req->cookie($options['key'])], '')->value();
+			$this->user = $this->db->select($options['source'], ['session_user' => 'session_user'])->where(['session_key' => $req->cookie($options['key'])], '')->value();
 		}
 	}
 	
@@ -66,7 +66,7 @@ class Session
 	
 	function getLogin()
 	{
-		return $this->db->select('users', ['user_name' => 'user_name'])->where(['id' => $this->user[0][0]], '')->value();
+		return $this->db->select('users', ['user_name' => 'user_name'])->where(['id' => $this->user], '')->value();
 	}
 	
 	function getRole()

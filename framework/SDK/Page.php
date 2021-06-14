@@ -8,10 +8,10 @@ class Page
 	public $html;
 	private $view;
 	
-	function __construct($cfg, $con)
+	function __construct($cfg)
 	{
 		$this->name = $cfg->GetSetting('name');
-		$this->html = new Html($this, $con);
+		$this->html = new Html($this);
 	}
 	
 	function LoadLayout($cfg)

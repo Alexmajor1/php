@@ -6,10 +6,10 @@ class Alias
 	public $cfg;
 	public $db;
 	
-	function __construct($cfg, $db)
+	function __construct($cfg)
 	{
 		$this->cfg = $cfg;
-		$this->db = $db;
+		$this->db = DB::getInstance();
 	}
 	
 	function encode($data)
@@ -84,7 +84,7 @@ class Alias
 	
 	function tableDecode($data)
 	{
-		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['page' => 'page'])->where(['name' => $data], '')->value();
+		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['page' => 'page'])->where(['name' => $data])->value();
 			
 		if($alias)
 		{

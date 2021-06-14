@@ -11,17 +11,15 @@ class Authorization
 	public $user;
 	private $password;
 	public $remember;
-	private $db;
 	private $model;
 	
-	function __construct($req, $db)
+	function __construct($req)
 	{
-		$this->model = new User($db);
+		$this->model = new User();
 		$this->request = $req;
 		$this->user = $this->request->post('User');
 		$this->password = $this->request->post('Password');
 		$this->remember = $this->request->post('Remember');
-		$this->db = $db;
 	}
 	
 	function getUserByToken()
@@ -54,7 +52,7 @@ class Authorization
 	
 	function isAdmin($conf)
 	{
-		$sess = new Session($this->db, $conf, $this->user);
+		$sess = new Session($conf, $this->user);
 		$sess->create();
 		
 		return strcmp($sess->getRole(), 'Admin') == 0;
@@ -65,7 +63,7 @@ class Authorization
 		$usr = null;
 		if($this->request->cookie($cfg['key']))
 		{
-			$sess = new Session($this->db, $cfg);
+			$sess = new Session($cfg);
 			$usr = $sess->get_user_id();
 			$this->user = $usr;
 			
