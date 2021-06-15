@@ -53,6 +53,13 @@ $plugins = [
 ];
 
 $widgets =[
+	'pagefooter' => [
+		'id' => 'footer',
+		'target' => 'mailto: asvelat@gmail.com',
+		'class' => 'WebMasterMail',
+		'id' => 'MailAddress',
+		'name' => 'webmaster'
+	],
 	'menu' => [
 		'id' => 'mainmenu',
 		'menuitems' => [
@@ -90,13 +97,6 @@ $widgets =[
 				'url' => 'index.php?page=logout'
 			],
 		]
-	],
-	'footer' => [
-		'id' => 'footer',
-		'target' => 'mailto: asvelat@gmail.com',
-		'class' => 'WebMasterMail',
-		'id' => 'MailAddress',
-		'name' => 'webmaster'
 	]
 ];
 ?>

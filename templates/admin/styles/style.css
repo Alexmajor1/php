@@ -29,6 +29,11 @@ p
 	height: auto;
 }
 
+#editor_form
+{
+	margin-left: 15px;
+}
+
 .margin
 {
 	margin: 0px;

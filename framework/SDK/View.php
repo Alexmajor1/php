@@ -28,8 +28,11 @@ class View
 		$data = strtok($module, ':');
 		
 		$path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/modules/'.$data.'.html';
+		
 		if(!file_exists($path))
+		{
 			$path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/framework/modules/'.$data.'.html';
+		}
 		
 		$file = fopen($path, "r");
 		$html = fread($file, filesize($path));

@@ -12,7 +12,7 @@ use models\Cabinet;
 class MainController extends Controller
 {
 	public $rules = ['Cabinet'];
-	public $widgets = ['footer'];
+	public $widgets = ['PageFooter'];
 	
 	function authorization()
 	{

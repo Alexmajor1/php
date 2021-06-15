@@ -3,7 +3,7 @@ namespace widgets;
 
 use framework\Widget;
 
-class FooterWidget extends Widget
+class PageFooterWidget extends Widget
 {
 	
 }

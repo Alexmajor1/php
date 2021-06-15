@@ -42,19 +42,5 @@ $modules = [
 			]
 		]
 	],
-	'link' => [
-		'WebMaster' => [
-			'target' => 'mailto: asvelat@gmail.com',
-			'class' => 'WebMasterMail',
-			'id' => 'MailAddress',
-			'name' => 'webmaster'
-		],
-		'insert' => [
-			'target' => 'index.php?page=admin\\\\themes',
-			'params' => '&mode=form',
-			'name' => 'add theme',
-			'style' => 'margin-left:10%'
-		]
-	],
 ];
 ?>

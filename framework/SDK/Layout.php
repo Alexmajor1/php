@@ -11,7 +11,7 @@ class Layout
 	
 	function __construct($cfg)
 	{
-		$this->title = $cfg->GetSetting('title');
+		$this->title = $cfg->GetSetting('layout')['title'];
 		$assets = new Assets($cfg);
 		$assets->generate();
 		
