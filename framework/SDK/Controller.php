@@ -5,7 +5,7 @@ session_start();
 class Controller
 {
 	public $db;
-	public $mods;
+	public $mods = [];
 	private $conf;
 	public $page;
 	public $alias;

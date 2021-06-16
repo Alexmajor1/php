@@ -54,11 +54,16 @@ $plugins = [
 
 $widgets =[
 	'pagefooter' => [
-		'id' => 'footer',
-		'target' => 'mailto: asvelat@gmail.com',
-		'class' => 'WebMasterMail',
-		'id' => 'MailAddress',
-		'name' => 'webmaster'
+		'content' => [
+			'link' => [
+				'id' => 'footer',
+				'target' => 'mailto: asvelat@gmail.com',
+				'class' => 'WebMasterMail',
+				'id' => 'MailAddress',
+				'name' => 'webmaster'
+			]
+		],
+		'id' => 'footer'
 	],
 	'menu' => [
 		'id' => 'mainmenu',

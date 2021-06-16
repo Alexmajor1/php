@@ -129,6 +129,8 @@ class Application
 			}
 		}
 		
+		$this->addData();
+		
 		if(isset($this->ctrl->widgets))
 		{
 			foreach($this->ctrl->widgets as $name)
@@ -137,13 +139,11 @@ class Application
 				{
 					$class = 'widgets\\'.$name.'Widget';
 					$widget = new $class($this->ctrl->getProperty('widgets')[strtolower($name)]);
-					$this->ctrl->mods = $widget->execute($this->ctrl->mods);
+					if(method_exists($widget, 'execute')) $widget->execute($this->cfg);
+					$this->ctrl->mods = $widget->show($this->ctrl->mods);
 				}
 			}
 		}
-		
-		$this->addData();
-		
 	}
 	
 	function run()
