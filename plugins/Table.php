@@ -30,43 +30,49 @@ class Table extends Plugin
 		
 	}
 	
-	function tableArr($value)
+	function getTableArrSort($rows)
 	{
-		$str = '';
 		$head_sort = array();
 		$pageLink = '';
+		
 		foreach($_REQUEST as $key => $val)
-			if((strstr('asc', $val) == false) and (strstr('desc', $val) == false))
+		{
+			if(!strstr('alias', $key))
 			{
-				if($key != 'alias')
-					$pageLink .= "&$key=$val";
-				else
-					$pageLink .= "$val";
-			}
-			else{
+				$pageLink .= "&$key=$val";
+				
 				switch($val)
 				{
 					case 'asc':$head_sort[$key] = SORT_ASC;break;
 					case 'desc':$head_sort[$key] = SORT_DESC;break;
-					default: $head_sort[$key] = SORT_DESC;
 				}
-			}
+			}else
+				$pageLink .= "$val";
+		}
 		
 		if(!empty($head_sort))
-			$value['rows'] = $this->tableArrSort($value['rows'], $head_sort);
+			return [$pageLink, $head_sort, $this->tableArrSort($rows, $head_sort)];
+		
+		return [$pageLink, $head_sort];
+	}
+	
+	function getTableArrHeaders($headers, $pageLink, $head_sort)
+	{
+		$str = '';
 		
 		$file = fopen($this->path.'/modules/tableHeader.html', "r");
 		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
 		
-		foreach($value['headers'] as $key => $val)
+		foreach($headers as $key => $val)
 		{			
 			$html1 = $html;
+			
 			if(count($head_sort) == 0){
 				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc", $val], $html1);
 				$str .= $html1."\n";
 			}else{
 				$str1 = '';
-				foreach($value['headers'] as $key1 => $val1)
+				foreach($headers as $key1 => $val1)
 				{
 					if($key1 == $key)
 					{
@@ -74,36 +80,39 @@ class Table extends Plugin
 						{
 							switch($head_sort[$key1])
 							{
-								case SORT_ASC:$str1 .= "&$key1=desc";break;
-								case SORT_DESC:$str1 .= "&$key1=asc";break;
-								default:$str1 .= "&$key1=asc";
+								case SORT_ASC: $pageLink = str_ireplace("&$key1=asc" , "&$key1=desc", $pageLink);break;
+								case SORT_DESC: $pageLink = str_ireplace("&$key1=desc" , "&$key1=asc", $pageLink);break;
 							}
 						}else{
 							$str1 .= "&$key1=desc";
 						}
-					}else{
-						if(key_exists($key1, $head_sort))
-						{
-							switch($head_sort[$key1])
-							{
-								case SORT_ASC:$str1 .= "&".($key1+1)."=asc";break;
-								case SORT_DESC:$str1 .= "&".($key1+1)."=desc";break;
-								default:$str1 .= "&".($key1+1)."=asc";
-							}
-						}
 					}
 				}
+				
 				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, $str1, $val], $html1);
 				$str .= $html1."\n";
 			}
 		}
 		
-		$value['headers'] = $str;
+		return $str;
+	}
+	
+	function tableArr($value)
+	{
+		$result = $this->getTableArrSort($value['rows']);
+		
+		$head_sort = $result[1];
+		$pageLink = $result[0];
+		
+		if(count($result) == 3)
+			$value['rows'] = $result[2];
+		
+		$value['headers'] = $this->getTableArrHeaders($value['headers'], $pageLink, $head_sort);
 			
 		$str = '';
 		$req = new Request(null);
-		$num = (key_exists('page', $req->get()))?$req->get('page'):1;
-		$end = $num*$value['pager']['pageSize'];
+		$num = (key_exists('p', $req->get()))?$req->get('p'):1;
+		$end = $num * $value['pager']['pageSize'];
 		$start = $end-$value['pager']['pageSize'];
 		
 		$file1 = fopen($this->path.'/modules/tableRow.html', "r");
@@ -152,11 +161,8 @@ class Table extends Plugin
 		return $res;
 	}
 	
-	function tableDB($value)
+	function getData($value)
 	{
-		$pageLink = $_REQUEST['alias'];
-		$str = '';
-		$head_sort = array();
 		$sql = 'select '.$value['fields'].' from '.$value[$value['mode']]['source'];
 		
 		if(key_exists('relation',$value[$value['mode']]))
@@ -165,13 +171,35 @@ class Table extends Plugin
 		}
 		
 		$order = ' order by ';
+		$fields = explode(', ', $value['fields']);
 		foreach($_REQUEST as $key => $val)
 			if($val == 'asc' or $val == 'desc')
-				$order .= "$key $val,";
+				$order .= $fields[$key]." $val,";
 		
 		if(strlen($order)> 10) $sql .= mb_substr($order, 0, -1);
 		
-		$rows = $this->db->DataQuery($sql);
+		$req = new Request(null);
+		$num = '';
+		if(key_exists('p', $req->get()))
+			$num = $req->get('p');
+		
+		if($num>0){
+			$page = $value['pageSize'];
+			$offset = ($num*$page)-$page;
+			$sql .= " limit $offset, $page";
+		} else {
+			$page = $value['pager']['pageSize'];
+			$sql .= " limit $page";
+		}
+		
+		return $this->db->DataQuery($sql);
+	}
+	
+	function getHeaders($value)
+	{
+		$pageLink = $_REQUEST['alias'];
+		$str = '';
+		$head_sort = array();
 		
 		if(!key_exists('headers', $value[$value['mode']]))
 			$tmp = $this->db->FieldsDescriptors();
@@ -203,7 +231,6 @@ class Table extends Plugin
 			foreach($value[$value['mode']]['headers'] as $key => $val)
 			{
 				$html1 = $html;
-				$key = $tmp[$key];
 				
 				if(key_exists($key, $_REQUEST))
 					switch($_REQUEST[$key]){
@@ -216,20 +243,14 @@ class Table extends Plugin
 				$str .= $html1;
 			}
 		
-		$req = new Request(null);
-		$num = '';
-		if(key_exists('page', $req->get()))
-			$num = $req->get('page');
+		return $str;
+	}
+	
+	function tableDB($value)
+	{
+		$rows = $this->getData($value);
 		
-		if($num>0){
-			$page = $value['pageSize'];
-			$offset = ($num*$page)-$page;
-			$sql .= " limit $offset, $page";
-		} else {
-			$page = $value['pager']['pageSize'];
-			$sql .= " limit $page";
-		}
-		$value['headers'] = $str;
+		$value['headers'] = $this->getHeaders($value);
 		
 		$file1 = fopen($this->path.'/modules/tableRow.html', "r");
 		$html1 = fread($file1, filesize($this->path.'/modules/tableRow.html'));
@@ -314,18 +335,18 @@ class Table extends Plugin
 		
 		foreach($_REQUEST as $key => $val)
 		{
-			if(($key != 'page' and $key != 'alias') or $key == '0')
+			if(($key != 'p' and $key != 'alias') or $key == '0')
 			{
 				$pageLink .= "&$key=$val";
 			}
-			else if($key != 'page')
+			else if($key != 'p')
 				$pageLink .= "$val";
 		}
 		 
 		for($i=1;$i<=$pageCount;$i++)
 		{
 			$html21 = $html2;
-			$html21 = str_ireplace(['{target}','{name}'], ["$pageLink&page=$i",$i], $html21);
+			$html21 = str_ireplace(['{target}','{name}'], ["&p=$i$pageLink",$i], $html21);
 			$str .= $html21;
 		}
 		$html11 = $html1;
