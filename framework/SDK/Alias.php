@@ -84,6 +84,8 @@ class Alias
 	
 	function tableDecode($data)
 	{
+		if($data == '') return 'index.php?page=main';
+			
 		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['page' => 'page'])->where(['name' => $data])->value();
 			
 		if($alias)
