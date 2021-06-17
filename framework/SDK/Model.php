@@ -65,10 +65,8 @@ class Model
 				$data[$value] = $req->post($value);
 			
 			if($req->post('id')){
-				echo 'update';
 				return $this->update($data,['id' => $req->post('id')]);
 			}else{
-				echo 'create';
 				return $this->create($data);
 			}
 			echo 'loose';
