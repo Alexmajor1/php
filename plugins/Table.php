@@ -174,7 +174,9 @@ class Table extends Plugin
 		$fields = explode(', ', $value['fields']);
 		foreach($_REQUEST as $key => $val)
 			if($val == 'asc' or $val == 'desc')
-				$order .= $fields[$key]." $val,";
+				$order .= 
+					$fields[$key].
+					" $val,";
 		
 		if(strlen($order)> 10) $sql .= mb_substr($order, 0, -1);
 		
@@ -201,6 +203,15 @@ class Table extends Plugin
 		$str = '';
 		$head_sort = array();
 		
+		foreach($_REQUEST as $key => $val)
+		{
+			if(is_numeric($key))
+			{
+				$head_sort[$key] = $val;
+				$pageLink .= "&$key=$val";
+			}
+		}
+		
 		if(!key_exists('headers', $value[$value['mode']]))
 			$tmp = $this->db->FieldsDescriptors();
 		else
@@ -208,40 +219,32 @@ class Table extends Plugin
 		
 		$file = fopen($this->path.'/modules/tableHeader.html', "r");
 		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
-		
-		if(!key_exists('headers', $value[$value['mode']]))
-			foreach($tmp as $key => $val)
+		$i = 0;
+		foreach($tmp as $val)
+		{
+			$html1 = $html;
+			$key = $i;
+			$val = (is_object($val))?$val->name:$val;
+			
+			
+			if(key_exists($key, $head_sort))
 			{
-				$html1 = $html;
-				$key = $tmp[$key]->name;
+				switch($head_sort[$key])
+				{
+					case 'asc': $pageLink = str_ireplace("&$key=asc" , "&$key=desc", $pageLink);break;
+					case 'desc': $pageLink = str_ireplace("&$key=desc" , "&$key=asc", $pageLink);break;
+				}
 				
-				if(key_exists($key, $_REQUEST))
-					switch($_REQUEST[$key]){
-						case 'asc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);;break;
-						case 'desc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=asc",$val], $html1);;break;
-					}
-				else
-					$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);
-				
-				$val1 = $val->name;
-				$value['headers'] = $val1;
-				$str .= $html1;
+				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, '', $val], $html1);
+			}else{
+				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc", $val], $html1);
 			}
-		else
-			foreach($value[$value['mode']]['headers'] as $key => $val)
-			{
-				$html1 = $html;
-				
-				if(key_exists($key, $_REQUEST))
-					switch($_REQUEST[$key]){
-						case 'asc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);;break;
-						case 'desc':$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=asc",$val], $html1);;break;
-					}
-				else
-					$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc",$val], $html1);
-				
-				$str .= $html1;
-			}
+			
+			$val1 = $val;
+			$value['headers'] = $val1;
+			$str .= $html1;
+			$i++;
+		}
 		
 		return $str;
 	}
