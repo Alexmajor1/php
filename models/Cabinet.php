@@ -6,6 +6,7 @@ class Cabinet
 	private $UserPermissions;
 	private $sess;
 	public $mods;
+	public $title = 'Cabinet';
 	
 	function __construct($sess, $mods)
 	{
@@ -21,28 +22,28 @@ class Cabinet
 	
 	function forumUpdate($req)
 	{
+		$forum = new Forum();
+		$theme = new Theme();
+		$topic = new Topic();
+		
 		if(key_exists('author', $req->post()))
 		{
 			$author = $req->post('author');
 			$message = $req->post('message');
 			
 			if($req->get('theme')){
-				$topic = new Topic();
 				$topic->create([
 					'theme_id' => $req->get('theme'),
 					'user_id' => $author,
 					'name' => $message
 				]);
 			} else if($req->get('forum')){
-				$theme = new Theme();
 				$theme->create([
 					'forum_id' => $req->get('forum'),
 					'user_id' => $author,
 					'name' => $message
 				]);
 			} else {
-				echo 'forum';
-				$forum = new Forum();
 				$res = $forum->create([
 					'user_id' => $author,
 					'name' => $message
@@ -50,9 +51,11 @@ class Cabinet
 			}
 		}
 		if(key_exists('theme', $req->get())){
+			$this->title = $theme->read(['name' => 'name'], ['id' => $req->get('theme')])[0][0];
 			$this->mods['table']['mode'] = 'data';
 			$this->mods['table']['data']['value'] = $req->get('theme');
 		} else if(key_exists('forum', $req->get())){
+			$this->title = $forum->read(['name' => 'name'], ['id' => $req->get('forum')])[0][0];
 			$this->mods['table']['mode'] = 'alt';
 			$this->mods['table']['alt']['value'] = $req->get('forum');
 		} else {

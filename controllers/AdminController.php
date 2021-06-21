@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use framework\Controller;
+use framework\Request;
 
 use models\User;
 use models\Role;
@@ -17,6 +18,10 @@ class AdminController extends Controller
 	
 	function index()
 	{
+		$layout = $this->getProperty('layout');
+		$layout['title'] = 'Admin panel';
+		$this->addConfig(['layout', $layout]);
+		
 		$users = count((new User($this->db))->read(['id']));
 		$this->mods['text']['users']['text'] = "Users count: $users";
 		
@@ -35,6 +40,19 @@ class AdminController extends Controller
 	
 	function users()
 	{
+		$layout = $this->getProperty('layout');
+		$mode = (new Request())->get('mode');
+		$id = (new Request())->get('id');
+		
+		if($mode)
+		{
+			if($id) $layout['title'] = 'Edit user';
+			else $layout['title'] = 'Add user';
+		}
+		else $layout['title'] = 'Users';
+		
+		$this->addConfig(['layout', $layout]);
+		
 		$model = new User($this->db);
 		$res = $model->editor($this->mods, ['User_name', 'User_role']);
 		
@@ -47,6 +65,19 @@ class AdminController extends Controller
 	
 	function roles()
 	{
+		$layout = $this->getProperty('layout');
+		$mode = (new Request())->get('mode');
+		$id = (new Request())->get('id');
+		
+		if($mode)
+		{
+			if($id) $layout['title'] = 'Edit role';
+			else $layout['title'] = 'Add role';
+		}
+		else $layout['title'] = 'Roles';
+		
+		$this->addConfig(['layout', $layout]);
+		
 		$model = new Role($this->db);
 		$res = $model->editor($this->mods, ['Role_name']);
 		
@@ -59,6 +90,19 @@ class AdminController extends Controller
 	
 	function rules()
 	{
+		$layout = $this->getProperty('layout');
+		$mode = (new Request())->get('mode');
+		$id = (new Request())->get('id');
+		
+		if($mode)
+		{
+			if($id) $layout['title'] = 'Edit rule';
+			else $layout['title'] = 'Add rule';
+		}
+		else $layout['title'] = 'Rules';
+		
+		$this->addConfig(['layout', $layout]);
+		
 		$model = new Rule($this->db);
 		$res = $model->editor($this->mods, ['Rule_name', 'Rule_role']);
 		
@@ -71,6 +115,19 @@ class AdminController extends Controller
 	
 	function forums()
 	{
+		$layout = $this->getProperty('layout');
+		$mode = (new Request())->get('mode');
+		$id = (new Request())->get('id');
+		
+		if($mode)
+		{
+			if($id) $layout['title'] = 'Edit forum';
+			else $layout['title'] = 'Add forum';
+		}
+		else $layout['title'] = 'Forums';
+		
+		$this->addConfig(['layout', $layout]);
+		
 		$model = new Forum($this->db);
 		$res = $model->editor($this->mods, ['user_id', 'name']);
 		
@@ -83,6 +140,19 @@ class AdminController extends Controller
 	
 	function themes()
 	{
+		$layout = $this->getProperty('layout');
+		$mode = (new Request())->get('mode');
+		$id = (new Request())->get('id');
+		
+		if($mode)
+		{
+			if($id) $layout['title'] = 'Edit theme';
+			else $layout['title'] = 'Add theme';
+		}
+		else $layout['title'] = 'Themes';
+		
+		$this->addConfig(['layout', $layout]);
+		
 		$model = new Theme($this->db);
 		$res = $model->editor($this->mods, ['user_id', 'forum_id', 'name']);
 		
@@ -95,6 +165,19 @@ class AdminController extends Controller
 	
 	function topics()
 	{
+		$layout = $this->getProperty('layout');
+		$mode = (new Request())->get('mode');
+		$id = (new Request())->get('id');
+		
+		if($mode)
+		{
+			if($id) $layout['title'] = 'Edit topic';
+			else $layout['title'] = 'Add topic';
+		}
+		else $layout['title'] = 'Topics';
+		
+		$this->addConfig(['layout', $layout]);
+		
 		$model = new Topic($this->db);
 		$res = $model->editor($this->mods, ['user_id', 'theme_id', 'name']);
 		

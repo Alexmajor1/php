@@ -58,6 +58,10 @@ class MainController extends Controller
 	
 	function registration()
 	{
+		$layout = $this->getProperty('layout');
+		$layout['title'] = 'Registration';
+		$this->addConfig(['layout', $layout]);
+		
 		$req = new Request();
 		
 		if((strcmp($this->page->name, 'registration') == 0) and $req->post('login'))
@@ -103,6 +107,11 @@ class MainController extends Controller
 		$req = new Request();
 		
 		$cab->forumUpdate($req);
+		
+		$layout = $this->getProperty('layout');
+		$layout['title'] = $cab->title;
+		$this->addConfig(['layout', $layout]);
+		
 		$this->mods = $cab->mods;
 	}
 }
