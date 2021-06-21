@@ -61,7 +61,9 @@ class Page
 	
 	function PrintPage()
 	{
-		echo preg_replace('/\s\w+="{\w+}"/','',$this->layout->content);
+		$result = preg_replace('/\s\w+="{\w+}"/', '', $this->layout->content);
+		$result = preg_replace('/{\w+}/', '', $result);
+		echo $result;
 	}
 }
 ?>
