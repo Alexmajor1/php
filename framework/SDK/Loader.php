@@ -20,8 +20,8 @@ class Loader
 	
 	function GetContent()
 	{
-		$this->page->LoadLayout($this->cfg);
-		$this->page->LoadView($this->cfg);
+		$this->page->LoadLayout();
+		$this->page->LoadView();
 		$page = explode('\\', $this->page->name);
 		
 		if($this->cfg->getSetting('site_template') != '')
@@ -72,7 +72,7 @@ class Loader
 	
 	function LoadContent()
 	{
-		$this->page->SetView($this->cfg);
+		$this->page->SetView();
 		$this->page->PrintPage();
 	}
 }

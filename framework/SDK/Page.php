@@ -7,21 +7,23 @@ class Page
 	private $layout;
 	public $html;
 	private $view;
+	private $cfg;
 	
 	function __construct($cfg)
 	{
+		$this->cfg = $cfg;
 		$this->name = $cfg->GetSetting('name');
 		$this->html = new Html($this);
 	}
 	
-	function LoadLayout($cfg)
+	function LoadLayout()
 	{
-		$this->layout = new Layout($cfg);
+		$this->layout = new Layout($this->cfg);
 	}
 	
-	function LoadView($cfg)
+	function LoadView()
 	{
-		$this->view = new View($cfg);
+		$this->view = new View($this->cfg);
 	}
 	
 	function getView()
@@ -29,9 +31,9 @@ class Page
 		return $this->view->content;
 	}
 	
-	function SetView($cfg)
+	function SetView()
 	{
-		$this->layout->LoadView($this->view, $cfg);
+		$this->layout->LoadView($this->view, $this->cfg);
 	}
 	
 	function updView($temp)
@@ -63,6 +65,10 @@ class Page
 	{
 		$result = preg_replace('/\s\w+="{\w+}"/', '', $this->layout->content);
 		$result = preg_replace('/{\w+}/', '', $result);
+		
+		$lang = new Localization($this->cfg);
+		$result = $lang->translate($result);
+		
 		echo $result;
 	}
 }
