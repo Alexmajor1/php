@@ -21,11 +21,11 @@ $modules = [
 		'size' => '1',
 		'listitems' => [
 			[
-				'value' => '1',
+				'value' => 'ru',
 				'name' => 'ru'
 			],
 			[
-				'value' => '2',
+				'value' => 'kz',
 				'name' => 'kz'
 			],
 		]

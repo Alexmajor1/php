@@ -15,15 +15,17 @@ class Localization
 		if(strlen($this->lang) > 0)
 		{
 			$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/languages/'.$this->lang.'.html';
-			$temp = fopen($path, "r");
-			$content = fread($temp, filesize($path));
-			$tmp = explode("\n", $content);
-			
-			foreach($tmp as $item)
-			{
-				$str = explode('=', $item);
+			if(file_exists($path)){
+				$temp = fopen($path, "r");
+				$content = fread($temp, filesize($path));
+				$tmp = explode("\n", $content);
 				
-				$this->dict[$str[0]] = $str[1];
+				foreach($tmp as $item)
+				{
+					$str = explode('=', $item);
+					
+					$this->dict[$str[0]] = $str[1];
+				}
 			}
 		}
 	}
