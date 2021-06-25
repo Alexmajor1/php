@@ -6,13 +6,13 @@ class View
 	public $content;
 	private $cfg;
 
-	function __construct($cfg)
+	function __construct()
 	{
-		$view_file = $cfg->getSetting('template');
-		$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/kernel/'.$view_file.'.html';
+		$this->cfg = Config::getInstance();
+		$view_file = $this->cfg->getSetting('template');
+		$path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/kernel/'.$view_file.'.html';
 		$temp = fopen($path, "r");
 		$this->content = fread($temp, filesize($path));
-		$this->cfg = $cfg;
 	}
 	
 	function SetTarget($target)

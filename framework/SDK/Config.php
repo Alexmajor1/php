@@ -3,12 +3,31 @@ namespace framework;
 
 class Config
 {
+	private static $instances;
 	private $src;
 	private $buf;
 	
-	function __construct($src)
+	protected function __construct($src)
 	{
 		$this->src = $src;
+	}
+	
+	protected function __clone(){}
+	
+	public function __wakeup()
+    {
+        throw new \Exception("Cannot unserialize singleton");
+    }
+	
+	public static function getInstance($src = '')
+	{
+		$subclass = static::class;
+        if (!isset(self::$instances[$subclass]))
+		{
+			self::$instances[$subclass] = new static($src);
+		}
+		
+		return self::$instances[$subclass];
 	}
 	
 	function setSetting($key, $value)

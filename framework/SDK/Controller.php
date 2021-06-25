@@ -16,7 +16,7 @@ class Controller
 	{
 		if($data == null) return $this;
 		$this->alias = $data;
-		$this->conf = $this->alias->cfg;
+		$this->conf = Config::getInstance();
 		$this->db = DB::getInstance();
 	}
 	
@@ -32,7 +32,7 @@ class Controller
 	
 	function getPage()
 	{
-		$this->page = new Page($this->conf);
+		$this->page = new Page();
 	}
 	
 	function getProperty($name)

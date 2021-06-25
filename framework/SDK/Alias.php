@@ -6,9 +6,9 @@ class Alias
 	public $cfg;
 	public $db;
 	
-	function __construct($cfg)
+	function __construct()
 	{
-		$this->cfg = $cfg;
+		$this->cfg = Config::getInstance();
 		$this->db = DB::getInstance();
 	}
 	

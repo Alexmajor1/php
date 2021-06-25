@@ -11,9 +11,9 @@ class Application
 	
 	function __construct($conf)
 	{
-		$this->cfg = new Config($conf);
+		$this->cfg = Config::getInstance($conf);
 		$this->db = DB::getInstance($this->cfg->getSetting('database'));
-		$this->alias = new Alias($this->cfg);
+		$this->alias = new Alias();
 		
 		$req = new Request();
 		

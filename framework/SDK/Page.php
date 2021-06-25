@@ -9,21 +9,21 @@ class Page
 	private $view;
 	private $cfg;
 	
-	function __construct($cfg)
+	function __construct()
 	{
-		$this->cfg = $cfg;
-		$this->name = $cfg->GetSetting('name');
+		$this->cfg = Config::getInstance();
+		$this->name = $this->cfg->GetSetting('name');
 		$this->html = new Html($this);
 	}
 	
 	function LoadLayout()
 	{
-		$this->layout = new Layout($this->cfg);
+		$this->layout = new Layout();
 	}
 	
 	function LoadView()
 	{
-		$this->view = new View($this->cfg);
+		$this->view = new View();
 	}
 	
 	function getView()
@@ -33,7 +33,7 @@ class Page
 	
 	function SetView()
 	{
-		$this->layout->LoadView($this->view, $this->cfg);
+		$this->layout->LoadView($this->view);
 	}
 	
 	function updView($temp)
