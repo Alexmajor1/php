@@ -36,11 +36,18 @@ class Application
 		include ($this->data);
 		
 		$this->ctrl->addConfig(['name', $name]);
-		$this->ctrl->addConfig(['modules', $modules]);
 		
 		$this->ctrl->getPage();
 		
-		$this->ctrl->getModules();
+		if(isset($modules))
+		{
+			$this->ctrl->addConfig(['modules', $modules]);
+		}
+		
+		if(isset($modules))
+		{
+			$this->ctrl->getModules();
+		}
 		
 		if(isset($target))
 		{
@@ -156,7 +163,12 @@ class Application
 				$method = explode('\\', $method)[1];
 			if($method == 'main') $method = 'index';
 			
-			$this->ctrl->$method();
+			$res = $this->ctrl->$method();
+			
+			if($res){
+				echo json_encode($res);
+				die;
+			}
 		}
 		$this->ctrl->generate();
 	}

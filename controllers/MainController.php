@@ -114,5 +114,10 @@ class MainController extends Controller
 		
 		$this->mods = $cab->mods;
 	}
+	
+	function test()
+	{
+		return array('hello world');
+	}
 }
 ?>
