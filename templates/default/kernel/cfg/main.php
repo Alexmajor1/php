@@ -63,7 +63,7 @@ $modules = [
 			'status' => [
 				'field_type' => 'text',
 				'class' => 'Status flex-col margin',
-				'id' => 'StatusLabel',
+				'id' => 'StatusText',
 				'text' => ''
 			]
 		]

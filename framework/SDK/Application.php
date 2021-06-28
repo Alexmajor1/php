@@ -166,7 +166,7 @@ class Application
 			$res = $this->ctrl->$method();
 			
 			if($res){
-				echo json_encode($res);
+				echo json_encode($res, JSON_PRETTY_PRINT);
 				die;
 			}
 		}

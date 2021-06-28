@@ -51,6 +51,7 @@ class MainController extends Controller
 				}
 			} else
 			{
+				$this->getError('wrong login or password');
 				$this->toPage('main');
 			}
 		}
@@ -70,16 +71,24 @@ class MainController extends Controller
 			
 			if($reg->validate($req->post()))
 			{
-				$this->mods['form']['fields']['status']['text'] = 'sql injection has detected';
-				return;
+				$this->getError('sql injection has detected');
+				$this->toPage('registration');
 			}
 			
 			if($res = $reg->execute())
 			{
-				if(is_string($res)) {$this->mods['form']['fields']['status']['text'] = $res;} else {$this->toPage('main');}
+				if(is_string($res))
+				{
+					$this->getError($res);
+					$this->toPage('registration');
+				} else 
+				{
+					$this->toPage('main');
+				}
 			} else
 			{
-				$this->mods['form']['fields']['status']['text'] = 'error';
+				$this->getError('error');
+				$this->toPage('registration');
 			}
 		}
 	}

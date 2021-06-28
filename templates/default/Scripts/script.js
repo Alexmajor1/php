@@ -17,9 +17,10 @@ function getCookie(cname) {
 function test()
 {
 	if(err = getCookie('error')){
-		stat = document.getElementById('StatusLabel');
-		stat.innerHTML =  err;
+		stat = document.getElementById('StatusText');
+		stat.innerHTML =  err.replaceAll('+', ' ');
 	}
+	
 	var result = Array.from(new URLSearchParams(location.href)).length;
 	if(result > 1){
 		backLink = document.getElementById('back-link');

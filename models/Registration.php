@@ -10,7 +10,7 @@ class Registration
 	private $role;
 	private $model;
 	
-	function __construct($db, $data)
+	function __construct($data)
 	{
 		$this->model = new User();
 		$this->user = $data['login'];
@@ -25,37 +25,41 @@ class Registration
 	
 	function CheckPassword()
 	{
+		$res = '';
+		
 		if(strlen($this->password)<10)
 		{
-			return 'password is short(>10)';
+			$res .= 'password is short(>10)</br>';
 		}
 		
 		if(!preg_match('/[[:digit:]+]/', $this->password))
 		{
-			return 'password must contain digits';
+			$res .= 'password must contain digits</br>';
 		}
 		
 		if(!preg_match('/[[:alpha:]+]/', $this->password) or preg_match('/[[а-яА-я]+]/', $this->password))
 		{
-			return 'password must contain letters';
+			$res .= 'password must contain letters</br>';
 		}
 		
 		if(!preg_match('/[[:upper:]+]/', $this->password))
 		{
-			return 'password must contain uppercase letters';
+			$res .= 'password must contain uppercase letters</br>';
 		}
 		
 		if(preg_match('/[[:space:]+]/', $this->password))
 		{
-			return 'password should not contain spaces';
+			$res .= 'password should not contain spaces</br>';
 		}
 		
 		if(preg_match('/[[:punct:]+]/', $this->password))
 		{
-			return 'password should not contain punctuation';
+			$res .= 'password should not contain punctuation</br>';
 		}
-		
-		return 'ok';
+		if(strlen($res) == 0)
+			return 'ok';
+		else
+			return $res;
 	}
 	
 	function validate($data)
@@ -68,7 +72,9 @@ class Registration
 	function execute()
 	{
 		if($this->CheckUser()) return 'this login is not available';
-		if($res = $this->CheckPassword() !== 'ok') return $res;
+		
+		$res = $this->CheckPassword();
+		if($res !== 'ok') return $res;
 		
 		$role = new Role();
 		$role_id = $role->read(['id_Role'], ['role_name' => $this->role])[0];
