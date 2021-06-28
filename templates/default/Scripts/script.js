@@ -14,7 +14,7 @@ function getCookie(cname) {
   return "";
 }
 
-function test()
+function main()
 {
 	if(err = getCookie('error')){
 		stat = document.getElementById('StatusText');
@@ -37,4 +37,5 @@ function test()
 		});
 	}
 }
-test();
+
+main();
