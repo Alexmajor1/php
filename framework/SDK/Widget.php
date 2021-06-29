@@ -20,24 +20,36 @@ class Widget
 	
 	function loadContent($cfg)
 	{
+		$content = '';
 		foreach($this->positions as $position){
-			$content = '';
-		
 			foreach($this->cfg[$position] as $key => $param)
 			{
-				if(in_array($key, $cfg->GetSetting('plugins'))) $value = $this->plugin($key, $params, $cfg);
-				else {
+				$html = '';
+				
+				if(in_array($key, $cfg->GetSetting('plugins'))) {
+					$values = $this->plugin($key, $param, $cfg);
+					
 					$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
 					$tmpl = fopen($path, "r");
-					$content .= fread($tmpl, filesize($path));
+					$html = fread($tmpl, filesize($path));
+					
+					foreach($values as $id => $value){
+						$html = str_ireplace('{'.$id.'}', $value, $html);
+					}
+				} else {
+					$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
+					$tmpl = fopen($path, "r");
+					$html = fread($tmpl, filesize($path));
 					
 					foreach($param as $key => $value)
-						$content = str_ireplace('{'.$key.'}', $value, $content);
+						$html = str_ireplace('{'.$key.'}', $value, $html);
 				}
+				
+				$content .= $html;
 			}
-			
-			$this->cfg[$position] = $content;
 		}
+		
+		$this->cfg[$position] = $content;
 	}
 	
 	function show($mods)
