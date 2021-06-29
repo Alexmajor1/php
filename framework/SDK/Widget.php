@@ -11,6 +11,13 @@ class Widget
 		$this->cfg = $cfg;
 	}
 	
+	function plugin($key, $value, $cfg)
+	{
+		$name = '\\Plugins\\'.$key;
+		$plugin = new $name(['value' => $value, 'db' => DB::getInstance(), 'cfg' => $cfg]);
+		return $plugin->show();
+	}
+	
 	function loadContent($cfg)
 	{
 		foreach($this->positions as $position){
@@ -18,12 +25,15 @@ class Widget
 		
 			foreach($this->cfg[$position] as $key => $param)
 			{
-				$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
-				$tmpl = fopen($path, "r");
-				$content .= fread($tmpl, filesize($path));
-				
-				foreach($param as $key => $value)
-					$content = str_ireplace('{'.$key.'}', $value, $content);
+				if(in_array($key, $cfg->GetSetting('plugins'))) $value = $this->plugin($key, $params, $cfg);
+				else {
+					$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
+					$tmpl = fopen($path, "r");
+					$content .= fread($tmpl, filesize($path));
+					
+					foreach($param as $key => $value)
+						$content = str_ireplace('{'.$key.'}', $value, $content);
+				}
 			}
 			
 			$this->cfg[$position] = $content;
