@@ -13,16 +13,16 @@ class Assets
 	{
 		$arr = explode('\\', $cfg->getSetting('template'));
 		if(count($arr)>1)
-			$this->tmp = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$arr[0];
+			$this->tmp = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$arr[0];
 		else
-			$this->tmp = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->getSetting('site_template');
+			$this->tmp = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->getSetting('site_template');
 		
 		$this->page = $cfg->getSetting('template');
 		
 		$this->modules = array_keys($cfg->getSetting('modules'));
 		
 		$dirs = $cfg->getSetting('assets');
-		$root_path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/'.$dirs['path'];
+		$root_path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/'.$dirs['path'];
 		
 		$css_path = $root_path.'/'.$dirs['styles']['dir'];
 		$css_file = $css_path.'/'.$dirs['styles']['name'].'.css';

@@ -14,7 +14,7 @@ class Table extends Plugin
 	{
 		$this->cfg = $this->data['cfg'];
 		$this->db = $this->data['db'];
-		$this->path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template');
+		$this->path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template');
 		if(key_exists('fields', $this->data['value']))
 			$data = $this->tableDB($this->data['value']);
 		else

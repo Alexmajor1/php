@@ -88,7 +88,7 @@ class Application
 					$tmpl = $this->ctrl->getProperty('site_template');
 				}
 				
-				$this->data = $_SERVER['DOCUMENT_ROOT']."".$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
+				$this->data = $_SERVER['DOCUMENT_ROOT'].$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
 			};
 			break;
 			case 'alias':
@@ -113,7 +113,7 @@ class Application
 					$tmpl = $this->ctrl->getProperty('site_template');
 				}
 				
-				$this->data = $_SERVER['DOCUMENT_ROOT'].'/'.$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
+				$this->data = $_SERVER['DOCUMENT_ROOT'].$this->ctrl->getProperty('base')."/templates/".$tmpl."/kernel/cfg/".end($page).".php";
 			};
 			break;
 			echo 'route';

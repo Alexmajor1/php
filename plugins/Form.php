@@ -13,8 +13,8 @@ class Form extends Plugin
 		
 		foreach($this->data['value']['fields'] as $key => $field)
 		{
-			$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/'.$field['field_type'].'.html', "r");
-			$html = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/'.$field['field_type'].'.html'));
+			$file = fopen($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/'.$field['field_type'].'.html', "r");
+			$html = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/'.$field['field_type'].'.html'));
 			
 			$field['name'] = $key;
 			
@@ -25,8 +25,8 @@ class Form extends Plugin
 				{	
 					foreach($field['groupitems'] as $item)
 					{
-						$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html', "r");
-						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html'));
+						$file = fopen($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html', "r");
+						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html'));
 						
 						foreach($item as $id1 => $item1)
 							$html1 = str_ireplace('{'.$id1.'}', $item1, $html1);
@@ -43,7 +43,7 @@ class Form extends Plugin
 					
 					foreach($data as $id => $item)
 					{
-						$file = fopen($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html', "r");
+						$file = fopen($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html', "r");
 						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html'));
 						
 						$res1 = str_ireplace(['{type}', '{value}'], [$field['type'],$item[0]], $html1);

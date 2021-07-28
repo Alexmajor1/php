@@ -29,7 +29,7 @@ class Widget
 				if(in_array($key, $cfg->GetSetting('plugins'))) {
 					$values = $this->plugin($key, $param, $cfg);
 					
-					$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
+					$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
 					$tmpl = fopen($path, "r");
 					$html = fread($tmpl, filesize($path));
 					
@@ -37,7 +37,7 @@ class Widget
 						$html = str_ireplace('{'.$id.'}', $value, $html);
 					}
 				} else {
-					$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
+					$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
 					$tmpl = fopen($path, "r");
 					$html = fread($tmpl, filesize($path));
 					

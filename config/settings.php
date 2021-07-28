@@ -1,5 +1,5 @@
 <?php
-$base = 'php';
+$base = '/php';
 
 $controller = "MainController";
 

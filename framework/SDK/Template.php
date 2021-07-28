@@ -8,7 +8,7 @@ class Template
 	function __construct($cfg)
 	{
 		$page = $cfg->getSetting('template');
-		$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/'.$page.'.html';
+		$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/'.$page.'.html';
 		$temp = fopen($path, "r");
 		$this->content = fread($temp, filesize($path));
 	}

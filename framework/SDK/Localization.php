@@ -14,7 +14,7 @@ class Localization
 		
 		if(strlen($this->lang) > 0)
 		{
-			$path = $_SERVER['DOCUMENT_ROOT'].'/'.$cfg->GetSetting('base').'/languages/'.$this->lang.'.html';
+			$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/languages/'.$this->lang.'.html';
 			if(file_exists($path)){
 				$temp = fopen($path, "r");
 				$content = fread($temp, filesize($path));
