@@ -24,11 +24,19 @@ class Assets
 		$dirs = $cfg->getSetting('assets');
 		$root_path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/'.$dirs['path'];
 		
+		if(!is_dir($root_path)) mkdir($root_path);
+		
 		$css_path = $root_path.'/'.$dirs['styles']['dir'];
+		
+		if(!is_dir($css_path)) mkdir($css_path);
+		
 		$css_file = $css_path.'/'.$dirs['styles']['name'].'.css';
 		$this->css = fopen($css_file, 'w+');
 		
 		$js_path = $root_path.'/'.$dirs['scripts']['dir'];
+		
+		if(!is_dir($js_path)) mkdir($js_path);
+		
 		$js_file = $js_path.'/'.$dirs['scripts']['name'].'.js';
 		$this->js = fopen($js_file, 'w+');
 	}
