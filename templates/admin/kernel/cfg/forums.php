@@ -27,9 +27,9 @@ $modules = [
 			'relation' => 'forums.user_id',
 			'value' => 'users.id',
 			'types' => [
-				['name' => 'text'],
-				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
+				'id' => ['name' => 'text'],
+				'User_name' => ['name' => 'text'],
+				'name' => ['name' => 'link', 'url' => '&mode=form&id='],
 			],
 		],
 	],

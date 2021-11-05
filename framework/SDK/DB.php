@@ -39,7 +39,7 @@ class DB
 	function DataQuery($str) {
 		$this->query = $this->cursor->query($str);
 		if(!$this->query){return [];}
-		return $this->query->fetch_all();
+		return $this->query->fetch_all(MYSQLI_ASSOC);
 	}
 	
 	function RowQuery($str)

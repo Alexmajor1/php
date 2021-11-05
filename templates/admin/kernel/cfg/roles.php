@@ -25,8 +25,8 @@ $modules = [
 			'headers' => ['ИД', 'название'],
 			'source' => 'roles',
 			'types' => [
-				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
+				'id' => ['name' => 'text'],
+				'Role_name' => ['name' => 'link', 'url' => '&mode=form&id='],
 			],
 		],
 	],

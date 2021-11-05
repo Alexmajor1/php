@@ -54,7 +54,6 @@ class Authorization
 	{
 		$sess = new Session($conf, $this->user);
 		$sess->create();
-		
 		return strcmp($sess->getRole(), 'Admin') == 0;
 	}
 	
@@ -73,8 +72,8 @@ class Authorization
 		{
 			$this->user = $this->model->read(
 				['id'], 
-				['user_name' => $this->user, 'user_password' => md5($this->password)]);
-			return ($this->user != null);
+				['user_name' => $this->user, 'user_password' => md5($this->password)])->id;
+			return ($this->user);
 		} else return false;
 	}
 }

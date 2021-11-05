@@ -55,7 +55,7 @@ class Controller
 		if($name != 'main')
 			$header = $this->alias->encode('index.php?page='.$name);
 		else
-			$header = $this->getProperty('base');
+			$header = '/'.$this->getProperty('base');
 		
 		header("location:$header");
 	}

@@ -17,3 +17,4 @@ class Plugin
 		return $this->html;
 	}
 }
+?>

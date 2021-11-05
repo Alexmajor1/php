@@ -51,11 +51,11 @@ class Cabinet
 			}
 		}
 		if(key_exists('theme', $req->get())){
-			$this->title = $theme->read(['name' => 'name'], ['id' => $req->get('theme')])[0][0];
+			$this->title = $theme->read(['name' => 'name'], ['id' => $req->get('theme')])->title;
 			$this->mods['table']['mode'] = 'data';
 			$this->mods['table']['data']['value'] = $req->get('theme');
 		} else if(key_exists('forum', $req->get())){
-			$this->title = $forum->read(['name' => 'name'], ['id' => $req->get('forum')])[0][0];
+			$this->title = $forum->read(['name' => 'name'], ['id' => $req->get('forum')])->title;
 			$this->mods['table']['mode'] = 'alt';
 			$this->mods['table']['alt']['value'] = $req->get('forum');
 		} else {

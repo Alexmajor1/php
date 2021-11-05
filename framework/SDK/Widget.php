@@ -30,16 +30,14 @@ class Widget
 					$values = $this->plugin($key, $param, $cfg);
 					
 					$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
-					$tmpl = fopen($path, "r");
-					$html = fread($tmpl, filesize($path));
+					$html = file_get_contents($path);
 					
 					foreach($values as $id => $value){
 						$html = str_ireplace('{'.$id.'}', $value, $html);
 					}
 				} else {
 					$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
-					$tmpl = fopen($path, "r");
-					$html = fread($tmpl, filesize($path));
+					$html = file_get_contents($path);
 					
 					foreach($param as $key => $value)
 						$html = str_ireplace('{'.$key.'}', $value, $html);

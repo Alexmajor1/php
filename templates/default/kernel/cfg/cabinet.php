@@ -32,8 +32,8 @@ $modules = [
 			'headers' => ['Форумы'],
 			'source' => 'forums',
 			'types' => [
-				['name' => 'hide'],
-				['name' => 'link', 'url' => '&forum=']
+				'id' => ['name' => 'hide'],
+				'name' => ['name' => 'link', 'url' => '&forum=']
 			],
 		],
 		'alt' => [
@@ -41,8 +41,8 @@ $modules = [
 			'source' => 'themes',
 			'relation' => 'forum_id',
 			'types' => [
-				['name' => 'hide'],
-				['name' => 'link', 'url' => '&theme=']
+				'id' => ['name' => 'hide'],
+				'name' => ['name' => 'link', 'url' => '&theme=']
 			],
 		],
 		'data' => [
@@ -50,8 +50,8 @@ $modules = [
 			'source' => 'topics',
 			'relation' => 'theme_id',
 			'types' => [
-				['name' => 'hide'],
-				['name' => 'text']
+				'id' => ['name' => 'hide'],
+				'name' => ['name' => 'text']
 			],
 		]
 	],

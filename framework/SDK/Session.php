@@ -51,7 +51,7 @@ class Session
 		
 		setcookie($this->options['key'], null, -1);
 		
-		$res = $this->db->delete($options['source'])->where(['session_key' => $req->cookie($options['key'])], '')->ChangeQuery($sql);
+		$res = $this->db->delete($this->options['source'])->where(['session_key' => $req->cookie($this->options['key'])], '')->change();
 	}
 	
 	function get_user_id()

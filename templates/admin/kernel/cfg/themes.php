@@ -19,7 +19,7 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'themes.id, forums.name, users.User_name, themes.name',
+		'fields' => 'themes.id, forums.name as forum, users.User_name, themes.name as theme',
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['ИД', 'форум', 'автор', 'название'],
@@ -27,10 +27,10 @@ $modules = [
 			'relation' => 'themes.user_id',
 			'value' => 'users.id',
 			'types' => [
-				['name' => 'text'],
-				['name' => 'text'],
-				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
+				'id' => ['name' => 'text'],
+				'forum' => ['name' => 'text'],
+				'User_name' => ['name' => 'text'],
+				'theme' => ['name' => 'link', 'url' => '&mode=form&id='],
 			],
 		],
 	],

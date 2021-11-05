@@ -10,11 +10,10 @@ class Form extends Plugin
 	function generate()
 	{
 		$res = '';
-		
+		$root_path = $_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/';
 		foreach($this->data['value']['fields'] as $key => $field)
 		{
-			$file = fopen($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/'.$field['field_type'].'.html', "r");
-			$html = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/'.$field['field_type'].'.html'));
+			$html = file_get_contents($root_path.$field['field_type'].'.html');
 			
 			$field['name'] = $key;
 			
@@ -25,9 +24,7 @@ class Form extends Plugin
 				{	
 					foreach($field['groupitems'] as $item)
 					{
-						$file = fopen($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html', "r");
-						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html'));
-						
+						$html1 = file_get_contents($root_path.'groupItem.html');
 						foreach($item as $id1 => $item1)
 							$html1 = str_ireplace('{'.$id1.'}', $item1, $html1);
 							
@@ -43,13 +40,13 @@ class Form extends Plugin
 					
 					foreach($data as $id => $item)
 					{
-						$file = fopen($_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html', "r");
-						$html1 = fread($file, filesize($_SERVER['DOCUMENT_ROOT'].'/'.$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/groupItem.html'));
+						$html1 = file_get_contents($root_path.'groupItem.html');
 						
-						$res1 = str_ireplace(['{type}', '{value}'], [$field['type'],$item[0]], $html1);
+						$html1 = str_ireplace(['{type}', '{value}'], [$field['type'],$item[$field['groupitems'].'_name']], $html1);
 						
-						if($item[0] != 'Admin') $field['groupitems'] .= $res1;
+						if($item[$field['groupitems'].'_name'] != 'Admin') $res1 .= $html1;
 					}
+					$field['groupitems'] = $res1;
 				}
 			}
 			

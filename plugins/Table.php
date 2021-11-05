@@ -60,8 +60,7 @@ class Table extends Plugin
 	{
 		$str = '';
 		
-		$file = fopen($this->path.'/modules/tableHeader.html', "r");
-		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
+		$html = file_get_contents($this->path.'/modules/tableHeader.html');
 		
 		foreach($headers as $key => $val)
 		{			
@@ -115,11 +114,8 @@ class Table extends Plugin
 		$end = $num * $value['pager']['pageSize'];
 		$start = $end-$value['pager']['pageSize'];
 		
-		$file1 = fopen($this->path.'/modules/tableRow.html', "r");
-		$html1 = fread($file1, filesize($this->path.'/modules/tableRow.html'));
-		
-		$file2 = fopen($this->path.'/modules/tableCol.html', "r");
-		$html2 = fread($file2, filesize($this->path.'/modules/tableCol.html'));
+		$html1 = file_get_contents($this->path.'/modules/tableRow.html');
+		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
 		
 		$str = '';
 		for($i=$start;$i<$end;$i++)
@@ -217,8 +213,7 @@ class Table extends Plugin
 		else
 			$tmp = $value[$value['mode']]['headers'];
 		
-		$file = fopen($this->path.'/modules/tableHeader.html', "r");
-		$html = fread($file, filesize($this->path.'/modules/tableHeader.html'));
+		$html = file_get_contents($this->path.'/modules/tableHeader.html');
 		$i = 0;
 		foreach($tmp as $val)
 		{
@@ -255,13 +250,11 @@ class Table extends Plugin
 		
 		$value['headers'] = $this->getHeaders($value);
 		
-		$file1 = fopen($this->path.'/modules/tableRow.html', "r");
-		$html1 = fread($file1, filesize($this->path.'/modules/tableRow.html'));
-		
-		$file2 = fopen($this->path.'/modules/tableCol.html', "r");
-		$html2 = fread($file2, filesize($this->path.'/modules/tableCol.html'));
+		$html1 = file_get_contents($this->path.'/modules/tableRow.html');
+		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
 		
 		$str = '';
+		
 		foreach($rows as $id => $row)
 		{
 			$str1 = '';
@@ -269,11 +262,10 @@ class Table extends Plugin
 			foreach($row as $key => $val)
 			{
 				$cell = $val;
-				
 				if($value[$value['mode']]['types']){
 					$cell = $this->fieldsDB([
 						'value' => $val, 
-						'id' => $row[0], 
+						'id' => $row['id'], 
 						'type' => $value[$value['mode']]['types'][$key]
 					]);
 					
@@ -299,11 +291,11 @@ class Table extends Plugin
 	{
 		$req = new Request();
 		$type = $data['type'];
+		$res = '';
 		if($type['name'] == 'hide') return '';
 		
 		if($type['name'] != 'text') {
-			$file = fopen($this->path.'/modules/'.$type['name'].'.html', "r");
-			$html = fread($file, filesize($this->path.'/modules/'.$type['name'].'.html'));
+			$html = file_get_contents($this->path.'/modules/'.$type['name'].'.html');
 		}
 		
 		switch($type['name']) {
@@ -327,11 +319,8 @@ class Table extends Plugin
 		
 		if($pageCount == 1) return '';
 		
-		$file1 = fopen($this->path.'/modules/tablePager.html', "r");
-		$html1 = fread($file1, filesize($this->path.'/modules/tablePager.html'));
-		
-		$file2 = fopen($this->path.'/modules/link.html', "r");
-		$html2 = fread($file2, filesize($this->path.'/modules/link.html'));
+		$html1 = file_get_contents($this->path.'/modules/tablePager.html');
+		$html2 = file_get_contents($this->path.'/modules/link.html');
 		
 		$str = '';
 		$pageLink = '';

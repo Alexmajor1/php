@@ -22,19 +22,19 @@ class AdminController extends Controller
 		$layout['title'] = 'Admin panel';
 		$this->addConfig(['layout', $layout]);
 		
-		$users = count((new User($this->db))->read(['id']));
+		$users = (new User($this->db))->read(['id'])->count();
 		$this->mods['text']['users']['text'] = "Users count: $users";
 		
-		$roles = count((new Role($this->db))->read(['id']));
+		$roles = (new Role($this->db))->read(['id'])->count();
 		$this->mods['text']['roles']['text'] = "Roles count: $roles";
 		
-		$forums = count((new Forum($this->db))->read(['id']));
+		$forums = (new Forum($this->db))->read(['id'])->count();
 		$this->mods['text']['forums']['text'] = "Forums count: $forums";
 		
-		$themes = count((new Theme($this->db))->read(['id']));
+		$themes = (new Theme($this->db))->read(['id'])->count();
 		$this->mods['text']['themes']['text'] = "Themes count: $themes";
 		
-		$topics = count((new Topic($this->db))->read(['id']));
+		$topics = (new Topic($this->db))->read(['id'])->count();
 		$this->mods['text']['topics']['text'] = "Topics count: $topics";
 	}
 	
@@ -53,7 +53,7 @@ class AdminController extends Controller
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new User($this->db);
+		$model = new User();
 		$res = $model->editor($this->mods, ['User_name', 'User_role']);
 		
 		if(is_array($res)){

@@ -16,8 +16,7 @@ class Localization
 		{
 			$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/languages/'.$this->lang.'.html';
 			if(file_exists($path)){
-				$temp = fopen($path, "r");
-				$content = fread($temp, filesize($path));
+				$content =file_get_contents($path);
 				$tmp = explode("\n", $content);
 				
 				foreach($tmp as $item)

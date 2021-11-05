@@ -6,6 +6,7 @@ Allow from all
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !phpmyadmin
 RewriteRule ^(.*)$ ./index.php?alias=$1 [L]
 
 <FilesMatch ".(css|js)$">

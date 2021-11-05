@@ -27,9 +27,9 @@ $modules = [
 			'relation' => 'User_role',
 			'value' => 'roles.id',
 			'types' => [
-				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
-				['name' => 'text'],
+				'id' => ['name' => 'text'],
+				'User_name' => ['name' => 'link', 'url' => '&mode=form&id='],
+				'Role_name' => ['name' => 'text'],
 			],
 		],
 	],

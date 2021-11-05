@@ -27,9 +27,9 @@ $modules = [
 			'relation' => 'Rule_role',
 			'value' => 'roles.id',
 			'types' => [
-				['name' => 'text'],
-				['name' => 'link', 'url' => '&mode=form&id='],
-				['name' => 'text'],
+				'id' => ['name' => 'text'],
+				'Rule_name' => ['name' => 'link', 'url' => '&mode=form&id='],
+				'Role_name' => ['name' => 'text'],
 			],
 		],
 	],

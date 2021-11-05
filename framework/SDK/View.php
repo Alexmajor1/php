@@ -11,8 +11,7 @@ class View
 		$this->cfg = Config::getInstance();
 		$view_file = $this->cfg->getSetting('template');
 		$path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/kernel/'.$view_file.'.html';
-		$temp = fopen($path, "r");
-		$this->content = fread($temp, filesize($path));
+		$this->content = file_get_contents($path);
 	}
 	
 	function SetTarget($target)
@@ -34,8 +33,9 @@ class View
 			$path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base').'/framework/modules/'.$data.'.html';
 		}
 		
-		$file = fopen($path, "r");
-		$html = fread($file, filesize($path));
+		/*$file = fopen($path, "r");
+		$html = fread($file, filesize($path));*/
+		$html = file_get_contents($path);
 		
 		foreach($params as $key => $value)
 		{

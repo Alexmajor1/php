@@ -45,14 +45,12 @@ class Assets
 	{
 		if(file_exists($path))
 		{
-			$file = fopen($path, 'r');
-			$code = fread($file, filesize($path));
+			$code = file_get_contents($path);
 			
 			if(strpos($path,'.css'))
 				fwrite($this->css, $code);
 			else
 				fwrite($this->js, $code);
-			fclose($file);
 		}
 	}
 	
