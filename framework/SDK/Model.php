@@ -3,16 +3,17 @@ namespace framework;
 
 class Model
 {
-	private $db;
-	private $table;
-	private $rows;
-	private $iter;
-	private $data;
+	protected $db;
+	protected $table;
+	protected $rows;
+	protected $iter;
+	protected $data;
 	
 	function __construct()
 	{
 		$this->db = DB::getInstance();
-		$this->table = strtolower(explode('\\', get_called_class())[1]).'s';
+		$arr = explode('\\', get_called_class());
+		$this->table = strtolower(end($arr)).'s';
 	}
 	
 	function create($data)
@@ -37,9 +38,9 @@ class Model
 		$data = $res->all();
 		
 		if($data){
-			if(count($data) == 1) {
+			if(count($data) == 1)
 				$this->data = $data[0];
-			} else {
+			else {
 				$this->iter = 0;
 				$this->rows = $data;
 				$this->data = $this->rows[$this->iter];
@@ -64,9 +65,9 @@ class Model
 			
 			if($data) {
 				$this->data = $data;
-				if(isset($this->iter)) {
+				if(isset($this->iter))
 					$this->rows[$this->iter] = $this->data;
-				}
+				
 				return true;
 			}
 		}
@@ -81,45 +82,12 @@ class Model
 	
 	function count()
 	{
-		if($this->rows){
+		if($this->rows)
 			return count($this->rows);
-		}elseif($this->data){
+		elseif($this->data)
 			return 1;
-		}
-		return false;
-	}
-	
-	function editor($mods, $fields){
-		$req = new Request();
 		
-		if($req->get('mode') == 'delete')
-			return $this->delete(['id' => $req->get('id')]);
-		elseif($req->get('id')){
-			$data = $this->read($fields, ['id' => $req->get('id')]);
-			
-			foreach($fields as $key=>$value){ 
-				$mods['form']['fields'][$value]['value'] = $data[$key];
-			}
-			
-			$mods['form']['fields']['id'] = [
-				'field_type' => 'hidden',
-				'name' => 'id',
-				'value' => $req->get('id'),
-			];
-			
-			return $mods;
-		}elseif(count($req->post())>0){
-			$data = array();
-			foreach($fields as $value)
-				$data[$value] = $req->post($value);
-			
-			if($req->post('id')){
-				return $this->update($data,['id' => $req->post('id')]);
-			}else{
-				return $this->create($data);
-			}
-			echo 'loose';
-		}
+		return false;
 	}
 	
 	function __get($key){

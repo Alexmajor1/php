@@ -4,12 +4,12 @@ namespace Controllers;
 use framework\Controller;
 use framework\Request;
 
-use models\User;
-use models\Role;
-use models\Rule;
-use models\Forum;
-use models\Theme;
-use models\Topic;
+use models\editors\UserEditor;
+use models\editors\RoleEditor;
+use models\editors\RuleEditor;
+use models\editors\ForumEditor;
+use models\editors\ThemeEditor;
+use models\editors\TopicEditor;
 
 class AdminController extends Controller
 {
@@ -22,19 +22,19 @@ class AdminController extends Controller
 		$layout['title'] = 'Admin panel';
 		$this->addConfig(['layout', $layout]);
 		
-		$users = (new User($this->db))->read(['id'])->count();
+		$users = (new UserEditor($this->db))->read(['id'])->count();
 		$this->mods['text']['users']['text'] = "Users count: $users";
 		
-		$roles = (new Role($this->db))->read(['id'])->count();
+		$roles = (new RoleEditor($this->db))->read(['id'])->count();
 		$this->mods['text']['roles']['text'] = "Roles count: $roles";
 		
-		$forums = (new Forum($this->db))->read(['id'])->count();
+		$forums = (new ForumEditor($this->db))->read(['id'])->count();
 		$this->mods['text']['forums']['text'] = "Forums count: $forums";
 		
-		$themes = (new Theme($this->db))->read(['id'])->count();
+		$themes = (new ThemeEditor($this->db))->read(['id'])->count();
 		$this->mods['text']['themes']['text'] = "Themes count: $themes";
 		
-		$topics = (new Topic($this->db))->read(['id'])->count();
+		$topics = (new TopicEditor($this->db))->read(['id'])->count();
 		$this->mods['text']['topics']['text'] = "Topics count: $topics";
 	}
 	
@@ -44,23 +44,18 @@ class AdminController extends Controller
 		$mode = (new Request())->get('mode');
 		$id = (new Request())->get('id');
 		
-		if($mode)
-		{
+		if($mode) {
 			if($id) $layout['title'] = 'Edit user';
 			else $layout['title'] = 'Add user';
-		}
-		else $layout['title'] = 'Users';
+		} else $layout['title'] = 'Users';
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new User();
+		$model = new UserEditor();
 		$res = $model->editor($this->mods, ['User_name', 'User_role']);
 		
-		if(is_array($res)){
-			$this->mods = $res;
-		}elseif($res){
-			$this->toPage('admin/users');
-		}
+		if(is_array($res)) $this->mods = $res;
+		elseif($res) $this->toPage('admin/users');
 	}
 	
 	function roles()
@@ -70,22 +65,17 @@ class AdminController extends Controller
 		$id = (new Request())->get('id');
 		
 		if($mode)
-		{
 			if($id) $layout['title'] = 'Edit role';
 			else $layout['title'] = 'Add role';
-		}
 		else $layout['title'] = 'Roles';
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new Role($this->db);
+		$model = new RoleEditor($this->db);
 		$res = $model->editor($this->mods, ['Role_name']);
 		
-		if(is_array($res)){
-			$this->mods = $res;
-		}elseif($res){
-			$this->toPage('admin/roles');
-		}
+		if(is_array($res)) $this->mods = $res;
+		elseif($res) $this->toPage('admin/roles');
 	}
 	
 	function rules()
@@ -94,23 +84,18 @@ class AdminController extends Controller
 		$mode = (new Request())->get('mode');
 		$id = (new Request())->get('id');
 		
-		if($mode)
-		{
+		if($mode){
 			if($id) $layout['title'] = 'Edit rule';
 			else $layout['title'] = 'Add rule';
-		}
 		else $layout['title'] = 'Rules';
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new Rule($this->db);
+		$model = new RuleEditor($this->db);
 		$res = $model->editor($this->mods, ['Rule_name', 'Rule_role']);
 		
-		if(is_array($res)){
-			$this->mods = $res;
-		}elseif($res){
-			$this->toPage('admin/rules');
-		}
+		if(is_array($res)) $this->mods = $res;
+		elseif($res) $this->toPage('admin/rules');
 	}
 	
 	function forums()
@@ -120,22 +105,17 @@ class AdminController extends Controller
 		$id = (new Request())->get('id');
 		
 		if($mode)
-		{
 			if($id) $layout['title'] = 'Edit forum';
 			else $layout['title'] = 'Add forum';
-		}
 		else $layout['title'] = 'Forums';
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new Forum($this->db);
+		$model = new ForumEditor($this->db);
 		$res = $model->editor($this->mods, ['user_id', 'name']);
 		
-		if(is_array($res)){
-			$this->mods = $res;
-		}elseif($res){
-			$this->toPage('admin/forums');
-		}
+		if(is_array($res)) $this->mods = $res;
+		elseif($res) $this->toPage('admin/forums');
 	}
 	
 	function themes()
@@ -145,22 +125,17 @@ class AdminController extends Controller
 		$id = (new Request())->get('id');
 		
 		if($mode)
-		{
 			if($id) $layout['title'] = 'Edit theme';
 			else $layout['title'] = 'Add theme';
-		}
 		else $layout['title'] = 'Themes';
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new Theme($this->db);
+		$model = new ThemeEditor($this->db);
 		$res = $model->editor($this->mods, ['user_id', 'forum_id', 'name']);
 		
-		if(is_array($res)){
-			$this->mods = $res;
-		}elseif($res){
-			$this->toPage('admin/themes');
-		}
+		if(is_array($res)) $this->mods = $res;
+		elseif($res) $this->toPage('admin/themes');
 	}
 	
 	function topics()
@@ -170,22 +145,17 @@ class AdminController extends Controller
 		$id = (new Request())->get('id');
 		
 		if($mode)
-		{
 			if($id) $layout['title'] = 'Edit topic';
 			else $layout['title'] = 'Add topic';
-		}
 		else $layout['title'] = 'Topics';
 		
 		$this->addConfig(['layout', $layout]);
 		
-		$model = new Topic($this->db);
+		$model = new TopicEditor($this->db);
 		$res = $model->editor($this->mods, ['user_id', 'theme_id', 'name']);
 		
-		if(is_array($res)){
-			$this->mods = $res;
-		}elseif($res){
-			$this->toPage('admin/topics');
-		}
+		if(is_array($res)) $this->mods = $res;
+		elseif($res) $this->toPage('admin/topics');
 	}
 }
 ?>

@@ -20,10 +20,8 @@ class AdminRule extends Rule
 		$arr = explode('cfg/', $this->path);
 		
 		$req = new Request();
-		if($req->get('mode')){
-			$this->path = $arr[0].'cfg/'.$req->get('mode').'.'.$arr[1];
-		}else
-			$this->path = $arr[0].'cfg/'.$arr[1];
+		if($req->get('mode')) $this->path = $arr[0].'cfg/'.$req->get('mode').'.'.$arr[1];
+		else $this->path = $arr[0].'cfg/'.$arr[1];
 	}
 }
 ?>

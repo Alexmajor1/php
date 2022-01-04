@@ -44,21 +44,10 @@ class Page
 	function LoadModules($modules)
 	{
 		foreach($modules as $key=>$value)
-		{
 			if(is_array($value))
-			{
 				foreach($value as $mod => $params)
-				{
-					if(!key_exists('id', $value))
-					{
-						$this->view->LoadModule($key.':'.$mod, $params);
-					}else
-					{
-						$this->view->LoadModule($key, $value);
-					}
-				}
-			}
-		}
+					if(!key_exists('id', $value)) $this->view->LoadModule($key.':'.$mod, $params);
+					else $this->view->LoadModule($key, $value);
 	}
 	
 	function PrintPage()

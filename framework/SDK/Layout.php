@@ -18,7 +18,8 @@ class Layout
 		
 		$this->style = 'assets/css/'.$this->cfg->GetSetting('layout')['style'].'.css';
 		$this->scripts = $this->cfg->GetSetting('layout')['scripts'];
-		$path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template').'/layouts/'.$this->cfg->getSetting('layout')['name'].'.html';
+		$path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->GetSetting('base').'/templates/'.
+			$this->cfg->GetSetting('site_template').'/layouts/'.$this->cfg->getSetting('layout')['name'].'.html';
 		$this->content = file_get_contents($path);
 	}
 	

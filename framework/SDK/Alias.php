@@ -14,8 +14,7 @@ class Alias
 	
 	function encode($data)
 	{
-		switch($this->cfg->getSetting('alias')['storage'])
-		{
+		switch($this->cfg->getSetting('alias')['storage']){
 			case 'file': return $this->fileEncode($data);break;
 			case 'table': return $this->tableEncode($data);break;
 		}
@@ -23,8 +22,7 @@ class Alias
 	
 	function decode($data)
 	{
-		switch($this->cfg->getSetting('alias')['storage'])
-		{
+		switch($this->cfg->getSetting('alias')['storage']){
 			case 'file': return $this->fileDecode($data);break;
 			case 'table': return $this->tableDecode($data);break;
 		}
@@ -37,27 +35,23 @@ class Alias
 		$aliases = split(';', $aliasesDB);
 		
 		foreach($data as $key => $value)
-		{
 			for($i=0;$i<count($aliases);$i++)
-			{
 				if(strpos($aliases[$i], $value))
-				{
 					$data[$key] = split('=>', $aliases[$i])[1];
-				}
-			}
-		}
 		
 		return $data;
 	}
 	
 	function tableEncode($data)
 	{
-		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['name' => 'name'])->where(['page' => $data], '')->value();
+		$alias = $this->db->select(
+			$this->cfg->getSetting('alias')['source'], 
+			['name' => 'name']
+		)->where(
+			['page' => $data],
+		)->value();
 			
-		if($alias)
-		{
-			return $alias;
-		}
+		if($alias) return $alias;
 		
 		return $data;
 	}
@@ -70,12 +64,8 @@ class Alias
 		$data = array();
 		
 		for($i=0;$i<count($aliases);$i++)
-		{
 			if(strpos($aliases[$i], $value))
-			{
 					$data[$key] = split('=>', $aliases[$i])[0];
-			}
-		}
 		
 		return (!empty($data))?$data:false;
 	}
@@ -84,12 +74,12 @@ class Alias
 	{
 		if($data == '') return 'index.php?page=main';
 			
-		$alias = $this->db->select($this->cfg->getSetting('alias')['source'], ['page' => 'page'])->where(['name' => $data])->value();
+		$alias = $this->db->select(
+			$this->cfg->getSetting('alias')['source'], 
+			['page' => 'page']
+		)->where(['name' => $data])->value();
 			
-		if($alias)
-		{
-			return $alias;
-		}
+		if($alias) return $alias;
 		
 		return false;
 	}

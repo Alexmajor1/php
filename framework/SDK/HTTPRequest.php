@@ -27,9 +27,7 @@ class HTTPRequest
 		$len = strlen($chars);
 		
 		for($i=0;$i<10;$i++)
-		{
 			$str .= substr($chars, rand(1, $len)-1, 1);
-		}
 		
 		$tmp = $str.'.'.explode('.', $flename)[1];
 		return curl_file_create($tmp, $filename);

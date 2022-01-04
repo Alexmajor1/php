@@ -23,9 +23,7 @@ class Config
 	{
 		$subclass = static::class;
         if (!isset(self::$instances[$subclass]))
-		{
 			self::$instances[$subclass] = new static($src);
-		}
 		
 		return self::$instances[$subclass];
 	}
@@ -40,12 +38,9 @@ class Config
 		include ((__DIR__).'\\..\\..\\'.$this->src);
 		
 		if(!empty($this->buf) && key_exists($key, $this->buf))
-		{
 			return $this->buf[$key];
-		} else if(isset($$key))
-			return $$key;
-		else
-			return false;
+		elseif(isset($$key)) return $$key;
+		else return false;
 	}
 }
 ?>

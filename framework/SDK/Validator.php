@@ -27,20 +27,15 @@ class Validator
 	
 	function sql($field)
 	{
-		if(is_numeric(stripos($this->Data[$field], 'select')) and 
-			is_numeric(stripos($this->Data[$field], 'from')))
-			return true;
-			
-		if(is_numeric(stripos($this->Data[$field], 'insert')) and 
-			is_numeric(stripos($this->Data[$field], 'into')) and 
-			is_numeric(stripos($this->Data[$field], 'values')))
-			return true;
-			
-		if(is_numeric(stripos($this->Data[$field], 'update')) and 
-			is_numeric(stripos($this->Data[$field], 'set')))
-			return true;
-			
-		return false;
+		$value = $this->Data[$field];
+		
+		return (stripos($value, 'select') !== false && 
+			stripos($value, 'from') !== false) ||
+			(stripos($value, 'insert') !== false && 
+			stripos($value, 'into') !== false && 
+			stripos($value, 'values') !== false) ||
+			(stripos($value, 'update') !== false && 
+			stripos($value, 'set') !== false);
 	}
 	
 	function email($field)

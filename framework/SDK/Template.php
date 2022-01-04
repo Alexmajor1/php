@@ -16,8 +16,7 @@ class Template
 	{
 		$arr = explode(';', $html);
 		
-		foreach($arr as $value)
-		{
+		foreach($arr as $value){
 			$temp = explode('->', $value);
 			if(sizeof($temp) == 1)break;
 			

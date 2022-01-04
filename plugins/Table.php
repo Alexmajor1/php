@@ -15,10 +15,8 @@ class Table extends Plugin
 		$this->cfg = $this->data['cfg'];
 		$this->db = $this->data['db'];
 		$this->path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template');
-		if(key_exists('fields', $this->data['value']))
-			$data = $this->tableDB($this->data['value']);
-		else
-			$data = $this->tableArr($this->data['value']);
+		if(key_exists('fields', $this->data['value'])) $data = $this->tableDB($this->data['value']);
+		else $data = $this->tableArr($this->data['value']);
 		$value = $data[0];
 		if(key_exists('pager', $this->data['value']))
 			$value['pager'] = $this->tablePager([
@@ -36,19 +34,14 @@ class Table extends Plugin
 		$pageLink = '';
 		
 		foreach($_REQUEST as $key => $val)
-		{
-			if(!strstr('alias', $key))
-			{
+			if(!strstr('alias', $key)){
 				$pageLink .= "&$key=$val";
 				
-				switch($val)
-				{
+				switch($val){
 					case 'asc':$head_sort[$key] = SORT_ASC;break;
 					case 'desc':$head_sort[$key] = SORT_DESC;break;
 				}
-			}else
-				$pageLink .= "$val";
-		}
+			}else $pageLink .= "$val";
 		
 		if(!empty($head_sort))
 			return [$pageLink, $head_sort, $this->tableArrSort($rows, $head_sort)];
@@ -62,8 +55,7 @@ class Table extends Plugin
 		
 		$html = file_get_contents($this->path.'/modules/tableHeader.html');
 		
-		foreach($headers as $key => $val)
-		{			
+		foreach($headers as $key => $val){			
 			$html1 = $html;
 			
 			if(count($head_sort) == 0){
@@ -72,21 +64,13 @@ class Table extends Plugin
 			}else{
 				$str1 = '';
 				foreach($headers as $key1 => $val1)
-				{
 					if($key1 == $key)
-					{
 						if(key_exists($key1, $head_sort))
-						{
-							switch($head_sort[$key1])
-							{
+							switch($head_sort[$key1]){
 								case SORT_ASC: $pageLink = str_ireplace("&$key1=asc" , "&$key1=desc", $pageLink);break;
 								case SORT_DESC: $pageLink = str_ireplace("&$key1=desc" , "&$key1=asc", $pageLink);break;
 							}
-						}else{
-							$str1 .= "&$key1=desc";
-						}
-					}
-				}
+						else $str1 .= "&$key1=desc"; 
 				
 				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, $str1, $val], $html1);
 				$str .= $html1."\n";
@@ -118,22 +102,17 @@ class Table extends Plugin
 		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
 		
 		$str = '';
-		for($i=$start;$i<$end;$i++)
-		{
+		for($i=$start;$i<$end;$i++){
 			$row = $value['rows'][$i];
 			$str1 = '';
 			foreach($row as $val)
-			{
 				if(!is_array($val)) 
 				{
 					$html21 = $html2;
 					$html21 = str_ireplace('{value}', $val, $html21);
 					
 					$str1 .= "$html21\n";
-				} else {
-					$this->fields($val);
-				}
-			}
+				}else $this->fields($val);
 			$html11 = $html1;
 			$html11 = str_ireplace('{cols}', $str1, $html11);
 			
@@ -148,7 +127,7 @@ class Table extends Plugin
 	
 	function fields($data)
 	{
-		switch($data['type']) {
+		switch($data['type']){
 			case 'text': $res = $data['value']['text'];break;
 			case 'link': $res = '<a href = "'.$data['value']['url'].'">'.$data['value']['caption'].'</a>';break;
 			case 'image': $res = '<img src = "'.$data['value']['url'].'">';break;
@@ -162,9 +141,7 @@ class Table extends Plugin
 		$sql = 'select '.$value['fields'].' from '.$value[$value['mode']]['source'];
 		
 		if(key_exists('relation',$value[$value['mode']]))
-		{
 			$sql .= ' where '.$value[$value['mode']]['relation'].'='.$value[$value['mode']]['value'];
-		}
 		
 		$order = ' order by ';
 		$fields = explode(', ', $value['fields']);
@@ -178,14 +155,13 @@ class Table extends Plugin
 		
 		$req = new Request(null);
 		$num = '';
-		if(key_exists('p', $req->get()))
-			$num = $req->get('p');
+		if(key_exists('p', $req->get())) $num = $req->get('p');
 		
 		if($num>0){
 			$page = $value['pageSize'];
 			$offset = ($num*$page)-$page;
 			$sql .= " limit $offset, $page";
-		} else {
+		}else{
 			$page = $value['pager']['pageSize'];
 			$sql .= " limit $page";
 		}
@@ -200,13 +176,10 @@ class Table extends Plugin
 		$head_sort = array();
 		
 		foreach($_REQUEST as $key => $val)
-		{
-			if(is_numeric($key))
-			{
+			if(is_numeric($key)) {
 				$head_sort[$key] = $val;
 				$pageLink .= "&$key=$val";
 			}
-		}
 		
 		if(!key_exists('headers', $value[$value['mode']]))
 			$tmp = $this->db->FieldsDescriptors();
@@ -215,15 +188,13 @@ class Table extends Plugin
 		
 		$html = file_get_contents($this->path.'/modules/tableHeader.html');
 		$i = 0;
-		foreach($tmp as $val)
-		{
+		foreach($tmp as $val){
 			$html1 = $html;
 			$key = $i;
 			$val = (is_object($val))?$val->name:$val;
 			
 			
-			if(key_exists($key, $head_sort))
-			{
+			if(key_exists($key, $head_sort)){
 				switch($head_sort[$key])
 				{
 					case 'asc': $pageLink = str_ireplace("&$key=asc" , "&$key=desc", $pageLink);break;
@@ -231,9 +202,8 @@ class Table extends Plugin
 				}
 				
 				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, '', $val], $html1);
-			}else{
+			}else
 				$html1 = str_ireplace(['{pageLink}', '{sort}','{value}'], [$pageLink, "&$key=desc", $val], $html1);
-			}
 			
 			$val1 = $val;
 			$value['headers'] = $val1;
@@ -255,12 +225,9 @@ class Table extends Plugin
 		
 		$str = '';
 		
-		foreach($rows as $id => $row)
-		{
+		foreach($rows as $id => $row){
 			$str1 = '';
-			
-			foreach($row as $key => $val)
-			{
+			foreach($row as $key => $val){
 				$cell = $val;
 				if($value[$value['mode']]['types']){
 					$cell = $this->fieldsDB([
@@ -294,15 +261,17 @@ class Table extends Plugin
 		$res = '';
 		if($type['name'] == 'hide') return '';
 		
-		if($type['name'] != 'text') {
+		if($type['name'] != 'text')
 			$html = file_get_contents($this->path.'/modules/'.$type['name'].'.html');
-		}
 		
 		switch($type['name']) {
 			case 'text': $res = $data['value'];break;
-			case 'link': {
-				$res = str_ireplace(['{target}','{name}'], [$req->get('alias').$data['type']['url'].$data['id'],$data['value']], $html);
-				}break;
+			case 'link':
+				$res = str_ireplace(
+					['{target}','{name}'], 
+					[$req->get('alias').$data['type']['url'].$data['id'],$data['value']], 
+					$html);
+				break;
 			case 'image': $res = str_ireplace('{link}', $data['value'], $html);break;
 		}
 		
@@ -326,17 +295,12 @@ class Table extends Plugin
 		$pageLink = '';
 		
 		foreach($_REQUEST as $key => $val)
-		{
 			if(($key != 'p' and $key != 'alias') or $key == '0')
-			{
 				$pageLink .= "&$key=$val";
-			}
 			else if($key != 'p')
 				$pageLink .= "$val";
-		}
 		 
-		for($i=1;$i<=$pageCount;$i++)
-		{
+		for($i=1;$i<=$pageCount;$i++) {
 			$html21 = $html2;
 			$html21 = str_ireplace(['{target}','{name}'], ["&p=$i$pageLink",$i], $html21);
 			$str .= $html21;
@@ -357,15 +321,10 @@ class Table extends Plugin
 		$str = '';
 		
 		foreach($tmp as $id => $value)
-		{
 			if(key_exists($id, $sort))
-			{
 				$str .= '$tmp['.($id).'], '.$sort[$id].',';
-			}else
-			{
+			else
 				$str .= '$tmp['.($id).'],';
-			}
-		}
 		
 		$str = substr($str, 0, -1);
 		

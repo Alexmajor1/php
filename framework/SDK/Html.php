@@ -16,23 +16,14 @@ class Html
 		foreach($mods as $key => $value)
 		{
 			if($cfg->GetSetting('alias')['mode'] == 'alias')
-			{
 				if(key_exists('target', $value))
-				{
 					$value['target'] = $alias->encode($value['target']);
-				}else
-				{
+				else
 					foreach($value as $mod => $params)
-					{
-						if(is_array($params) and key_exists('target', $params))
-						{
+						if(is_array($params) and key_exists('target', $params)){
 							$params['target'] = $alias->encode($params['target']);
 							$value[$mod] = $params;
 						}
-					}
-				}
-				
-			}
 			
 			if(in_array($key, $cfg->GetSetting('plugins'))) $value = $this->ldr->plugin($key, $value);
 			
@@ -40,11 +31,9 @@ class Html
 		}
 		
 		if($cfg->getSetting('target'))
-		{
 			$cfg->setSetting
 				('target', $alias->encode
 					($cfg->getSetting('target')));
-		}
 		
 		$this->ldr->setConfig($cfg);
 		$this->ldr->GetContent();

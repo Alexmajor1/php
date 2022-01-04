@@ -11,8 +11,7 @@ class Form extends Plugin
 	{
 		$res = '';
 		$root_path = $_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/';
-		foreach($this->data['value']['fields'] as $key => $field)
-		{
+		foreach($this->data['value']['fields'] as $key => $field) {
 			$html = file_get_contents($root_path.$field['field_type'].'.html');
 			
 			$field['name'] = $key;
@@ -20,10 +19,8 @@ class Form extends Plugin
 			if($field['field_type'] == 'group') {
 				$res1 = '';
 				
-				if(is_array($field['groupitems']))
-				{	
-					foreach($field['groupitems'] as $item)
-					{
+				if(is_array($field['groupitems'])) {	
+					foreach($field['groupitems'] as $item) {
 						$html1 = file_get_contents($root_path.'groupItem.html');
 						foreach($item as $id1 => $item1)
 							$html1 = str_ireplace('{'.$id1.'}', $item1, $html1);
@@ -38,8 +35,7 @@ class Form extends Plugin
 					$sql = 'SELECT '.$field['groupitems'].'_name FROM '.$field['groupitems'].'s';
 					$data = $this->data['db']->DataQuery($sql);
 					
-					foreach($data as $id => $item)
-					{
+					foreach($data as $id => $item) {
 						$html1 = file_get_contents($root_path.'groupItem.html');
 						
 						$html1 = str_ireplace(['{type}', '{value}'], [$field['type'],$item[$field['groupitems'].'_name']], $html1);

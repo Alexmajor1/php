@@ -22,26 +22,17 @@ class Widget
 	{
 		$content = '';
 		foreach($this->positions as $position){
-			foreach($this->cfg[$position] as $key => $param)
-			{
+			foreach($this->cfg[$position] as $key => $param){
 				$html = '';
 				
-				if(in_array($key, $cfg->GetSetting('plugins'))) {
+				if(in_array($key, $cfg->GetSetting('plugins')))
 					$values = $this->plugin($key, $param, $cfg);
-					
-					$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
-					$html = file_get_contents($path);
-					
-					foreach($values as $id => $value){
-						$html = str_ireplace('{'.$id.'}', $value, $html);
-					}
-				} else {
-					$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
-					$html = file_get_contents($path);
-					
-					foreach($param as $key => $value)
-						$html = str_ireplace('{'.$key.'}', $value, $html);
-				}
+				
+				$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
+				$html = file_get_contents($path);
+				
+				foreach($param as $key => $value)
+					$html = str_ireplace('{'.$key.'}', $value, $html);
 				
 				$content .= $html;
 			}

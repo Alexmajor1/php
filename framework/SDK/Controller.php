@@ -52,10 +52,8 @@ class Controller
 	
 	function toPage($name)
 	{
-		if($name != 'main')
-			$header = $this->alias->encode('index.php?page='.$name);
-		else
-			$header = '/'.$this->getProperty('base');
+		if($name != 'main') $header = $this->alias->encode('index.php?page='.$name);
+		else $header = '/'.$this->getProperty('base');
 		
 		header("location:$header");
 	}

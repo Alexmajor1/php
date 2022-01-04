@@ -24,9 +24,7 @@ class DB
 	{
 		$subclass = static::class;
         if (!isset(self::$instances[$subclass]))
-		{
 			self::$instances[$subclass] = new static($ConData);
-		}
 		
 		return self::$instances[$subclass];
 	}
@@ -38,21 +36,21 @@ class DB
 	
 	function DataQuery($str) {
 		$this->query = $this->cursor->query($str);
-		if(!$this->query){return [];}
+		if(!$this->query) return [];
 		return $this->query->fetch_all(MYSQLI_ASSOC);
 	}
 	
 	function RowQuery($str)
 	{
 		$this->query = $this->cursor->query($str);
-		if(!$this->query){return [];}
+		if(!$this->query) return [];
 		return $this->query->fetch_row();
 	}
 	
 	function ValueQuery($str)
 	{
 		$this->query = $this->cursor->query($str);
-		if(!$this->query){return null;}
+		if(!$this->query) return null;
 		return $this->query->fetch_row()[0];
 	}
 	
@@ -68,14 +66,10 @@ class DB
 		$fields = '(';
 		$values = '(';
 		
-		foreach($data as $field => $value)
-		{
+		foreach($data as $field => $value) {
 			$fields .= "$field, ";
-			if(!is_numeric($value)) {
-				$values .= "\"$value\", ";
-			} else {
-				$values .= "$value, ";
-			}
+			if(!is_numeric($value)) $values .= "\"$value\", ";
+			else $values .= "$value, ";
 		}
 		$fields = substr_replace($fields, ')', strlen($fields)-2,1);
 		$values = substr_replace($values, ')', strlen($values)-2,1);
@@ -89,12 +83,8 @@ class DB
 		$this->sql = 'SELECT';
 		
 		foreach($data as $alias => $field)
-		{
-			if(!is_numeric($alias)) 
-				$this->sql .= " $field as $alias,";
-			else 
-				$this->sql .= " $field,";
-		}
+			if(!is_numeric($alias)) $this->sql .= " $field as $alias,";
+			else $this->sql .= " $field,";
 		
 		$this->sql = substr_replace($this->sql, " FROM $table", strlen($this->sql)-1,1);
 		return $this;
@@ -105,13 +95,8 @@ class DB
 		$this->sql = "UPDATE $table SET";
 		
 		foreach($data as $field => $value)
-		{
-			if(!is_numeric($value)){
-				$this->sql .= " $field=\"$value\",";
-			} else {
-				$this->sql .= " $field=$value,";
-			}
-		}
+			if(!is_numeric($value)) $this->sql .= " $field=\"$value\",";
+			else $this->sql .= " $field=$value,";
 		
 		$this->sql = substr_replace($this->sql, '', strlen($this->sql)-1,1);
 		return $this;
@@ -128,16 +113,16 @@ class DB
 		$this->sql .= ' WHERE';
 		
 		foreach($conditions as $field => $value)
-		{
-			if(is_array($value))
-				$this->sql .= " $field=".$value[0]." $operation";
-			elseif(!is_numeric($value))
-				$this->sql .= " $field=\"$value\" $operation";
-			else
-				$this->sql .= " $field=$value $operation";
-		}
+			if(is_array($value)) $this->sql .= " $field=".$value[0]." $operation";
+			elseif(!is_numeric($value)) $this->sql .= " $field=\"$value\" $operation";
+			else $this->sql .= " $field=$value $operation";
 		
-		$this->sql = substr_replace($this->sql, '', strlen($this->sql)-strlen($operation), strlen($operation));
+		$this->sql = substr_replace(
+			$this->sql, 
+			'', 
+			strlen($this->sql)-strlen($operation), 
+			strlen($operation));
+			
 		return $this;
 	}
 	

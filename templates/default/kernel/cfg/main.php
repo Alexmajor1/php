@@ -108,7 +108,6 @@ $modules = [
 	'image' => [
 		'id' => 'testImage',
 		'link' => 'images\Chrysanthemum.jpg',
-		
 	]
 ];
 ?>
