@@ -15,12 +15,14 @@ class Widget
 	{
 		$name = '\\Plugins\\'.$key;
 		$plugin = new $name(['value' => $value, 'db' => DB::getInstance(), 'cfg' => $cfg]);
+		
 		return $plugin->show();
 	}
 	
 	function loadContent($cfg)
 	{
 		$content = '';
+		
 		foreach($this->positions as $position){
 			foreach($this->cfg[$position] as $key => $param){
 				$html = '';

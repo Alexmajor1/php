@@ -13,6 +13,7 @@ class Html
 	function draw($cfg, $alias, $mods)
 	{
 		$this->ldr->setConfig($cfg);
+		
 		foreach($mods as $key => $value)
 		{
 			if($cfg->GetSetting('alias')['mode'] == 'alias')

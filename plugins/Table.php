@@ -14,9 +14,14 @@ class Table extends Plugin
 	{
 		$this->cfg = $this->data['cfg'];
 		$this->db = $this->data['db'];
-		$this->path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->GetSetting('base').'/templates/'.$this->cfg->GetSetting('site_template');
+		$this->path = $_SERVER['DOCUMENT_ROOT'].
+			$this->cfg->GetSetting('base').
+			'/templates/'.
+			$this->cfg->GetSetting('site_template');
+			
 		if(key_exists('fields', $this->data['value'])) $data = $this->tableDB($this->data['value']);
 		else $data = $this->tableArr($this->data['value']);
+		
 		$value = $data[0];
 		if(key_exists('pager', $this->data['value']))
 			$value['pager'] = $this->tablePager([
@@ -83,7 +88,6 @@ class Table extends Plugin
 	function tableArr($value)
 	{
 		$result = $this->getTableArrSort($value['rows']);
-		
 		$head_sort = $result[1];
 		$pageLink = $result[0];
 		
@@ -91,13 +95,11 @@ class Table extends Plugin
 			$value['rows'] = $result[2];
 		
 		$value['headers'] = $this->getTableArrHeaders($value['headers'], $pageLink, $head_sort);
-			
 		$str = '';
 		$req = new Request(null);
 		$num = (key_exists('p', $req->get()))?$req->get('p'):1;
 		$end = $num * $value['pager']['pageSize'];
 		$start = $end-$value['pager']['pageSize'];
-		
 		$html1 = file_get_contents($this->path.'/modules/tableRow.html');
 		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
 		
@@ -106,11 +108,9 @@ class Table extends Plugin
 			$row = $value['rows'][$i];
 			$str1 = '';
 			foreach($row as $val)
-				if(!is_array($val)) 
-				{
+				if(!is_array($val)) {
 					$html21 = $html2;
 					$html21 = str_ireplace('{value}', $val, $html21);
-					
 					$str1 .= "$html21\n";
 				}else $this->fields($val);
 			$html11 = $html1;
@@ -145,6 +145,7 @@ class Table extends Plugin
 		
 		$order = ' order by ';
 		$fields = explode(', ', $value['fields']);
+		
 		foreach($_REQUEST as $key => $val)
 			if($val == 'asc' or $val == 'desc')
 				$order .= 
@@ -155,6 +156,7 @@ class Table extends Plugin
 		
 		$req = new Request(null);
 		$num = '';
+		
 		if(key_exists('p', $req->get())) $num = $req->get('p');
 		
 		if($num>0){
@@ -183,8 +185,7 @@ class Table extends Plugin
 		
 		if(!key_exists('headers', $value[$value['mode']]))
 			$tmp = $this->db->FieldsDescriptors();
-		else
-			$tmp = $value[$value['mode']]['headers'];
+		else $tmp = $value[$value['mode']]['headers'];
 		
 		$html = file_get_contents($this->path.'/modules/tableHeader.html');
 		$i = 0;
@@ -193,10 +194,8 @@ class Table extends Plugin
 			$key = $i;
 			$val = (is_object($val))?$val->name:$val;
 			
-			
 			if(key_exists($key, $head_sort)){
-				switch($head_sort[$key])
-				{
+				switch($head_sort[$key]) {
 					case 'asc': $pageLink = str_ireplace("&$key=asc" , "&$key=desc", $pageLink);break;
 					case 'desc': $pageLink = str_ireplace("&$key=desc" , "&$key=asc", $pageLink);break;
 				}
@@ -217,16 +216,14 @@ class Table extends Plugin
 	function tableDB($value)
 	{
 		$rows = $this->getData($value);
-		
 		$value['headers'] = $this->getHeaders($value);
-		
 		$html1 = file_get_contents($this->path.'/modules/tableRow.html');
 		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
-		
 		$str = '';
 		
 		foreach($rows as $id => $row){
 			$str1 = '';
+			
 			foreach($row as $key => $val){
 				$cell = $val;
 				if($value[$value['mode']]['types']){
@@ -241,16 +238,17 @@ class Table extends Plugin
 			
 				$html21 = $html2;
 				$html21 = str_ireplace('{value}', $cell, $html21);
-			
 				$str1 .= "$html21\n";
 			}
+			
 			$html11 = $html1;
 			$html11 = str_ireplace('{cols}', $str1, $html11);
-			
 			$str .= "$html11\n";
 		}
+		
 		$value['rows'] = $str;
 		$count = sizeof($rows);
+		
 		return [$value, $count];
 	}
 	
@@ -259,8 +257,8 @@ class Table extends Plugin
 		$req = new Request();
 		$type = $data['type'];
 		$res = '';
-		if($type['name'] == 'hide') return '';
 		
+		if($type['name'] == 'hide') return '';
 		if($type['name'] != 'text')
 			$html = file_get_contents($this->path.'/modules/'.$type['name'].'.html');
 		
@@ -281,6 +279,7 @@ class Table extends Plugin
 	function tablePager($value)
 	{
 		$pageCount = 0;
+		
 		if($value['rowCount']%$value['pageSize']>0)
 			$pageCount = intdiv($value['rowCount'],$value['pageSize'])+1;
 		else
@@ -290,21 +289,20 @@ class Table extends Plugin
 		
 		$html1 = file_get_contents($this->path.'/modules/tablePager.html');
 		$html2 = file_get_contents($this->path.'/modules/link.html');
-		
 		$str = '';
 		$pageLink = '';
 		
 		foreach($_REQUEST as $key => $val)
 			if(($key != 'p' and $key != 'alias') or $key == '0')
 				$pageLink .= "&$key=$val";
-			else if($key != 'p')
-				$pageLink .= "$val";
+			else if($key != 'p') $pageLink .= "$val";
 		 
 		for($i=1;$i<=$pageCount;$i++) {
 			$html21 = $html2;
 			$html21 = str_ireplace(['{target}','{name}'], ["&p=$i$pageLink",$i], $html21);
 			$str .= $html21;
 		}
+		
 		$html11 = $html1;
 		$html11 = str_ireplace('{pagesLinks}', $str, $html11);
 		
@@ -314,6 +312,7 @@ class Table extends Plugin
 	function tableArrSort($rows, $sort)
 	{
 		$tmp = array();
+		
 		foreach($rows as $num => $row)
 			foreach($row as $key => $col)
 				$tmp[$key][$num] = $col;
@@ -323,8 +322,7 @@ class Table extends Plugin
 		foreach($tmp as $id => $value)
 			if(key_exists($id, $sort))
 				$str .= '$tmp['.($id).'], '.$sort[$id].',';
-			else
-				$str .= '$tmp['.($id).'],';
+			else $str .= '$tmp['.($id).'],';
 		
 		$str = substr($str, 0, -1);
 		

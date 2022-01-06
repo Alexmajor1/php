@@ -54,7 +54,6 @@ class Page
 	{
 		$result = preg_replace('/\s\w+="{\w+}"/', '', $this->layout->content);
 		$result = preg_replace('/{\w+}/', '', $result);
-		
 		$lang = new Localization($this->cfg);
 		$result = $lang->translate($result);
 		

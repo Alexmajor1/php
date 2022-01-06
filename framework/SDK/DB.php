@@ -23,6 +23,7 @@ class DB
 	public static function getInstance($ConData = [])
 	{
 		$subclass = static::class;
+		
         if (!isset(self::$instances[$subclass]))
 			self::$instances[$subclass] = new static($ConData);
 		
@@ -36,27 +37,34 @@ class DB
 	
 	function DataQuery($str) {
 		$this->query = $this->cursor->query($str);
+		
 		if(!$this->query) return [];
+		
 		return $this->query->fetch_all(MYSQLI_ASSOC);
 	}
 	
 	function RowQuery($str)
 	{
 		$this->query = $this->cursor->query($str);
+		
 		if(!$this->query) return [];
+		
 		return $this->query->fetch_row();
 	}
 	
 	function ValueQuery($str)
 	{
 		$this->query = $this->cursor->query($str);
+		
 		if(!$this->query) return null;
+		
 		return $this->query->fetch_row()[0];
 	}
 	
 	function ChangeQuery($str)
 	{
 		$this->query = $this->cursor->query($str);
+		
 		return $this->query;
 	}
 	
@@ -68,13 +76,15 @@ class DB
 		
 		foreach($data as $field => $value) {
 			$fields .= "$field, ";
+			
 			if(!is_numeric($value)) $values .= "\"$value\", ";
 			else $values .= "$value, ";
 		}
+		
 		$fields = substr_replace($fields, ')', strlen($fields)-2,1);
 		$values = substr_replace($values, ')', strlen($values)-2,1);
-		
 		$this->sql .= "$fields VALUES$values";
+		
 		return $this;
 	}
 	
@@ -87,6 +97,7 @@ class DB
 			else $this->sql .= " $field,";
 		
 		$this->sql = substr_replace($this->sql, " FROM $table", strlen($this->sql)-1,1);
+		
 		return $this;
 	}
 	
@@ -99,12 +110,14 @@ class DB
 			else $this->sql .= " $field=$value,";
 		
 		$this->sql = substr_replace($this->sql, '', strlen($this->sql)-1,1);
+		
 		return $this;
 	}
 	
 	function delete($table)
 	{
 		$this->sql = "DELETE FROM $table";
+		
 		return $this;
 	}
 	

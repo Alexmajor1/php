@@ -4,34 +4,43 @@ namespace framework;
 class Application
 {
 	private $cfg;
-	private $db;
-	private $alias;
 	private $ctrl;
 	private $data;
 	
 	function __construct($conf)
 	{
 		$this->cfg = Config::getInstance($conf);
-		$this->db = DB::getInstance($this->cfg->getSetting('database'));
-		$this->alias = new Alias();
+		DB::getInstance($this->cfg->getSetting('database'));
+		$alias = new Alias();
+		$req = (new Request())->get();
 		
-		$req = new Request();
-		
-		if((!key_exists('page', $req->get()))&&(!key_exists('alias', $req->get())))
+		if((!key_exists('page', $req))&&(!key_exists('alias', $req)))
 			$page = 'main';
 		else
-			$page = explode('page=', $this->alias->decode($req->get('alias')))[1];
+			$page = explode('page=', $alias->decode($req['alias']))[1];
 		
 		if(stripos($page, '\\') > 0)
 			$ctrl = 'controllers\\'.explode('\\', ucfirst($page))[0].'Controller';
 		else
 			$ctrl = 'controllers\\'.$this->cfg->getSetting('controller');
 		
-		$this->ctrl = new $ctrl($this->alias);
+		$this->ctrl = new $ctrl($alias);
 	}
 	
 	function AddData()
 	{
+		if(isset($this->ctrl->rules))
+			foreach($this->ctrl->rules as $rule)
+				if($rule != '') {
+					$rule = 'rules\\'.$rule.'Rule';
+					
+					$check = new $rule($this->ctrl);
+					$check->path = $this->data;
+					$check->execute();
+					$this->ctrl = $check->ctrl;
+					$this->data = $check->path;
+				}
+				
 		include ($this->data);
 		
 		$this->ctrl->addConfig(['name', $name]);
@@ -49,58 +58,6 @@ class Application
 		
 		if(isset($template))
 			$this->ctrl->addConfig(['template', $template]);
-	}
-	
-	function route()
-	{
-		$req = new Request();
-		$tmp_path = $_SERVER['DOCUMENT_ROOT'].$this->ctrl->getProperty('base')."/templates/";
-		switch($this->ctrl->getProperty('alias')['mode']){
-			case 'page':
-				if(!key_exists('page', $req->get())){
-					$this->ctrl->addConfig(['page','main']);
-					$page = 'page=main';
-				} else {
-					$this->ctrl->addConfig(['page',$req->get('page')]);
-					if($req->get['page'] == 'logout') $this->ctrl->logout();
-					
-					$page = explode('\\', $req->get['page']);
-				}
-				
-				if(count($page) > 1) $tmpl = $page[0];
-				else $tmpl = $this->ctrl->getProperty('site_template');
-				
-				$this->data = $tmp_path.$tmpl."/kernel/cfg/".end($page).".php";
-			break;
-			case 'alias':
-				if(!key_exists('alias', $req->get())) $page = 'page=main';
-				else $page = $this->alias->decode($req->get('alias'));
-				
-				if(explode('page=', $page)[1] == 'logout')
-					$this->ctrl->logout();
-				
-				$page = explode('\\', explode('page=', $page)[1]);
-				
-				if(count($page) > 1) $tmpl = $page[0];
-				else $tmpl = $this->ctrl->getProperty('site_template');
-				
-				$this->data = $tmp_path.$tmpl."/kernel/cfg/".end($page).".php";
-			break;
-		}
-		
-		if(isset($this->ctrl->rules))
-			foreach($this->ctrl->rules as $rule)
-				if($rule != '') {
-					$rule = 'rules\\'.$rule.'Rule';
-					
-					$check = new $rule($this->ctrl);
-					$check->path = $this->data;
-					$check->execute();
-					$this->ctrl = $check->ctrl;
-					$this->data = $check->path;
-				}
-		
-		$this->addData();
 		
 		if(isset($this->ctrl->widgets))
 			foreach($this->ctrl->widgets as $name)
@@ -112,8 +69,18 @@ class Application
 				}
 	}
 	
+	function route()
+	{
+		$router = new Router();
+		$cfg_file = $router->route();
+		
+		if($cfg_file) $this->data = $cfg_file;
+		else $this->ctrl->logout();
+	}
+	
 	function run()
 	{
+		$this->addData();
 		if($this->ctrl->page->name != 'main') {
 			$method = $this->ctrl->page->name;
 			
@@ -123,6 +90,7 @@ class Application
 			$res = $this->ctrl->$method();
 			
 			if($res){
+				header("Content-Type: application/json");
 				echo json_encode($res, JSON_PRETTY_PRINT);
 				die;
 			}

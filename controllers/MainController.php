@@ -24,9 +24,8 @@ class MainController extends Controller
 			$this->toPage('main');
 		}
 		
-		if($auth->remember) {
+		if($auth->remember)
 			$auth->setUserToken();
-		}
 		
 		if($auth->Execute($this->getProperty('session')))
 			if($auth->isAdmin($this->getProperty('session')))
@@ -99,7 +98,7 @@ class MainController extends Controller
 	
 	function test()
 	{
-		return array('hello world');
+		return ['message' => 'hello world'];
 	}
 }
 ?>

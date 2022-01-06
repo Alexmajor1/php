@@ -10,6 +10,25 @@ class ModelEditor extends Model
 		$this->table = strtolower(end($arr)).'s';
 	}
 	
+	function rowsCount()
+	{
+		return $this->read(['id'])->count();
+	}
+	
+	function getTitle($layout, $title)
+	{
+		$req = new Request();
+		$mode = $req->get('mode');
+		$id = $req->get('id');
+		
+		if($mode) {
+			if($id) $layout['title'] = $title['edit'];
+			else $layout['title'] = $title['add'];
+		} else $layout['title'] = $title['main'];
+		
+		return $layout;
+	}
+	
 	function editor($mods, $fields){
 		$req = new Request();
 		
@@ -35,8 +54,7 @@ class ModelEditor extends Model
 			
 			if($req->post('id'))
 				return $this->update($data,['id' => $req->post('id')]);
-			else
-				return $this->create($data);
+			else return $this->create($data);
 		}
 	}
 }

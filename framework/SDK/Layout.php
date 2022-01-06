@@ -13,6 +13,7 @@ class Layout
 	{
 		$this->cfg = Config::getInstance();
 		$this->title = $this->cfg->GetSetting('layout')['title'];
+		
 		$assets = new Assets($this->cfg);
 		$assets->generate();
 		
@@ -27,9 +28,10 @@ class Layout
 	{
 		$this->content = str_replace('{title}', $this->title, $this->content);
 		$this->content = str_replace('{style}', $this->style, $this->content);
-		
 		$this->content = str_replace('{scripts}', '<script src="assets/js/script.js"></script>', $this->content);
+		
 		$temp->SetTarget($this->cfg->getSetting('target'));
+		
 		$this->content = str_replace('{content}', $temp->content, $this->content);
 	}
 }

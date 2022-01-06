@@ -25,3 +25,4 @@ class Listbox extends Plugin
 		$this->html = $this->data['value'];
 	}
 }
+?>

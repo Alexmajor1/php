@@ -15,6 +15,7 @@ class Controller
 	function __construct($data)
 	{
 		if($data == null) return $this;
+		
 		$this->alias = $data;
 		$this->conf = Config::getInstance();
 		$this->db = DB::getInstance();
@@ -56,6 +57,7 @@ class Controller
 		else $header = '/'.$this->getProperty('base');
 		
 		header("location:$header");
+		die;
 	}
 }
 ?>

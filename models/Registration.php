@@ -25,37 +25,33 @@ class Registration
 	
 	function CheckPassword()
 	{
-		$res = '';
+		$valid = new Validator(['password' => $this->password]);
 		
-		if(strlen($this->password)<10)
-		{
-			$res .= 'password is short(>10)</br>';
-		}
+		$res = $valid->checkWithMsg(
+			!$valid->lenght('password', 10)
+			'password is short(>10)</br>'
+		);
+		$res .= $valid->checkWithMsg(
+			!$valid->content('password', 'digit')
+			'password must contain digits</br>'
+		);
+		$res .= $valid->checkWithMsg(
+			!$valid->content('password', 'alpha')
+			'password must contain letters</br>'
+		);
+		$res .= $valid->checkWithMsg(
+			!$valid->content('password', 'upper')
+			'password must contain uppercase letters</br>'
+		);
+		$res .= $valid->checkWithMsg(
+			$valid->content('password', 'space')
+			'password should not contain spaces</br>'
+		);
+		$res .= $valid->checkWithMsg(
+			$valid->content('password', 'punct')
+			'password should not contain punctuation</br>'
+		);
 		
-		if(!preg_match('/[[:digit:]+]/', $this->password))
-		{
-			$res .= 'password must contain digits</br>';
-		}
-		
-		if(!preg_match('/[[:alpha:]+]/', $this->password) or preg_match('/[[а-яА-я]+]/', $this->password))
-		{
-			$res .= 'password must contain letters</br>';
-		}
-		
-		if(!preg_match('/[[:upper:]+]/', $this->password))
-		{
-			$res .= 'password must contain uppercase letters</br>';
-		}
-		
-		if(preg_match('/[[:space:]+]/', $this->password))
-		{
-			$res .= 'password should not contain spaces</br>';
-		}
-		
-		if(preg_match('/[[:punct:]+]/', $this->password))
-		{
-			$res .= 'password should not contain punctuation</br>';
-		}
 		if(strlen($res) == 0)
 			return 'ok';
 		else
@@ -66,7 +62,7 @@ class Registration
 	{
 		$valid = new Validator($data);
 		
-		return $valid->sql('User') or $valid->sql('Password');
+		return $valid->sql('User') || $valid->sql('Password');
 	}
 	
 	function execute()
@@ -74,15 +70,16 @@ class Registration
 		if($this->CheckUser()) return 'this login is not available';
 		
 		$res = $this->CheckPassword();
+		
 		if($res !== 'ok') return $res;
 		
 		$role = new Role();
-		$role_id = $role->read(['id_Role'], ['role_name' => $this->role])[0];
+		$role_id = $role->read(['id_Role'], ['role_name' => $this->role])->id;
 		
 		return $this->model->create([
 					'user_name' => $this->user, 
 					'user_password' => md5($this->password), 
-					'user_role' => $role_id[0]
+					'user_role' => $role_id
 				]);
 	}
 }

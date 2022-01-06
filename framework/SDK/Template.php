@@ -18,6 +18,7 @@ class Template
 		
 		foreach($arr as $value){
 			$temp = explode('->', $value);
+			
 			if(sizeof($temp) == 1)break;
 			
 			$this->content = str_replace($temp[1], $temp[0], $this->content);

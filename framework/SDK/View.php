@@ -24,7 +24,6 @@ class View
 	function LoadModule($module, $params)
 	{	
 		$data = explode(':', $module)[0];
-		
 		$path = $this->tmp_path.'/templates/'.$this->cfg->GetSetting('site_template').'/modules/'.$data.'.html';
 		
 		if(!file_exists($path)) $path = $this->tmp_path.'/framework/modules/'.$data.'.html';

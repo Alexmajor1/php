@@ -10,10 +10,13 @@ class Form extends Plugin
 	function generate()
 	{
 		$res = '';
-		$root_path = $_SERVER['DOCUMENT_ROOT'].$this->data['cfg']->GetSetting('base').'/templates/'.$this->data['cfg']->GetSetting('site_template').'/modules/';
+		$root_path = $_SERVER['DOCUMENT_ROOT'].
+			$this->data['cfg']->GetSetting('base').
+			'/templates/'.
+			$this->data['cfg']->GetSetting('site_template').
+			'/modules/';
 		foreach($this->data['value']['fields'] as $key => $field) {
 			$html = file_get_contents($root_path.$field['field_type'].'.html');
-			
 			$field['name'] = $key;
 			
 			if($field['field_type'] == 'group') {
@@ -37,7 +40,6 @@ class Form extends Plugin
 					
 					foreach($data as $id => $item) {
 						$html1 = file_get_contents($root_path.'groupItem.html');
-						
 						$html1 = str_ireplace(['{type}', '{value}'], [$field['type'],$item[$field['groupitems'].'_name']], $html1);
 						
 						if($item[$field['groupitems'].'_name'] != 'Admin') $res1 .= $html1;
@@ -53,7 +55,7 @@ class Form extends Plugin
 		}
 		
 		$this->data['value']['fields'] = $res;
-		
 		$this->html = $this->data['value'];
 	}
 }
+?>

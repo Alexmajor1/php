@@ -22,6 +22,7 @@ class Loader
 	{
 		$this->page->LoadLayout();
 		$this->page->LoadView();
+		
 		$page = explode('\\', $this->page->name);
 		
 		if($this->cfg->getSetting('site_template') != '')
@@ -47,6 +48,7 @@ class Loader
 		else{
 			$data = $this->db->select($value[$elem.'items'].'s', [$value[$elem.'items'].'_name' => $value[$elem.'items'].'_name'])->all();
 			$value[$elem.'items'] .= 's'; 
+			
 			foreach($data as $set => $val)
 				$value[$elem.'items'] .= '<input id="'.$val[0].'Label" type="'.$elem.'" name="'.$value[$elem.'items'].'" value="'.$val[0].'">'.$val[0];
 		}
@@ -57,6 +59,7 @@ class Loader
 	{
 		$name = '\\Plugins\\'.$key;
 		$plugin = new $name(['value' => $value, 'db' => DB::getInstance(), 'cfg' => $this->cfg]);
+		
 		return $plugin->show();
 	}
 	

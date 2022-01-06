@@ -19,10 +19,13 @@ class Model
 	function create($data)
 	{
 		$res = $this->db->insert($this->table, $data)->change();
+		
 		if($res){
 			$res = $this->db->select($this->table, '*')->where(['id' => $this->db->LastInsert()])->one();
+			
 			if($res){
 				$this->data = $res;
+				
 				return $this;
 			}
 		}
@@ -53,7 +56,6 @@ class Model
 	function update($data, $where = [])
 	{
 		$res = $this->db->update($this->table, $data);
-		
 		$passed = $res->change();
 		
 		if($passed) {
@@ -92,12 +94,15 @@ class Model
 	
 	function __get($key){
 		if(key_exists($key, $this->data)) return $this->data[$key];
+		
 		return false;
 	}
 	
 	function __set($key, $value){
 		if(!key_exists($key, $this->data)) return false;
+		
 		$this->data[$key] = $value;
+		
 		return true;
 	}
 	
@@ -107,7 +112,9 @@ class Model
 	
 	function __unset($key){
 		if(!key_exists($key, $this->data)) return;
+		
 		unset($this->data[$key]);
+		
 		return true;
 	}
 }

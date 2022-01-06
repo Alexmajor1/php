@@ -34,11 +34,10 @@ class Authorization
 		$len = strlen($chars);
 
 		for($i=0;$i<10;$i++)
-		{
 			$token .= substr($chars, rand(1, $len)-1, 1);
-		}
 		
 		$res = $this->model->update(['user_remember', $token], ['user_name' => $this->user]);
+		
 		if($res)
 			setcookie('token', $token);
 	}
@@ -54,12 +53,14 @@ class Authorization
 	{
 		$sess = new Session($conf, $this->user);
 		$sess->create();
+		
 		return strcmp($sess->getRole(), 'Admin') == 0;
 	}
 	
 	function Execute($cfg)
 	{
 		$usr = null;
+		
 		if($this->request->cookie($cfg['key']))
 		{
 			$sess = new Session($cfg);
@@ -73,6 +74,7 @@ class Authorization
 			$this->user = $this->model->read(
 				['id'], 
 				['user_name' => $this->user, 'user_password' => md5($this->password)])->id;
+				
 			return ($this->user);
 		} else return false;
 	}
