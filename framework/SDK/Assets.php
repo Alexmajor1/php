@@ -47,8 +47,8 @@ class Assets
 		{
 			$code = file_get_contents($path);
 			
-			if(strpos($path,'.css')) fwrite($this->css, $code);
-			else fwrite($this->js, $code);
+			if(strpos($path,'.css')) fwrite($this->css, $code.PHP_EOL);
+			else fwrite($this->js, $code.PHP_EOL);
 		}
 	}
 	

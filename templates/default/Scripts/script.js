@@ -34,13 +34,10 @@ function main()
 	}
 	
 	var langs = document.getElementById('lng');
-	
-	for(let i = 0; i < langs.children.length; i++){
-		langs[i].addEventListener('click', function(e){
-			console.log(e.target.value);
-			document.location.href = '&lang='+e.target.value;
-		});
-	}
+	langs.addEventListener('change', function(e){
+		console.log(e.target.value);
+		document.location.href = '&lang='+e.target.value;
+	});
 }
 
 main();

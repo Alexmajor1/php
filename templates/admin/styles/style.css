@@ -19,7 +19,7 @@ p
 #content
 {
 	width: auto;
-	height: auto;
+	min-height: 100%;
 }
 
 #editor_form

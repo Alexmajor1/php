@@ -176,7 +176,7 @@ class DB
 	
 	function LastInsert()
 	{
-		return $this->cursor->insert_id();
+		return $this->cursor->insert_id;
 	}
 	
 	function Clear()

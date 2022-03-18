@@ -23,10 +23,12 @@ $modules = [
 				'name' => 'name'
 			],
 			'User_role' => [
-				'field_type' => 'edit',
+				'field_type' => 'listbox',
 				'id' => 'user_role',
 				'class' => 'user-role flex-row',
-				'name' => 'role'
+				'name' => 'role', 
+				'source' => 'role',
+				'field' => 'Role_name'
 			],
 			'submit' => [
 				'field_type' => 'send',

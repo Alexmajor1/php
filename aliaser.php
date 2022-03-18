@@ -4,8 +4,7 @@ include_once "config\\settings.php";
 $tmpls = array('default','admin');
 $files = array();
 
-foreach($tmpls as $tmpl)
-{
+foreach($tmpls as $tmpl) {
 	$dir = scandir("templates\\$tmpl\\kernel\\cfg");
 	
 	foreach($dir as $file)
@@ -29,8 +28,7 @@ function fileStorage($source, $files)
 	$data = array();
 	
 	foreach($files as $file)
-		if(!is_dir($file))
-		{
+		if(!is_dir($file)) {
 			include_once $file;
 			
 			foreach($modules as $module)
@@ -55,21 +53,18 @@ function tableStorage($source, $files, $ConData, $tmpls)
 	$db = new framework\DB($ConData);
 	
 	foreach($files as $file)
-		if(!is_dir($file))
-		{
+		if(!is_dir($file)) {
 			echo $file.'<br>';
 			
 			include_once $file;
 			
 			foreach($modules as $name => $module)
-				if(key_exists('target', $module))
-				{
+				if(key_exists('target', $module)) {
 					echo $module['target'].'<br>';
 					
 					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$module['target'].'"');
 					
-					if($res == null)
-					{
+					if($res == null) {
 						echo "ADD $name<br>";
 						
 						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand().'","'.$module['target'].'")');

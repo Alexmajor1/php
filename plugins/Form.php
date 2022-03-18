@@ -4,6 +4,7 @@ namespace Plugins;
 use framework\Plugin;
 use framework\Request;
 use framework\Alias;
+use framework\DB;
 
 class Form extends Plugin
 {
@@ -19,9 +20,15 @@ class Form extends Plugin
 			$html = file_get_contents($root_path.$field['field_type'].'.html');
 			$field['name'] = $key;
 			
+			if(in_array($field['field_type'], $this->data['cfg']->GetSetting('plugins'))) {
+				$name = '\\Plugins\\'.ucfirst($field['field_type']);
+				$plugin = new $name([
+					'value' => $field, 'db' => DB::getInstance(), 'cfg' => $this->data['cfg']]);
+				$field = $plugin->show();
+			}
+			
 			if($field['field_type'] == 'group') {
 				$res1 = '';
-				
 				if(is_array($field['groupitems'])) {	
 					foreach($field['groupitems'] as $item) {
 						$html1 = file_get_contents($root_path.'groupItem.html');

@@ -24,8 +24,8 @@ $modules = [
 		'main' => [
 			'headers' => ['ИД', 'форум', 'автор', 'название'],
 			'source' => 'themes, forums, users',
-			'relation' => 'themes.user_id',
-			'value' => 'users.id',
+			'relation' => ['themes.user_id', 'themes.forum_id'],
+			'value' => ['users.id', 'forums.id'],
 			'types' => [
 				'id' => ['name' => 'text'],
 				'forum' => ['name' => 'text'],

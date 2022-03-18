@@ -22,19 +22,19 @@ class AdminController extends Controller
 		$layout['title'] = 'Admin panel';
 		$this->addConfig(['layout', $layout]);
 		
-		$users = (new UserEditor($this->db))->rowsCount();
+		$users = (new UserEditor())->rowsCount();
 		$this->mods['text']['users']['text'] = "Users count: $users";
 		
-		$roles = (new RoleEditor($this->db))->rowsCount();
+		$roles = (new RoleEditor())->rowsCount();
 		$this->mods['text']['roles']['text'] = "Roles count: $roles";
 		
-		$forums = (new ForumEditor($this->db))->rowsCount();
+		$forums = (new ForumEditor())->rowsCount();
 		$this->mods['text']['forums']['text'] = "Forums count: $forums";
 		
-		$themes = (new ThemeEditor($this->db))->rowsCount();
+		$themes = (new ThemeEditor())->rowsCount();
 		$this->mods['text']['themes']['text'] = "Themes count: $themes";
 		
-		$topics = (new TopicEditor($this->db))->rowsCount();
+		$topics = (new TopicEditor())->rowsCount();
 		$this->mods['text']['topics']['text'] = "Topics count: $topics";
 	}
 	
@@ -52,7 +52,7 @@ class AdminController extends Controller
 	function roles()
 	{
 		$layout = $this->getProperty('layout');
-		$model = new RoleEditor($this->db);
+		$model = new RoleEditor();
 		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Roles', 'add' => 'Add role', 'edit' => 'Edit role'])]);
 		$res = $model->editor($this->mods, ['Role_name']);
 		
@@ -63,7 +63,7 @@ class AdminController extends Controller
 	function rules()
 	{
 		$layout = $this->getProperty('layout');
-		$model = new RuleEditor($this->db);
+		$model = new RuleEditor();
 		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Rules', 'add' => 'Add rule', 'edit' => 'Edit rule'])]);
 		$res = $model->editor($this->mods, ['Rule_name', 'Rule_role']);
 		
@@ -74,7 +74,7 @@ class AdminController extends Controller
 	function forums()
 	{
 		$layout = $this->getProperty('layout');
-		$model = new ForumEditor($this->db);
+		$model = new ForumEditor();
 		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Forums', 'add' => 'Add forum', 'edit' => 'Edit forum'])]);
 		$res = $model->editor($this->mods, ['user_id', 'name']);
 		
@@ -85,7 +85,7 @@ class AdminController extends Controller
 	function themes()
 	{
 		$layout = $this->getProperty('layout');
-		$model = new ThemeEditor($this->db);
+		$model = new ThemeEditor();
 		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Themes', 'add' => 'Add theme', 'edit' => 'Edit theme'])]);
 		$res = $model->editor($this->mods, ['user_id', 'forum_id', 'name']);
 		
@@ -96,7 +96,7 @@ class AdminController extends Controller
 	function topics()
 	{
 		$layout = $this->getProperty('layout');
-		$model = new TopicEditor($this->db);
+		$model = new TopicEditor();
 		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Topics', 'add' => 'Add topic', 'edit' => 'Edit topic'])]);
 		$res = $model->editor($this->mods, ['user_id', 'theme_id', 'name']);
 		

@@ -21,7 +21,7 @@ class Model
 		$res = $this->db->insert($this->table, $data)->change();
 		
 		if($res){
-			$res = $this->db->select($this->table, '*')->where(['id' => $this->db->LastInsert()])->one();
+			$res = $this->db->select($this->table, ['*'])->where(['id' => $this->db->LastInsert()])->one();
 			
 			if($res){
 				$this->data = $res;
@@ -41,9 +41,10 @@ class Model
 		$data = $res->all();
 		
 		if($data){
-			if(count($data) == 1)
+			if(count($data) == 1) {
 				$this->data = $data[0];
-			else {
+				$this->rows = $data;
+			} else {
 				$this->iter = 0;
 				$this->rows = $data;
 				$this->data = $this->rows[$this->iter];
@@ -90,6 +91,11 @@ class Model
 			return 1;
 		
 		return false;
+	}
+	
+	function toArray()
+	{
+		return $this->rows;
 	}
 	
 	function __get($key){

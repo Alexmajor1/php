@@ -37,8 +37,12 @@ class ModelEditor extends Model
 		elseif($req->get('id')){
 			$data = $this->read($fields, ['id' => $req->get('id')]);
 			
-			foreach($fields as $value)
-				$mods['form']['fields'][$value]['value'] = $data->$value;
+			foreach($fields as $id => $value)
+				if(method_exists($this, 'get'.ucfirst($mods['form']['fields'][$value]['name']))) {
+					$method = 'get'.ucfirst($mods['form']['fields'][$value]['name']);
+					$mods['form']['fields'][$value]['value'] = $this->$method($data->$value);
+				} else
+					$mods['form']['fields'][$value]['value'] = $data->$value;
 			
 			$mods['form']['fields']['id'] = [
 				'field_type' => 'hidden',
@@ -49,12 +53,22 @@ class ModelEditor extends Model
 			return $mods;
 		}elseif(count($req->post())>0){
 			$data = array();
-			foreach($fields as $value)
-				$data[$value] = $req->post($value);
+			foreach($fields as $value) {
+				$data = $req->post($value);
+				
+				$data[$value] = $data;
+			}
 			
 			if($req->post('id'))
 				return $this->update($data,['id' => $req->post('id')]);
 			else return $this->create($data);
+		} elseif($req->get('mode') == 'form') {
+			foreach($fields as $id => $value)
+				if(method_exists($this, 'get'.ucfirst($mods['form']['fields'][$value]['name']))) {
+					$method = 'get'.ucfirst($mods['form']['fields'][$value]['name']);
+					$mods['form']['fields'][$value]['value'] = $this->$method(0);
+				} else
+					$mods['form']['fields'][$value]['value'] = '';
 		}
 	}
 }

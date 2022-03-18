@@ -21,6 +21,10 @@ $modules = [
 		'size' => '1',
 		'listitems' => [
 			[
+				'name' => 'select language...',
+				'value' => ''
+			],
+			[
 				'value' => 'ru',
 				'name' => 'ru'
 			],

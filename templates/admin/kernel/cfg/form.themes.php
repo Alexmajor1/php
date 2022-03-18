@@ -17,16 +17,20 @@ $modules = [
 		'class' => 'ThemeEditor',
 		'fields' => [
 			'user_id' => [
-				'field_type' => 'edit',
+				'field_type' => 'listbox',
 				'id' => 'user_id',
 				'class' => 'user-id flex-row',
-				'name' => 'UserId'
+				'name' => 'user',
+				'source' => 'user',
+				'field' => 'User_name'
 			],
 			'forum_id' => [
-				'field_type' => 'edit',
+				'field_type' => 'listbox',
 				'id' => 'forum_id',
 				'class' => 'forum-id flex-row',
-				'name' => 'ForumId'
+				'name' => 'forum',
+				'source' => 'forum',
+				'field' => 'name'
 			],
 			'name' => [
 				'field_type' => 'edit',

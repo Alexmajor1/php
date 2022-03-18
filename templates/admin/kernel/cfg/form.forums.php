@@ -17,10 +17,12 @@ $modules = [
 		'class' => 'ForumEditor',
 		'fields' => [
 			'user_id' => [
-				'field_type' => 'edit',
+				'field_type' => 'listbox',
 				'id' => 'user_id',
 				'class' => 'user-id flex-row',
-				'name' => 'UserId'
+				'name' => 'user',
+				'source' => 'user',
+				'field' => 'User_name'
 			],
 			'name' => [
 				'field_type' => 'edit',

@@ -30,7 +30,6 @@ class Table extends Plugin
 			]);
 		
 		$this->html = $value;
-		
 	}
 	
 	function getTableArrSort($rows)
@@ -140,7 +139,15 @@ class Table extends Plugin
 	{
 		$sql = 'select '.$value['fields'].' from '.$value[$value['mode']]['source'];
 		
-		if(key_exists('relation',$value[$value['mode']]))
+		if(key_exists('relation',$value[$value['mode']]) 
+			&& is_array($value[$value['mode']]['relation'])) {
+			$where = '';
+			for($row = 0; $row < count($value[$value['mode']]['relation']); $row++) {
+				$where .= $value[$value['mode']]['relation'][$row].'='.
+					$value[$value['mode']]['value'][$row].' AND ';
+			}
+			$sql .= ' where '.substr($where, 0, -5);
+		} elseif(key_exists('relation',$value[$value['mode']]))
 			$sql .= ' where '.$value[$value['mode']]['relation'].'='.$value[$value['mode']]['value'];
 		
 		$order = ' order by ';
