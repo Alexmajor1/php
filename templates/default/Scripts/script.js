@@ -35,8 +35,11 @@ function main()
 	
 	var langs = document.getElementById('lng');
 	langs.addEventListener('change', function(e){
-		console.log(e.target.value);
-		document.location.href = '&lang='+e.target.value;
+		console.log(document.location);
+		if(e.target.value != 'kz')
+			document.location.href = '&lang='+e.target.value;
+		else
+			document.location.href = document.location.origin;
 	});
 }
 
