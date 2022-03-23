@@ -11,6 +11,9 @@ use models\editors\ForumEditor;
 use models\editors\ThemeEditor;
 use models\editors\TopicEditor;
 
+use library\Admin;
+use library\General;
+
 class AdminController extends Controller
 {
 	public $rules = ['Admin'];
@@ -18,90 +21,43 @@ class AdminController extends Controller
 	
 	function index()
 	{
-		$layout = $this->getProperty('layout');
-		$layout['title'] = 'Admin panel';
-		$this->addConfig(['layout', $layout]);
+		General::getTitle($this, 'Admin panel');
 		
-		$users = (new UserEditor())->rowsCount();
-		$this->mods['text']['users']['text'] = "Users count: $users";
-		
-		$roles = (new RoleEditor())->rowsCount();
-		$this->mods['text']['roles']['text'] = "Roles count: $roles";
-		
-		$forums = (new ForumEditor())->rowsCount();
-		$this->mods['text']['forums']['text'] = "Forums count: $forums";
-		
-		$themes = (new ThemeEditor())->rowsCount();
-		$this->mods['text']['themes']['text'] = "Themes count: $themes";
-		
-		$topics = (new TopicEditor())->rowsCount();
-		$this->mods['text']['topics']['text'] = "Topics count: $topics";
+		$this->mods['text']['users']['text'] = Admin::count(new UserEditor(), 'Users');
+		$this->mods['text']['roles']['text'] = Admin::count(new RoleEditor(), 'Roles');
+		$this->mods['text']['forums']['text'] = Admin::count(new ForumEditor(), 'Forums');
+		$this->mods['text']['themes']['text'] = Admin::count(new ThemeEditor(), 'Themes');
+		$this->mods['text']['topics']['text'] = Admin::count(new TopicEditor(), 'Topics');
 	}
 	
 	function users()
 	{
-		$layout = $this->getProperty('layout');
-		$model = new UserEditor();
-		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Users', 'add' => 'Add user', 'edit' => 'Edit user'])]);
-		$res = $model->editor($this->mods, ['User_name', 'User_role']);
-		
-		if(is_array($res)) $this->mods = $res;
-		elseif($res) $this->toPage('admin/users');
+		Admin::tablePages($this, new UserEditor(), ['main' => 'Users', 'add' => 'Add user', 'edit' => 'Edit user'], ['User_name', 'User_role'], 'admin/users');
 	}
 	
 	function roles()
 	{
-		$layout = $this->getProperty('layout');
-		$model = new RoleEditor();
-		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Roles', 'add' => 'Add role', 'edit' => 'Edit role'])]);
-		$res = $model->editor($this->mods, ['Role_name']);
-		
-		if(is_array($res)) $this->mods = $res;
-		elseif($res) $this->toPage('admin/roles');
+		Admin::tablePages($this, new RoleEditor(), ['main' => 'Roles', 'add' => 'Add role', 'edit' => 'Edit role'], ['Role_name'], 'admin/roles');
 	}
 	
 	function rules()
 	{
-		$layout = $this->getProperty('layout');
-		$model = new RuleEditor();
-		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Rules', 'add' => 'Add rule', 'edit' => 'Edit rule'])]);
-		$res = $model->editor($this->mods, ['Rule_name', 'Rule_role']);
-		
-		if(is_array($res)) $this->mods = $res;
-		elseif($res) $this->toPage('admin/rules');
+		Admin::tablePages($this, new RuleEditor(), ['main' => 'Rules', 'add' => 'Add Rules', 'edit' => 'Edit Rules'], ['Rule_name', 'Rule_role'], 'admin/rules');
 	}
 	
 	function forums()
 	{
-		$layout = $this->getProperty('layout');
-		$model = new ForumEditor();
-		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Forums', 'add' => 'Add forum', 'edit' => 'Edit forum'])]);
-		$res = $model->editor($this->mods, ['user_id', 'name']);
-		
-		if(is_array($res)) $this->mods = $res;
-		elseif($res) $this->toPage('admin/forums');
+		Admin::tablePages($this, new ForumEditor(), ['main' => 'Forums', 'add' => 'Add forum', 'edit' => 'Edit forum'], ['user_id', 'name'], 'admin/forums');
 	}
 	
 	function themes()
 	{
-		$layout = $this->getProperty('layout');
-		$model = new ThemeEditor();
-		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Themes', 'add' => 'Add theme', 'edit' => 'Edit theme'])]);
-		$res = $model->editor($this->mods, ['user_id', 'forum_id', 'name']);
-		
-		if(is_array($res)) $this->mods = $res;
-		elseif($res) $this->toPage('admin/themes');
+		Admin::tablePages($this, new ThemeEditor(), ['main' => 'Themes', 'add' => 'Add theme', 'edit' => 'Edit theme'], ['user_id', 'forum_id', 'name'], 'admin/themes');
 	}
 	
 	function topics()
 	{
-		$layout = $this->getProperty('layout');
-		$model = new TopicEditor();
-		$this->addConfig(['layout', $model->getTitle($layout, ['main' => 'Topics', 'add' => 'Add topic', 'edit' => 'Edit topic'])]);
-		$res = $model->editor($this->mods, ['user_id', 'theme_id', 'name']);
-		
-		if(is_array($res)) $this->mods = $res;
-		elseif($res) $this->toPage('admin/topics');
+		Admin::tablePages($this, new TopicEditor(), ['main' => 'Topics', 'add' => 'Add topic', 'edit' => 'Edit topic'], ['user_id', 'theme_id', 'name'], 'admin/topics');
 	}
 }
 ?>

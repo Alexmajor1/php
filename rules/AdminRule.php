@@ -9,7 +9,7 @@ class AdminRule extends Rule
 {
 	function execute()
 	{
-		$this->ctrl->addConfig(['site_template', 'admin']);
+		$this->ctrl->addConfig(['site_template' => 'admin']);
 		
 		$settings = $this->ctrl->getProperty('session');
 		$sess = new Session($settings);

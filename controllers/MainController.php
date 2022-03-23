@@ -9,6 +9,8 @@ use models\Authorization;
 use models\Registration;
 use models\Cabinet;
 
+use library\General;
+
 class MainController extends Controller
 {
 	public $rules = ['Auth', 'Cabinet'];
@@ -39,9 +41,7 @@ class MainController extends Controller
 	
 	function registration()
 	{
-		$layout = $this->getProperty('layout');
-		$layout['title'] = 'Registration';
-		$this->addConfig(['layout', $layout]);
+		General::getTitle($this, 'Registration');
 		
 		$req = new Request();
 		
