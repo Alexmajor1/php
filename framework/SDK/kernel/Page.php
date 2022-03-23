@@ -1,5 +1,5 @@
 <?php
-namespace framework;
+namespace framework\kernel;
 
 class Page
 {
@@ -48,6 +48,11 @@ class Page
 				foreach($value as $mod => $params)
 					if(!key_exists('id', $value)) $this->view->LoadModule($key.':'.$mod, $params);
 					else $this->view->LoadModule($key, $value);
+	}
+	
+	function drawHtml($alias, $mods)
+	{
+		$this->html->draw($this->cfg, $alias, $mods);
 	}
 	
 	function PrintPage()

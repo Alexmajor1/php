@@ -12,18 +12,18 @@ class Controller
 	private $html;
 	public $rule = '';
 	
-	function __construct($data)
+	function __construct($alias)
 	{
-		if($data == null) return $this;
-		
-		$this->alias = $data;
-		$this->conf = Config::getInstance();
-		$this->db = DB::getInstance();
+		if($alias != null){
+			$this->alias = $alias;
+			$this->conf = kernel\Config::getInstance();
+			$this->db = DB::getInstance();
+		}
 	}
 	
 	function addConfig($cfg)
 	{
-		$this->conf->setSetting($cfg[0], $cfg[1]);
+		$this->conf->setSetting(array_key_first($cfg), array_values($cfg)[0]);
 	}
 	
 	function getModules()
@@ -33,7 +33,12 @@ class Controller
 	
 	function getPage()
 	{
-		$this->page = new Page();
+		$this->page = new kernel\Page();
+	}
+	
+	function getPageName()
+	{
+		return $this->page->name;
 	}
 	
 	function getProperty($name)
@@ -43,7 +48,7 @@ class Controller
 	
 	function generate()
 	{
-		$this->page->html->draw($this->conf, $this->alias, $this->mods);
+		$this->page->drawHtml($this->alias, $this->mods);
 	}
 	
 	function getError($err)
@@ -57,7 +62,6 @@ class Controller
 		else $header = '/'.$this->getProperty('base');
 		
 		header("location:$header");
-		die;
 	}
 }
 ?>

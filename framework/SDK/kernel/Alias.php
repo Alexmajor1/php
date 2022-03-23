@@ -1,5 +1,5 @@
 <?php
-namespace framework;
+namespace framework\kernel;
 
 class Alias
 {
@@ -9,7 +9,7 @@ class Alias
 	function __construct()
 	{
 		$this->cfg = Config::getInstance();
-		$this->db = DB::getInstance();
+		$this->db = \framework\DB::getInstance();
 	}
 	
 	function encode($data)

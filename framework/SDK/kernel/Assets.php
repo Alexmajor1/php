@@ -1,5 +1,5 @@
 <?php
-namespace framework;
+namespace framework\kernel;
 
 class Assets
 {

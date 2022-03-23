@@ -1,5 +1,5 @@
 <?php
-namespace framework;
+namespace framework\kernel;
 
 class Localization
 {
@@ -8,7 +8,7 @@ class Localization
 	
 	function __construct($cfg)
 	{
-		$req = new Request();
+		$req = new \framework\Request();
 		$this->lang = $req->get('lang');
 		
 		if(strlen($this->lang) > 0){

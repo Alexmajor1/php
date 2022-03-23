@@ -1,5 +1,5 @@
 <?php
-namespace framework;
+namespace framework\kernel;
 
 class Router
 {
@@ -10,7 +10,7 @@ class Router
 	
 	function __construct()
 	{
-		$this->req = new Request();
+		$this->req = new \framework\Request();
 		$this->cfg = Config::getInstance();
 		$this->path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->getSetting('base')."/templates/";
 		$this->alias = $this->alias = new Alias();

@@ -1,22 +1,22 @@
 <?php
-namespace framework;
+namespace framework\kernel;
 
 class Html
 {
 	private $ldr;
+	private $cfg;
 	
 	function __construct($page)
 	{
 		$this->ldr = new Loader($page);
+		$this->cfg = Config::getInstance();
 	}
 	
 	function draw($cfg, $alias, $mods)
-	{
-		$this->ldr->setConfig($cfg);
-		
+	{	
 		foreach($mods as $key => $value)
 		{
-			if($cfg->GetSetting('alias')['mode'] == 'alias')
+			if($this->cfg->GetSetting('alias')['mode'] == 'alias')
 				if(key_exists('target', $value))
 					$value['target'] = $alias->encode($value['target']);
 				else
@@ -26,17 +26,16 @@ class Html
 							$value[$mod] = $params;
 						}
 			
-			if(in_array($key, $cfg->GetSetting('plugins'))) $value = $this->ldr->plugin($key, $value);
+			if(in_array($key, $this->cfg->GetSetting('plugins'))) $value = $this->ldr->plugin($key, $value);
 			
 			$this->ldr->GetModule($key, $value);
 		}
 		
-		if($cfg->getSetting('target'))
-			$cfg->setSetting
+		if($this->cfg->getSetting('target'))
+			$this->cfg->setSetting
 				('target', $alias->encode
-					($cfg->getSetting('target')));
-		
-		$this->ldr->setConfig($cfg);
+					($this->cfg->getSetting('target')));
+
 		$this->ldr->GetContent();
 		$this->ldr->LoadContent();
 	}
