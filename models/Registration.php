@@ -28,27 +28,27 @@ class Registration
 		$valid = new Validator(['password' => $this->password]);
 		
 		$res = $valid->checkWithMsg(
-			!$valid->lenght('password', 10)
+			!$valid->lenght('password', 10),
 			'password is short(>10)</br>'
 		);
 		$res .= $valid->checkWithMsg(
-			!$valid->content('password', 'digit')
+			!$valid->content('password', 'digit'),
 			'password must contain digits</br>'
 		);
 		$res .= $valid->checkWithMsg(
-			!$valid->content('password', 'alpha')
+			!$valid->content('password', 'alpha'),
 			'password must contain letters</br>'
 		);
 		$res .= $valid->checkWithMsg(
-			!$valid->content('password', 'upper')
+			!$valid->content('password', 'upper'),
 			'password must contain uppercase letters</br>'
 		);
 		$res .= $valid->checkWithMsg(
-			$valid->content('password', 'space')
+			$valid->content('password', 'space'),
 			'password should not contain spaces</br>'
 		);
 		$res .= $valid->checkWithMsg(
-			$valid->content('password', 'punct')
+			$valid->content('password', 'punct'),
 			'password should not contain punctuation</br>'
 		);
 		
@@ -62,7 +62,7 @@ class Registration
 	{
 		$valid = new Validator($data);
 		
-		return $valid->sql('User') || $valid->sql('Password');
+		return $valid->sql('login') || $valid->sql('password');
 	}
 	
 	function execute()
@@ -73,8 +73,13 @@ class Registration
 		
 		if($res !== 'ok') return $res;
 		
-		$role = new Role();
-		$role_id = $role->read(['id_Role'], ['role_name' => $this->role])->id;
+		$roles = new Role();
+		$role = $roles->read(['id'], ['Role_name' => $this->role]);
+		if($role) {
+			$role_id = $role->id;
+		} else {
+			return false;
+		}
 		
 		return $this->model->create([
 					'user_name' => $this->user, 
