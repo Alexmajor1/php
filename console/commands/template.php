@@ -5,10 +5,6 @@ class template
 {
 	function create($params)
 	{
-		/*$code = file_get_contents(__DIR__.'\\templates\\controller.php');
-		$code = str_ireplace('{name}', $params[0], $code);
-		file_put_contents(__DIR__.'\\..\\\..\\controllers\\'.$params[0].'Controller.php', $code);
-		return 'controller '.$params[0].'Controller created';*/
 		$root_path = __DIR__.'\\..\\..\\templates\\'.$params[0];
 		mkdir($root_path);
 		file_put_contents($root_path.'\\main.html', '');

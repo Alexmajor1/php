@@ -8,6 +8,8 @@ class {name}Controller extends Controller
 	function index()
 	{
 		
-	}	
+	}
+	
+	{pages}
 }
 ?>
