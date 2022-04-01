@@ -40,6 +40,9 @@ $modules = [
 		'method' => 'POST',
 		'id' => 'EntryPanel',
 		'fields' => [
+			'_csrf_token' => [
+				'field_type' => 'hidden'
+			],
 			'User' => [
 				'field_type' => 'edit',
 				'class' => 'UserName flex-col',

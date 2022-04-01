@@ -3,13 +3,13 @@ namespace library;
 
 class Admin
 {
-	function count($model, $name)
+	static function count($model, $name)
 	{
 		$count = $model->rowsCount();
 		return "$name count: $count";
 	}
 	
-	function tablePages(&$ctrl, $model, $titles, $cols, $backward)
+	static function tablePages(&$ctrl, $model, $titles, $cols, $backward)
 	{
 		$layout = $ctrl->getProperty('layout');
 		

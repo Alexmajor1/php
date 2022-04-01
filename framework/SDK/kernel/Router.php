@@ -47,9 +47,12 @@ class Router
 		if(!key_exists('alias', $this->req->get())) $page = 'page=main';
 		else $page = $this->alias->decode($this->req->get('alias'));
 		
-		if(explode('page=', $page)[1] == 'logout') return false;
-		
-		$page = explode('\\', explode('page=', $page)[1]);
+		if(count(explode('page=', $page)) > 1) {
+			if(explode('page=', $page)[1] == 'logout') return false;
+			$page = explode('\\', explode('page=', $page)[1]);
+		} else {
+			$page = ['404'];
+		}
 		
 		if(count($page) > 1) $tmpl = $page[0];
 		else $tmpl = $this->cfg->getSetting('site_template');

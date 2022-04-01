@@ -38,8 +38,9 @@ class Table extends Plugin
 		$pageLink = '';
 		
 		foreach($_REQUEST as $key => $val)
-			if(!strstr('alias', $key)){
-				$pageLink .= "&$key=$val";
+			if(!strpos($key, 'alias')){
+				if($key != 'query' && strpos(strtolower($val), 'script') === false)
+					$pageLink .= "&$key=$val";
 				
 				switch($val){
 					case 'asc':$head_sort[$key] = SORT_ASC;break;
@@ -300,9 +301,10 @@ class Table extends Plugin
 		$pageLink = '';
 		
 		foreach($_REQUEST as $key => $val)
-			if(($key != 'p' and $key != 'alias') or $key == '0')
-				$pageLink .= "&$key=$val";
-			else if($key != 'p') $pageLink .= "$val";
+			if($key != 'query' && strpos(strtolower($val), 'script') === false)
+				if(($key != 'p' and $key != 'alias') or $key == '0')
+					$pageLink .= "&$key=$val";
+				else if($key != 'p') $pageLink .= "$val";
 		 
 		for($i=1;$i<=$pageCount;$i++) {
 			$html21 = $html2;

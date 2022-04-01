@@ -53,7 +53,7 @@ class Controller
 	
 	function getError($err)
 	{
-		setcookie('error', $err, time()+1);
+		setcookie('error', $err, ['expires' => time()+1, 'httponly' => true]);
 	}
 	
 	function toPage($name)
@@ -62,6 +62,7 @@ class Controller
 		else $header = '/'.$this->getProperty('base');
 		
 		header("location:$header");
+		die;
 	}
 }
 ?>

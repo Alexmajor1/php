@@ -9,6 +9,9 @@ $modules = [
 		'class' => 'flex-col',
 		'method' => 'POST',
 		'fields' => [
+			'_csrf_token' => [
+				'field_type' => 'hidden'
+			],
 			'login' => [
 				'field_type' => 'edit',
 				'name' => 'user',

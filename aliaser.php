@@ -29,6 +29,7 @@ function fileStorage($source, $files)
 	
 	foreach($files as $file)
 		if(!is_dir($file)) {
+			echo $file.'<br>';
 			include_once $file;
 			
 			foreach($modules as $module)
@@ -40,10 +41,14 @@ function fileStorage($source, $files)
 	
 	$aliases = fopen("aliases\\$source".".php","a+");
 	
-	foreach($data as $value)
+	foreach($data as $value) {
+		echo "ADD $value<br>";
 		fwrite($aliases, "$value=>index.php?alias=".str_rand().";");
+	}
 	
 	fclose($aliases);
+	
+	echo 'finish';
 }
 
 function tableStorage($source, $files, $ConData, $tmpls)

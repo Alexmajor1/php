@@ -8,6 +8,18 @@ use framework\DB;
 
 class Form extends Plugin
 {
+	function csrf()
+	{
+		$chars = 'abcdefghijklmnoprsqtuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890';
+		$len = strlen($chars);
+		$token = '';
+		for($i=0;$i<64;$i++)
+		{
+			$token .= substr($chars, rand(1, $len)-1, 1);
+		}
+		return $token;
+	}
+	
 	function generate()
 	{
 		$res = '';
@@ -18,6 +30,9 @@ class Form extends Plugin
 			'/modules/';
 		foreach($this->data['value']['fields'] as $key => $field) {
 			$html = file_get_contents($root_path.$field['field_type'].'.html');
+			if($key == '_csrf_token') {
+				$field['value'] = $this->csrf();
+			}
 			$field['name'] = $key;
 			
 			if(in_array($field['field_type'], $this->data['cfg']->GetSetting('plugins'))) {

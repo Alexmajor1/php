@@ -71,9 +71,15 @@ class Authorization
 		}
 		if(is_null($usr))
 		{
-			$this->user = $this->model->read(
+			$user = $this->model->read(
 				['id'], 
-				['user_name' => $this->user, 'user_password' => md5($this->password)])->id;
+				['user_name' => $this->user, 'user_password' => md5($this->password)]);
+			
+			if($user) {
+				$this->user = $user->id;
+			} else {
+				return false;
+			}
 				
 			return ($this->user);
 		} else return false;

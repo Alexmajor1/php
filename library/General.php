@@ -3,7 +3,7 @@ namespace library;
 
 class General
 {
-	function getTitle(&$ctrl, $title)
+	static function getTitle(&$ctrl, $title)
 	{
 		$layout = $ctrl->getProperty('layout');
 		$layout['title'] = $title;

@@ -43,7 +43,7 @@ class Session
 			if(!$res)
 				return false;
 			
-			setcookie($this->options['key'], $sess_id);
+			setcookie($this->options['key'], $sess_id, ['httponly' => true]);
 		}
 	}
 	

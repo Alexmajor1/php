@@ -16,8 +16,10 @@ class Application
 		
 		if((!key_exists('page', $req))&&(!key_exists('alias', $req)))
 			$page = 'main';
-		else
+		elseif($alias->decode($req['alias']))
 			$page = explode('page=', $alias->decode($req['alias']))[1];
+		else
+			$page = '404';
 		
 		if(stripos($page, '\\') > 0)
 			$ctrl = 'controllers\\'.explode('\\', ucfirst($page))[0].'Controller';
@@ -33,6 +35,7 @@ class Application
 	{		
 		include ($this->data);
 		
+		if(!isset($name)) return null;
 		$this->ctrl->addConfig(['name'  => $name]);
 		
 		$this->ctrl->getPage();
@@ -80,7 +83,7 @@ class Application
 					$this->ctrl = $check->ctrl;
 					$this->data = $check->path;
 				}
-		
+		if(!isset($this->data)) return $this->ctrl->addConfig(['name'  => '403']);
 		$this->addData();
 		
 		if($this->ctrl->getPageName() != 'main') {
@@ -89,11 +92,13 @@ class Application
 			if(stripos($method, '\\') > 0) $method = explode('\\', $method)[1];
 			if($method == 'main') $method = 'index';
 			
-			$res = $this->ctrl->$method();
-			if($res){
-				header("Content-Type: application/json");
-				echo json_encode($res, JSON_PRETTY_PRINT);
-				return null;
+			if(method_exists($this->ctrl, $method)) {
+				$res = $this->ctrl->$method();
+				if($res){
+					header("Content-Type: application/json");
+					echo json_encode($res, JSON_PRETTY_PRINT);
+					return null;
+				}
 			}
 		}
 		$this->ctrl->generate();

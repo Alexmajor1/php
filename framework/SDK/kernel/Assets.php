@@ -19,7 +19,8 @@ class Assets
 		
 		$this->page = $cfg->getSetting('template');
 		
-		$this->modules = array_keys($cfg->getSetting('modules'));
+		if($cfg->getSetting('modules'))
+			$this->modules = array_keys($cfg->getSetting('modules'));
 		
 		$dirs = $cfg->getSetting('assets');
 		$root_path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/'.$dirs['path'];
@@ -57,16 +58,18 @@ class Assets
 		$this->fileAppend($this->tmp.'/styles/style.css');
 		$this->fileAppend($this->tmp.'/styles/pages/'.$this->page.'.css');
 		
-		foreach($this->modules as $module)
-			$this->fileAppend($this->tmp.'/styles/modules/'.$module.'.css');
+		if(isset($this->modules))
+			foreach($this->modules as $module)
+				$this->fileAppend($this->tmp.'/styles/modules/'.$module.'.css');
 		
 		fclose($this->css);
 		
 		$this->fileAppend($this->tmp.'/scripts/script.js');
 		$this->fileAppend($this->tmp.'/scripts/pages/'.$this->page.'.js');
 		
-		foreach($this->modules as $module)
-			$this->fileAppend($this->tmp.'/scripts/modules/'.$module.'.js');
+		if(isset($this->modules))
+			foreach($this->modules as $module)
+				$this->fileAppend($this->tmp.'/scripts/modules/'.$module.'.js');
 		
 		fclose($this->js);
 	}

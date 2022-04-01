@@ -51,7 +51,7 @@ class Model
 			}
 			return $this;
 		}
-		return $data;
+		return false;
 	}
 	
 	function update($data, $where = [])
