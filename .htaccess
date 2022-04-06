@@ -2,7 +2,7 @@ Options +FollowSymLinks
 Options -Indexes
 Order allow,deny
 Allow from all
-php_flag display_errors off
+# php_flag display_errors off
 
 <FilesMatch ".(css|js)$">
 	Header append Cache-Control "no-store, no-cache, must-revalidate"

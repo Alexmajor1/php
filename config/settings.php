@@ -66,41 +66,81 @@ $widgets =[
 		'id' => 'footer'
 	],
 	'menu' => [
-		'id' => 'mainmenu',
-		'menuitems' => [
-			'homePage' =>
-			[
-				'caption' => 'home page',
-				'url' => 'index.php?page=admin\\\\main'
-			],
-			'users' => [
-				'caption' => 'users',
-				'url' => 'index.php?page=admin\\\\users'
-			],
-			'roles' => [
-				'caption' => 'roles',
-				'url' => 'index.php?page=admin\\\\roles'
-			],
-			'rules' => [
-				'caption' => 'rules',
-				'url' => 'index.php?page=admin\\\\rules'
-			],
-			'forums' => [
-				'caption' => 'forums',
-				'url' => 'index.php?page=admin\\\\forums'
-			],
-			'themes' => [
-				'caption' => 'themes',
-				'url' => 'index.php?page=admin\\\\themes'
-			],
-			'topics' => [
-				'caption' => 'topics',
-				'url' => 'index.php?page=admin\\\\topics'
-			],
-			'logout' => [
-				'caption' => 'logout',
-				'url' => 'index.php?page=logout'
-			],
+		'admin' => [
+			'id' => 'mainmenu',
+			'menuitems' => [
+				'homePage' =>
+				[
+					'caption' => 'home page',
+					'url' => 'index.php?page=admin\\\\main'
+				],
+				'users' => [
+					'caption' => 'users',
+					'url' => 'index.php?page=admin\\\\users'
+				],
+				'roles' => [
+					'caption' => 'roles',
+					'url' => 'index.php?page=admin\\\\roles'
+				],
+				'rules' => [
+					'caption' => 'rules',
+					'url' => 'index.php?page=admin\\\\rules'
+				],
+				'forums' => [
+					'caption' => 'forums',
+					'url' => 'index.php?page=admin\\\\forums'
+				],
+				'themes' => [
+					'caption' => 'themes',
+					'url' => 'index.php?page=admin\\\\themes'
+				],
+				'topics' => [
+					'caption' => 'topics',
+					'url' => 'index.php?page=admin\\\\topics'
+				],
+				'logout' => [
+					'caption' => 'logout',
+					'url' => 'index.php?page=logout'
+				],
+			]
+		],
+		'editor' => [
+			'id' => 'editormenu',
+			'menuitems' => [
+				'migrations' =>
+				[
+					'caption' => 'migrations',
+					'url' => 'index.php?page=editor\\\\migrations'
+				],
+				'controllers' => [
+					'caption' => 'controllers',
+					'url' => 'index.php?page=editor\\\\controllers'
+				],
+				'rules' => [
+					'caption' => 'rules',
+					'url' => 'index.php?page=editor\\\\rules'
+				],
+				'models' => [
+					'caption' => 'models',
+					'url' => 'index.php?page=editor\\\\models'
+				],
+				'templates' => [
+					'caption' => 'templates',
+					'url' => 'index.php?page=editor\\\\templates'
+				],
+				'plugins' => [
+					'caption' => 'plugins',
+					'url' => 'index.php?page=editor\\\\plugins'
+				],
+				'widgets' => [
+					'caption' => 'widgets',
+					'url' => 'index.php?page=editor\\\\widgets'
+				],
+				'logout' => [
+					'caption' => 'logout',
+					'url' => 'index.php?page=logout'
+				],
+			]
 		]
 	]
 ];

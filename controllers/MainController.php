@@ -9,6 +9,8 @@ use models\Authorization;
 use models\Registration;
 use models\Cabinet;
 
+use migrations\test;
+
 use library\General;
 
 class MainController extends Controller
@@ -99,7 +101,9 @@ class MainController extends Controller
 	
 	function test()
 	{
-		return ['message' => 'hello world'];
+		$migration = new test($this->getProperty('database'));
+		
+		return ['migrate' => $migration->create('InnoDB', 'utf8')];
 	}
 }
 ?>

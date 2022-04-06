@@ -1,7 +1,7 @@
 <?php
 include_once "config\\settings.php";
 
-$tmpls = array('default','admin');
+$tmpls = array('default', 'admin', 'editor');
 $files = array();
 
 foreach($tmpls as $tmpl) {
@@ -55,26 +55,26 @@ function tableStorage($source, $files, $ConData, $tmpls)
 {
 	include_once "framework\\SDK\\DB.php";
 	
-	$db = new framework\DB($ConData);
+	$db = framework\DB::getInstance($ConData);
 	
 	foreach($files as $file)
 		if(!is_dir($file)) {
 			echo $file.'<br>';
 			
 			include_once $file;
-			
-			foreach($modules as $name => $module)
-				if(key_exists('target', $module)) {
-					echo $module['target'].'<br>';
-					
-					$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$module['target'].'"');
-					
-					if($res == null) {
-						echo "ADD $name<br>";
+			if(isset($modules))
+				foreach($modules as $name => $module)
+					if(key_exists('target', $module)) {
+						echo $module['target'].'<br>';
 						
-						$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand().'","'.$module['target'].'")');
+						$res = $db->ValueQuery("SELECT id FROM $source WHERE page=\"".$module['target'].'"');
+						
+						if($res == null) {
+							echo "ADD $name<br>";
+							
+							$res = $db->ChangeQuery("INSERT INTO $source(name, page) VALUES(\"".str_rand().'","'.$module['target'].'")');
+						}
 					}
-				}
 		}
 	
 	echo 'finish';

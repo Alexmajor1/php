@@ -1,4 +1,5 @@
-	function {name}
+	function {name}()
 	{
 		
 	}
+	
