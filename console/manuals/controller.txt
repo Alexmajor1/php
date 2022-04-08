@@ -1,0 +1,3 @@
+cli controller [command]
+Commands:
+ create <name> <pages...> - create controller

@@ -1,0 +1,3 @@
+cli template [command]
+Commands:
+ create <name>  <pages...> - create template

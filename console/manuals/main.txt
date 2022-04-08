@@ -1,0 +1,16 @@
+cli [command] [params...]
+Commands:
+ controller
+	create - create controller
+ migrate - migrate entered migration
+	create - create migration
+ model
+	create - create data model
+ plugin
+	create - create plugin
+ rule
+	create - create rule
+ template
+	create - create template
+ widget
+	create - create widget

@@ -1,0 +1,3 @@
+cli pligin [command]
+Commands:
+ create <name> - create plugin

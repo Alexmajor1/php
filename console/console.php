@@ -18,7 +18,7 @@ class console
 		
 		if($args[1] != 'help' && method_exists(new $this->cmd, $this->func))
 			$this->params = array_slice($args, 3);
-		elseif($args[1] != 'help')
+		elseif($args[1] == 'help')
 			$this->params = array_slice($args, 2);
 	}
 	
@@ -38,19 +38,12 @@ class console
 	}
 	
 	function help()
-	{
-		$return = 'Command: cli [command] [args...]'.PHP_EOL;
-		$return = 'Commands:'.PHP_EOL;
-		
-		foreach(scandir(__DIR__.'\\commands\\') as $file) {
-			if(!is_dir($file)){
-				$return .= ' '.explode('.', $file)[0].PHP_EOL;
-				foreach(get_class_methods('console\\commands\\'.explode('.', $file)[0]) as $method)
-					$return .= "\t$method".PHP_EOL;
-			}
+	{	
+		if(!isset($this->params)) {
+			return file_get_contents(__DIR__.'\\manuals\\main.txt');
+		} else {
+			return file_get_contents(__DIR__.'\\manuals\\'.$this->params[0].'.txt');
 		}
-		
-		return $return;
 	}
 }
 ?>

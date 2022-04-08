@@ -1,0 +1,3 @@
+cli migrate [command]
+ <name> - migrate entered migration
+ create <name> - create migration

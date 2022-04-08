@@ -1,0 +1,3 @@
+cli rule [command]
+Commands:
+ create <name> - create rule

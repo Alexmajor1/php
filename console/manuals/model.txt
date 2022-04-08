@@ -1,0 +1,3 @@
+cli model [command]
+Commands:
+ create <name> <fields...> - create data model
