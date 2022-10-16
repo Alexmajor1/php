@@ -34,10 +34,10 @@ class Session
 			{
 				$sess_id .= substr($chars, rand(1, $len)-1, 1);
 			}
-			
+			print_r($this->user->id);
 			$res = $this->db->insert(
 				$this->options['source'], 
-				['session_key' => $sess_id,'session_user' => $this->user[0][0]]
+				['session_key' => $sess_id,'session_user' => $this->user->id]
 			)->change();
 			
 			if(!$res)
@@ -85,7 +85,7 @@ class Session
 			'roles, users', 
 			['role_name' =>'role_name']
 		)->where(
-			['users.id' => $this->user[0][0], 'roles.id' => ['user_role']], 
+			['users.id' => is_numeric($this->user)?$this->user:$this->user->id, 'roles.id' => ['user_role']], 
 			'AND'
 		)->value();
 	}
@@ -99,6 +99,16 @@ class Session
 			['Rule_role' => ['user_role'], 'users.id' => $this->user[0][0]], 
 			'AND'
 		)->all();
+	}
+	
+	function addToken($token)
+	{
+		return setcookie('csrf_token', $token, ['httponly' => true, 'expires' => time()+1800]);
+	}
+	
+	function checkToken($token)
+	{
+		return $token == (new Request())->cookie('csrf_token');
 	}
 }
 ?>

@@ -12,7 +12,7 @@ class Localization
 		$this->lang = $req->get('lang');
 		
 		if(strlen($this->lang) > 0){
-			$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/languages/'.$this->lang.'.html';
+			$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'languages'.DIRECTORY_SEPARATOR.$this->lang.'.html';
 			
 			if(file_exists($path)){
 				$content = file_get_contents($path);

@@ -9,31 +9,45 @@ table
 	border: 0px;
 }
 
+table caption
+{
+	color: white;
+}
+
 th
 {
 	border-width: 2px;
 	border-style: outset;
-	background-color: silver;
+	background-color: blue;
+	border-color: lightblue;
 }
 
 th a
 {
 	width:100%;
+	color: white;
 }
 
 #pager a
 {
 	margin-left: 3px;
+	color:white;
+}
+
+tbody td
+{
+	color: white;
+	border-color: lightblue;
 }
 
 #pager a:hover, tbody tr:hover
 {
-	background-color: silver;
+	background-color: lightblue;
 }
 
 th a:hover, tbody td:hover
 {
-	background-color: gray;
+	background-color: lightgray;
 }
 
 tfoot tr, tfoot td

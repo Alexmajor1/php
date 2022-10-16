@@ -5,6 +5,7 @@ use framework\Plugin;
 use framework\Request;
 use framework\Alias;
 use framework\DB;
+use framework\Session;
 
 class Form extends Plugin
 {
@@ -13,10 +14,18 @@ class Form extends Plugin
 		$chars = 'abcdefghijklmnoprsqtuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890';
 		$len = strlen($chars);
 		$token = '';
+		
 		for($i=0;$i<64;$i++)
 		{
 			$token .= substr($chars, rand(1, $len)-1, 1);
 		}
+		$settings = $this->data['cfg']->getSetting('session');
+		$sess = new Session($settings);
+		if(!$sess->addToken($token)) {
+			echo 'csrf token crashed';
+			die;
+		}
+		
 		return $token;
 	}
 	
@@ -25,9 +34,9 @@ class Form extends Plugin
 		$res = '';
 		$root_path = $_SERVER['DOCUMENT_ROOT'].
 			$this->data['cfg']->GetSetting('base').
-			'/templates/'.
+			DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR. 
 			$this->data['cfg']->GetSetting('site_template').
-			'/modules/';
+			DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
 		foreach($this->data['value']['fields'] as $key => $field) {
 			$html = file_get_contents($root_path.$field['field_type'].'.html');
 			if($key == '_csrf_token') {

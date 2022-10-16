@@ -22,9 +22,9 @@ class Listbox extends Plugin
 		foreach($this->data['value']['listitems'] as $item){
 			$path = $_SERVER['DOCUMENT_ROOT'].
 				$this->data['cfg']->GetSetting('base').
-				'/templates/'.
+				DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR. 
 				$this->data['cfg']->GetSetting('site_template').
-				'/modules/listItem.html';
+				DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'listItem.html';
 			$html = file_get_contents($path);
 			if(key_exists('current', $this->data) && $item['name'] == $this->data['current'])
 				$html = str_ireplace(['{name}', '{sel}','{value}'], 

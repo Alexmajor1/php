@@ -11,8 +11,8 @@ class View
 	{
 		$this->cfg = Config::getInstance();
 		$view_file = $this->cfg->getSetting('template');
-		$this->tmp_path = $_SERVER['DOCUMENT_ROOT'].'/'.$this->cfg->GetSetting('base');
-		$path = $this->tmp_path.'/templates/'.$this->cfg->GetSetting('site_template').'/kernel/'.$view_file.'.html';
+		$this->tmp_path = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.$this->cfg->GetSetting('base');
+		$path = $this->tmp_path.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$this->cfg->GetSetting('site_template').DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.$view_file.'.html';
 		if(file_exists($path))
 			$this->content = file_get_contents($path);
 	}
@@ -25,9 +25,9 @@ class View
 	function LoadModule($module, $params)
 	{
 		$data = explode(':', $module)[0];
-		$path = $this->tmp_path.'/templates/'.$this->cfg->GetSetting('site_template').'/modules/'.$data.'.html';
+		$path = $this->tmp_path.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$this->cfg->GetSetting('site_template').DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$data.'.html';
 		
-		if(!file_exists($path)) $path = $this->tmp_path.'/framework/modules/'.$data.'.html';
+		if(!file_exists($path)) $path = $this->tmp_path.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$data.'.html';
 		
 		$html = file_get_contents($path);
 		

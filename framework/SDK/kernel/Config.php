@@ -35,7 +35,7 @@ class Config
 	
 	function getSetting($key)
 	{
-		include ((__DIR__).'\\..\\..\\..\\'.$this->src);
+		include ((__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$this->src);
 		
 		if(!empty($this->buf) && key_exists($key, $this->buf))
 			return $this->buf[$key];

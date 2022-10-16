@@ -16,7 +16,7 @@ class Table extends Plugin
 		$this->db = $this->data['db'];
 		$this->path = $_SERVER['DOCUMENT_ROOT'].
 			$this->cfg->GetSetting('base').
-			'/templates/'.
+			''.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.
 			$this->cfg->GetSetting('site_template');
 			
 		if(key_exists('fields', $this->data['value'])) $data = $this->tableDB($this->data['value']);
@@ -58,7 +58,7 @@ class Table extends Plugin
 	{
 		$str = '';
 		
-		$html = file_get_contents($this->path.'/modules/tableHeader.html');
+		$html = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableHeader.html');
 		
 		foreach($headers as $key => $val){			
 			$html1 = $html;
@@ -100,8 +100,8 @@ class Table extends Plugin
 		$num = (key_exists('p', $req->get()))?$req->get('p'):1;
 		$end = $num * $value['pager']['pageSize'];
 		$start = $end-$value['pager']['pageSize'];
-		$html1 = file_get_contents($this->path.'/modules/tableRow.html');
-		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
+		$html1 = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableRow.html');
+		$html2 = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableCol.html');
 		
 		$str = '';
 		for($i=$start;$i<$end;$i++){
@@ -195,7 +195,7 @@ class Table extends Plugin
 			$tmp = $this->db->FieldsDescriptors();
 		else $tmp = $value[$value['mode']]['headers'];
 		
-		$html = file_get_contents($this->path.'/modules/tableHeader.html');
+		$html = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableHeader.html');
 		$i = 0;
 		foreach($tmp as $val){
 			$html1 = $html;
@@ -225,8 +225,8 @@ class Table extends Plugin
 	{
 		$rows = $this->getData($value);
 		$value['headers'] = $this->getHeaders($value);
-		$html1 = file_get_contents($this->path.'/modules/tableRow.html');
-		$html2 = file_get_contents($this->path.'/modules/tableCol.html');
+		$html1 = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableRow.html');
+		$html2 = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableCol.html');
 		$str = '';
 		
 		foreach($rows as $id => $row){
@@ -268,7 +268,7 @@ class Table extends Plugin
 		
 		if($type['name'] == 'hide') return '';
 		if($type['name'] != 'text')
-			$html = file_get_contents($this->path.'/modules/'.$type['name'].'.html');
+			$html = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$type['name'].'.html');
 		
 		switch($type['name']) {
 			case 'text': $res = $data['value'];break;
@@ -295,8 +295,8 @@ class Table extends Plugin
 		
 		if($pageCount == 1) return '';
 		
-		$html1 = file_get_contents($this->path.'/modules/tablePager.html');
-		$html2 = file_get_contents($this->path.'/modules/link.html');
+		$html1 = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tablePager.html');
+		$html2 = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'link.html');
 		$str = '';
 		$pageLink = '';
 		

@@ -16,11 +16,11 @@ class AdminRule extends Rule
 		
 		if(strcmp($sess->getLogin(), '') == 0) $this->ctrl->toPage('main');
 		
-		$arr = explode('cfg/', $this->path);
+		$arr = explode('cfg'.DIRECTORY_SEPARATOR, $this->path);
 		$req = new Request();
 		
 		if($req->get('mode')) $this->path = $arr[0].'cfg/'.$req->get('mode').'.'.$arr[1];
-		else $this->path = $arr[0].'cfg/'.$arr[1];
+		else $this->path = $arr[0].'cfg'.DIRECTORY_SEPARATOR.$arr[1];
 	}
 }
 ?>

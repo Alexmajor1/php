@@ -6,6 +6,13 @@
 #cabinet
 {
 	width: 16%;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
+#cabinet div p
+{
+	color: black;
 }
 
 .forumEditor

@@ -50,6 +50,7 @@ class Cabinet
 				]);
 			}
 		}
+		
 		if(key_exists('theme', $req->get())){
 			$this->title = $theme->read(['name' => 'name'], ['id' => $req->get('theme')])->title;
 			$this->mods['table']['mode'] = 'data';

@@ -1,15 +1,19 @@
 ol
 {
 	list-style-type: none;
-	background-color: silver;
+	background-color: blue;
 	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	color: white;
 }
-
+menu a
+{
+	color: white;
+}
 li:hover
 {
-	background-color: gray;
+	background-color: lightblue;
 	font-weight: bold;
 }

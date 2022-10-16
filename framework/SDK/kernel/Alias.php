@@ -30,7 +30,7 @@ class Alias
 	
 	function fileEncode($data)
 	{
-		$path = (__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php';
+		$path = (__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'aliases'.DIRECTORY_SEPARATOR.$this->cfg->getSetting('alias')['source'].'.php';
 		$aliasesDB = file_get_contents($path);
 		$aliases = split(';', $aliasesDB);
 		
@@ -58,7 +58,7 @@ class Alias
 	
 	function fileDecode($data)
 	{
-		$path = (__DIR__).'\\..\\..\\aliases\\'.$this->cfg->getSetting('alias')['source'].'.php';
+		$path = (__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'aliases'.DIRECTORY_SEPARATOR.$this->cfg->getSetting('alias')['source'].'.php';
 		$aliasesDB = file_get_contents($path);
 		$aliases = split(';', $aliasesDB);
 		$data = array();

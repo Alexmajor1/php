@@ -21,7 +21,7 @@ class MainController extends Controller
 	function authorization()
 	{
 		$req = new Request();
-		$auth = new Authorization($req);
+		$auth = new Authorization();
 		
 		if($res = $auth->validate($req->post())) {
 			$this->getError('sql injection has detected');
@@ -32,14 +32,13 @@ class MainController extends Controller
 			$auth->setUserToken();
 		
 		if($auth->Execute($this->getProperty('session'))) {
-			echo 'execute';
 			if($auth->isAdmin($this->getProperty('session')))
 				$this->toPage('admin\\\\main');
 			else $this->toPage('cabinet');
+		} else {
+			$this->getError('wrong login or password');
+			$this->toPage('main');
 		}
-		
-		$this->getError('wrong login or password');
-		$this->toPage('main');
 		
 	}
 	

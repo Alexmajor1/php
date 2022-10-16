@@ -32,7 +32,7 @@ class Application
 	}
 	
 	function AddData()
-	{		
+	{
 		include ($this->data);
 		
 		if(!isset($name)) return null;

@@ -13,10 +13,10 @@ class Authorization
 	public $remember;
 	private $model;
 	
-	function __construct($req)
+	function __construct()
 	{
 		$this->model = new User();
-		$this->request = $req;
+		$this->request = new Request();
 		$this->user = $this->request->post('User');
 		$this->password = $this->request->post('Password');
 		$this->remember = $this->request->post('Remember');
@@ -58,31 +58,22 @@ class Authorization
 	}
 	
 	function Execute($cfg)
-	{
-		$usr = null;
+	{	
+		$sess = new Session($cfg);
 		
+		if(!$sess->checkToken($this->request->post('_csrf_token')))
+			return false;
+		
+		$this->user = $sess->get_user_id();
 		if($this->request->cookie($cfg['key']))
-		{
-			$sess = new Session($cfg);
-			$usr = $sess->get_user_id();
-			$this->user = $usr;
-			
-			return ($usr != null);
-		}
-		if(is_null($usr))
-		{
-			$user = $this->model->read(
+			return ($this->user != null);
+		
+		if(!$this->user)
+			$this->user = $this->model->read(
 				['id'], 
-				['user_name' => $this->user, 'user_password' => md5($this->password)]);
-			
-			if($user) {
-				$this->user = $user->id;
-			} else {
-				return false;
-			}
-				
-			return ($this->user);
-		} else return false;
+				['user_name' => $this->request->post('User'), 'user_password' => md5($this->password)]);
+		
+		return ($this->user);
 	}
 }
 ?>

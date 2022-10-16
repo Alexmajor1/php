@@ -5,36 +5,36 @@ class template
 {
 	function create($params)
 	{
-		$root_path = __DIR__.'\\..\\..\\templates\\'.$params[0];
+		$root_path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.''.$params[0];
 		mkdir($root_path);
-		file_put_contents($root_path.'\\main.html', '');
-		mkdir($root_path.'\\kernel');
-		file_put_contents($root_path.'\\kernel\\main.html', '');
-		mkdir($root_path.'\\kernel\\cfg');
-		file_put_contents($root_path.'\\kernel\\cfg\\main.php', '');
-		mkdir($root_path.'\\layouts');
-		file_put_contents($root_path.'\\layouts\\layout.html', '');
-		mkdir($root_path.'\\Scripts');
-		file_put_contents($root_path.'\\Scripts\\script.js', '');
-		mkdir($root_path.'\\styles');
-		file_put_contents($root_path.'\\styles\\style.css', '');
-		mkdir($root_path.'\\styles\\modules');
-		mkdir($root_path.'\\styles\\pages');
-		file_put_contents($root_path.'\\styles\\pages\\main.css', '');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'main.html', '');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'kernel');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'main.html', '');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'cfg');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.'main.php', '');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'layouts');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'layouts'.DIRECTORY_SEPARATOR.'layout.html', '');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'Scripts');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'Scripts'.DIRECTORY_SEPARATOR.'script.js', '');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'styles');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'style.css', '');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'modules');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'pages');
+		file_put_contents($root_path.DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'pages'.DIRECTORY_SEPARATOR.'main.css', '');
 		
-		mkdir($root_path.'\\modules');
-		$dir = scandir(__DIR__.'\\..\\..\\framework\\modules');
+		mkdir($root_path.DIRECTORY_SEPARATOR.'modules');
+		$dir = scandir(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'modules');
 		foreach($dir as $file) {
-			if(!is_dir(__DIR__.'\\..\\..\\framework\\modules\\'.$file))
-			copy(__DIR__.'\\..\\..\\framework\\modules\\'.$file, 
-				$root_path.'\\modules\\'.$file);
+			if(!is_dir(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$file))
+			copy(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'framework'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$file, 
+				$root_path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$file);
 		}
 		
 		foreach(array_slice($params, 1) as $page) {
-			file_put_contents($root_path."\\$page.html", '');
-			file_put_contents($root_path."\\kernel\\$page.html", '');
-			file_put_contents($root_path."\\kernel\\cfg\\$page.php", '');
-			file_put_contents($root_path."\\styles\\pages\\$page.css", '');
+			file_put_contents($root_path.DIRECTORY_SEPARATOR.'$page.html', '');
+			file_put_contents($root_path.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'$page.html', '');
+			file_put_contents($root_path.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.'$page.php', '');
+			file_put_contents($root_path.DIRECTORY_SEPARATOR.'styles'.DIRECTORY_SEPARATOR.'pages'.DIRECTORY_SEPARATOR.'$page.css', '');
 		}
 		return 'template '.$params[0].' created';
 	}

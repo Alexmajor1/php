@@ -32,32 +32,111 @@ class AdminController extends Controller
 	
 	function users()
 	{
-		Admin::tablePages($this, new UserEditor(), ['main' => 'Users', 'add' => 'Add user', 'edit' => 'Edit user'], ['User_name', 'User_role'], 'admin/users');
+		Admin::tablePages(
+			$this, 
+			new UserEditor(), 
+			[
+				'main' => 'Users', 
+				'add' => 'Add user', 
+				'edit' => 'Edit user'
+			], 
+			[
+				'User_name', 
+				'User_role'
+			], 
+			'admin/users'
+		);
 	}
 	
 	function roles()
 	{
-		Admin::tablePages($this, new RoleEditor(), ['main' => 'Roles', 'add' => 'Add role', 'edit' => 'Edit role'], ['Role_name'], 'admin/roles');
+		Admin::tablePages(
+			$this, 
+			new RoleEditor(), 
+			[
+				'main' => 'Roles', 
+				'add' => 'Add role', 
+				'edit' => 'Edit role'
+			], 
+			[
+				'Role_name'
+			], 
+			'admin/roles'
+		);
 	}
 	
 	function rules()
 	{
-		Admin::tablePages($this, new RuleEditor(), ['main' => 'Rules', 'add' => 'Add Rules', 'edit' => 'Edit Rules'], ['Rule_name', 'Rule_role'], 'admin/rules');
+		Admin::tablePages(
+			$this, 
+			new RuleEditor(), 
+			[
+				'main' => 'Rules', 
+				'add' => 'Add Rules', 
+				'edit' => 'Edit Rules'
+			], 
+			[
+				'Rule_name', 
+				'Rule_role'
+			], 
+			'admin/rules'
+		);
 	}
 	
 	function forums()
 	{
-		Admin::tablePages($this, new ForumEditor(), ['main' => 'Forums', 'add' => 'Add forum', 'edit' => 'Edit forum'], ['user_id', 'name'], 'admin/forums');
+		Admin::tablePages(
+			$this, 
+			new ForumEditor(), 
+			[
+				'main' => 'Forums', 
+				'add' => 'Add forum', 
+				'edit' => 'Edit forum'
+			], 
+			[
+				'user_id', 
+				'name'
+			], 
+			'admin/forums'
+		);
 	}
 	
 	function themes()
 	{
-		Admin::tablePages($this, new ThemeEditor(), ['main' => 'Themes', 'add' => 'Add theme', 'edit' => 'Edit theme'], ['user_id', 'forum_id', 'name'], 'admin/themes');
+		Admin::tablePages(
+			$this, 
+			new ThemeEditor(), 
+			[
+				'main' => 'Themes', 
+				'add' => 'Add theme', 
+				'edit' => 'Edit theme'
+			], 
+			[
+				'user_id', 
+				'forum_id', 
+				'name'
+			], 
+			'admin/themes'
+		);
 	}
 	
 	function topics()
 	{
-		Admin::tablePages($this, new TopicEditor(), ['main' => 'Topics', 'add' => 'Add topic', 'edit' => 'Edit topic'], ['user_id', 'theme_id', 'name'], 'admin/topics');
+		Admin::tablePages(
+			$this, 
+			new TopicEditor(), 
+			[
+				'main' => 'Topics', 
+				'add' => 'Add topic', 
+				'edit' => 'Edit topic'
+			], 
+			[
+				'user_id', 
+				'theme_id', 
+				'name'
+			], 
+			'admin/topics'
+		);
 	}
 }
 ?>

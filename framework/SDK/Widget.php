@@ -30,7 +30,7 @@ class Widget
 				if(in_array($key, $cfg->GetSetting('plugins')))
 					$values = $this->plugin($key, $param, $cfg);
 				
-				$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').'/templates/'.$cfg->GetSetting('site_template').'/modules/'.$key.'.html';
+				$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$key.'.html';
 				$html = file_get_contents($path);
 				
 				foreach($param as $key => $value)
