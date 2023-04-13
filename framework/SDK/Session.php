@@ -3,19 +3,19 @@ namespace framework;
 
 class Session
 {
-	private $db;
+	private $builder;
 	private $options;
 	private $user;
 	
 	function __construct($options, $id = '')
 	{
-		$this->db = DB::getInstance();
+		$this->builder = new QueryBuilder();
 		$this->options = $options;
 		$req = new Request();
 		$this->user = $id;
 		
 		if($id == '')
-			$this->user = $this->db->select(
+			$this->user = $this->builder->select(
 				$options['source'], 
 				['session_user' => 'session_user']
 			)->where(['session_key' => $req->cookie($options['key'])], '')->value();
@@ -35,7 +35,7 @@ class Session
 				$sess_id .= substr($chars, rand(1, $len)-1, 1);
 			}
 			print_r($this->user->id);
-			$res = $this->db->insert(
+			$res = $this->builder->insert(
 				$this->options['source'], 
 				['session_key' => $sess_id,'session_user' => $this->user->id]
 			)->change();
@@ -53,7 +53,7 @@ class Session
 		
 		setcookie($this->options['key'], null, -1);
 		
-		$res = $this->db->delete(
+		$res = $this->builder->delete(
 			$this->options['source']
 		)->where(
 			['session_key' => $req->cookie($this->options['key'])], 
@@ -73,7 +73,7 @@ class Session
 	
 	function getLogin()
 	{
-		return $this->db->select(
+		return $this->builder->select(
 			'users', 
 			['user_name' => 'user_name']
 		)->where(['id' => $this->user], '')->value();
@@ -81,7 +81,7 @@ class Session
 	
 	function getRole()
 	{
-		return $this->db->select(
+		return $this->builder->select(
 			'roles, users', 
 			['role_name' =>'role_name']
 		)->where(
@@ -92,7 +92,7 @@ class Session
 	
 	function getPermissions()
 	{
-		return $this->db->select(
+		return $this->builder->select(
 			'rules, users', 
 			['rule_name' => 'rule_name']
 		)->where(

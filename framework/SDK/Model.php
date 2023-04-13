@@ -3,7 +3,7 @@ namespace framework;
 
 class Model
 {
-	protected $db;
+	protected $builder;
 	protected $table;
 	protected $rows;
 	protected $iter;
@@ -11,17 +11,17 @@ class Model
 	
 	function __construct()
 	{
-		$this->db = DB::getInstance();
+		$this->builder = new QueryBuilder();
 		$arr = explode('\\', get_called_class());
 		$this->table = strtolower(end($arr)).'s';
 	}
 	
 	function create($data)
 	{
-		$res = $this->db->insert($this->table, $data)->change();
+		$res = $this->builder->insert($this->table, $data)->change();
 		
 		if($res){
-			$res = $this->db->select($this->table, ['*'])->where(['id' => $this->db->LastInsert()])->one();
+			$res = $this->builder->select($this->table, ['*'])->where(['id' => $this->builder->LastInsert()])->one();
 			
 			if($res){
 				$this->data = $res;
@@ -34,7 +34,7 @@ class Model
 	
 	function read($data, $where = [])
 	{
-		$res = $this->db->select($this->table, $data);
+		$res = $this->builder->select($this->table, $data);
 		
 		if(!empty($where)) $res->where($where,'AND');
 		
@@ -56,11 +56,11 @@ class Model
 	
 	function update($data, $where = [])
 	{
-		$res = $this->db->update($this->table, $data);
+		$res = $this->builder->update($this->table, $data)->where($where);
 		$passed = $res->change();
 		
 		if($passed) {
-			$res = $this->db->select($this->table, '*');
+			$res = $this->builder->select($this->table, '*');
 		
 			if(!empty($where)) $res->where($where,'AND');
 			
@@ -80,7 +80,7 @@ class Model
 	
 	function delete($where)
 	{
-		return $this->db->delete($this->table)->where($where, 'AND')->change();
+		return $this->builder->delete($this->table)->where($where, 'AND')->change();
 	}
 	
 	function count()

@@ -1,15 +1,8 @@
 <?php
 namespace framework;
 
-class ModelEditor extends Model
-{
-	function __construct()
-	{
-		$this->db = DB::getInstance();
-		$arr = explode('\\', str_ireplace('Editor', '', get_called_class()));
-		$this->table = strtolower(end($arr)).'s';
-	}
-	
+trait Editor
+{	
 	function rowsCount()
 	{
 		return $this->read(['id'])->count();
@@ -52,12 +45,8 @@ class ModelEditor extends Model
 			
 			return $mods;
 		}elseif(count($req->post())>0){
-			$data = array();
-			foreach($fields as $value) {
-				$data = $req->post($value);
-				
-				$data[$value] = $data;
-			}
+			$data = $req->post();
+			unset($data['id']);
 			
 			if($req->post('id'))
 				return $this->update($data,['id' => $req->post('id')]);

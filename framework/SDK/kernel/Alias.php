@@ -1,15 +1,17 @@
 <?php
 namespace framework\kernel;
 
+use framework\QueryBuilder;
+
 class Alias
 {
 	public $cfg;
-	public $db;
+	public $builder;
 	
 	function __construct()
 	{
 		$this->cfg = Config::getInstance();
-		$this->db = \framework\DB::getInstance();
+		$this->builder = new QueryBuilder();
 	}
 	
 	function encode($data)
@@ -44,14 +46,14 @@ class Alias
 	
 	function tableEncode($data)
 	{
-		$alias = $this->db->select(
+		$alias = $this->builder->select(
 			$this->cfg->getSetting('alias')['source'], 
 			['name' => 'name']
 		)->where(
 			['page' => $data],
 		)->value();
-			
-		if($alias) return $alias;
+		
+		if ($alias) return $alias;
 		
 		return $data;
 	}
@@ -74,7 +76,7 @@ class Alias
 	{
 		if($data == '') return 'index.php?page=main';
 			
-		$alias = $this->db->select(
+		$alias = $this->builder->select(
 			$this->cfg->getSetting('alias')['source'], 
 			['page' => 'page']
 		)->where(['name' => $data])->value();

@@ -4,8 +4,9 @@ namespace Plugins;
 use framework\Plugin;
 use framework\Request;
 use framework\Alias;
-use framework\DB;
+use framework\Builder;
 use framework\Session;
+use framework\QueryBuilder;
 
 class Form extends Plugin
 {
@@ -47,7 +48,7 @@ class Form extends Plugin
 			if(in_array($field['field_type'], $this->data['cfg']->GetSetting('plugins'))) {
 				$name = '\\Plugins\\'.ucfirst($field['field_type']);
 				$plugin = new $name([
-					'value' => $field, 'db' => DB::getInstance(), 'cfg' => $this->data['cfg']]);
+					'value' => $field, 'bulder' => new QueryBuilder(), 'cfg' => $this->data['cfg']]);
 				$field = $plugin->show();
 			}
 			
@@ -67,7 +68,7 @@ class Form extends Plugin
 				} else {
 					
 					$sql = 'SELECT '.$field['groupitems'].'_name FROM '.$field['groupitems'].'s';
-					$data = $this->data['db']->DataQuery($sql);
+					$data = $this->data['builder']->DataQuery($sql);
 					
 					foreach($data as $id => $item) {
 						$html1 = file_get_contents($root_path.'groupItem.html');

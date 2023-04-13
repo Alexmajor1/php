@@ -1,6 +1,8 @@
 <?php
 namespace framework\kernel;
 
+use framework\QueryBuilder;
+
 class Loader
 {
 	private $cfg;
@@ -39,7 +41,7 @@ class Loader
 	function plugin($key, $value)
 	{
 		$name = '\\Plugins\\'.$key;
-		$plugin = new $name(['value' => $value, 'db' => \framework\DB::getInstance(), 'cfg' => $this->cfg]);
+		$plugin = new $name(['value' => $value, 'builder' => new QueryBuilder(), 'cfg' => $this->cfg]);
 		
 		return $plugin->show();
 	}

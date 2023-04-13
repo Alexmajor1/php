@@ -4,12 +4,12 @@ namespace Controllers;
 use framework\Controller;
 use framework\Request;
 
-use models\editors\UserEditor;
-use models\editors\RoleEditor;
-use models\editors\RuleEditor;
-use models\editors\ForumEditor;
-use models\editors\ThemeEditor;
-use models\editors\TopicEditor;
+use models\User;
+use models\Role;
+use models\Rule;
+use models\Forum;
+use models\Theme;
+use models\Topic;
 
 use library\Admin;
 use library\General;
@@ -23,18 +23,18 @@ class AdminController extends Controller
 	{
 		General::getTitle($this, 'Admin panel');
 		
-		$this->mods['text']['users']['text'] = Admin::count(new UserEditor(), 'Users');
-		$this->mods['text']['roles']['text'] = Admin::count(new RoleEditor(), 'Roles');
-		$this->mods['text']['forums']['text'] = Admin::count(new ForumEditor(), 'Forums');
-		$this->mods['text']['themes']['text'] = Admin::count(new ThemeEditor(), 'Themes');
-		$this->mods['text']['topics']['text'] = Admin::count(new TopicEditor(), 'Topics');
+		$this->mods['text']['users']['text'] = Admin::count(new User(), 'Users');
+		$this->mods['text']['roles']['text'] = Admin::count(new Role(), 'Roles');
+		$this->mods['text']['forums']['text'] = Admin::count(new Forum(), 'Forums');
+		$this->mods['text']['themes']['text'] = Admin::count(new Theme(), 'Themes');
+		$this->mods['text']['topics']['text'] = Admin::count(new Topic(), 'Topics');
 	}
 	
 	function users()
 	{
 		Admin::tablePages(
 			$this, 
-			new UserEditor(), 
+			new User(), 
 			[
 				'main' => 'Users', 
 				'add' => 'Add user', 
@@ -44,7 +44,7 @@ class AdminController extends Controller
 				'User_name', 
 				'User_role'
 			], 
-			'admin/users'
+			'admin\\\\users'
 		);
 	}
 	
@@ -52,7 +52,7 @@ class AdminController extends Controller
 	{
 		Admin::tablePages(
 			$this, 
-			new RoleEditor(), 
+			new Role(), 
 			[
 				'main' => 'Roles', 
 				'add' => 'Add role', 
@@ -61,7 +61,7 @@ class AdminController extends Controller
 			[
 				'Role_name'
 			], 
-			'admin/roles'
+			'admin\\\\roles'
 		);
 	}
 	
@@ -69,7 +69,7 @@ class AdminController extends Controller
 	{
 		Admin::tablePages(
 			$this, 
-			new RuleEditor(), 
+			new Rule(), 
 			[
 				'main' => 'Rules', 
 				'add' => 'Add Rules', 
@@ -79,7 +79,7 @@ class AdminController extends Controller
 				'Rule_name', 
 				'Rule_role'
 			], 
-			'admin/rules'
+			'admin\\\\rules'
 		);
 	}
 	
@@ -87,7 +87,7 @@ class AdminController extends Controller
 	{
 		Admin::tablePages(
 			$this, 
-			new ForumEditor(), 
+			new Forum(), 
 			[
 				'main' => 'Forums', 
 				'add' => 'Add forum', 
@@ -97,7 +97,7 @@ class AdminController extends Controller
 				'user_id', 
 				'name'
 			], 
-			'admin/forums'
+			'admin\\\\forums'
 		);
 	}
 	
@@ -105,7 +105,7 @@ class AdminController extends Controller
 	{
 		Admin::tablePages(
 			$this, 
-			new ThemeEditor(), 
+			new Theme(), 
 			[
 				'main' => 'Themes', 
 				'add' => 'Add theme', 
@@ -116,7 +116,7 @@ class AdminController extends Controller
 				'forum_id', 
 				'name'
 			], 
-			'admin/themes'
+			'admin\\\\themes'
 		);
 	}
 	
@@ -124,7 +124,7 @@ class AdminController extends Controller
 	{
 		Admin::tablePages(
 			$this, 
-			new TopicEditor(), 
+			new Topic(), 
 			[
 				'main' => 'Topics', 
 				'add' => 'Add topic', 
@@ -135,7 +135,7 @@ class AdminController extends Controller
 				'theme_id', 
 				'name'
 			], 
-			'admin/topics'
+			'admin\\\\topics'
 		);
 	}
 }

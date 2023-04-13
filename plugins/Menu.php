@@ -10,15 +10,15 @@ class Menu extends Plugin
 		if(is_array($this->data['value']['menuitems'])){
 			$str = '';
 			foreach($this->data['value']['menuitems'] as $set => $val){
-				$link = ($this->data['db'])->ValueQuery("SELECT name FROM aliases WHERE page=\"".$val['url']."\"");
+				$link = ($this->data['builder'])->query->ValueQuery("SELECT name FROM aliases WHERE page=\"".$val['url']."\"");
 				$str .= "<li><a href=\"$link\">".$val['caption'].'</a></li>';
 			}
 		}else{
 			$sql = 'SELECT '.$this->data['value']['menuitems'].'_name FROM '.$this->data['value']['menuitems'].'s';
-			$data = ($this->data['db'])->DataQuery($sql);
+			$data = ($this->data['builder'])->query->DataQuery($sql);
 			$str = '';
 			foreach($data as $set=>$val){
-				$link = ($this->data['db'])->ValueQuery("SELECT name FROM aliases WHERE page=\"".$val['url']."\"");
+				$link = ($this->data['builder'])->query->ValueQuery("SELECT name FROM aliases WHERE page=\"".$val['url']."\"");
 				$str .= "<li><a href=\"$link\">".$val['caption'].'</a></li>';
 			}
 		}

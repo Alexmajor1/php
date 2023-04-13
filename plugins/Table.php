@@ -6,17 +6,17 @@ use framework\Request;
 
 class Table extends Plugin
 {
-	private $db;
+	private $builder;
 	private $cfg;
 	private $path;
 	
 	function generate()
 	{
 		$this->cfg = $this->data['cfg'];
-		$this->db = $this->data['db'];
+		$this->builder = $this->data['builder'];
 		$this->path = $_SERVER['DOCUMENT_ROOT'].
 			$this->cfg->GetSetting('base').
-			''.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.
+			DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.
 			$this->cfg->GetSetting('site_template');
 			
 		if(key_exists('fields', $this->data['value'])) $data = $this->tableDB($this->data['value']);
@@ -176,7 +176,7 @@ class Table extends Plugin
 			$sql .= " limit $page";
 		}
 		
-		return $this->db->DataQuery($sql);
+		return $this->builder->query->DataQuery($sql);
 	}
 	
 	function getHeaders($value)
@@ -192,7 +192,7 @@ class Table extends Plugin
 			}
 		
 		if(!key_exists('headers', $value[$value['mode']]))
-			$tmp = $this->db->FieldsDescriptors();
+			$tmp = $this->builder->query->FieldsDescriptors();
 		else $tmp = $value[$value['mode']]['headers'];
 		
 		$html = file_get_contents($this->path.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'tableHeader.html');
