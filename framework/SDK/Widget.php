@@ -13,7 +13,7 @@ class Widget
 	
 	function plugin($key, $value, $cfg)
 	{
-		$name = '\\Plugins\\'.$key;
+		$name = '\\Plugins\\'.ucfirst($key);
 		$plugin = new $name(['value' => $value, 'db' => DB::getInstance(), 'cfg' => $cfg]);
 		
 		return $plugin->show();

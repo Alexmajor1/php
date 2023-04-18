@@ -40,7 +40,7 @@ class Loader
 	
 	function plugin($key, $value)
 	{
-		$name = '\\Plugins\\'.$key;
+		$name = '\\Plugins\\'.ucfirst($key);
 		$plugin = new $name(['value' => $value, 'builder' => new QueryBuilder(), 'cfg' => $this->cfg]);
 		
 		return $plugin->show();
