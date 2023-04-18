@@ -1,6 +1,7 @@
 <?php
 function autoload($class)
 {
+	$class = str_replace('\\', '/', $class);
 	if(strstr($class, 'framework'))
 		require_once str_replace('framework', 'framework'.DIRECTORY_SEPARATOR.'SDK', $class).'.php';
 	else if(strstr($class, 'Controller'))
