@@ -21,7 +21,7 @@ class Model
 		$res = $this->builder->insert($this->table, $data)->change();
 		
 		if($res){
-			$res = $this->builder->select($this->table, ['*'])->where(['id' => $this->builder->LastInsert()])->one();
+			$res = $this->builder->select($this->table, ['*'])->where(['id' => $this->builder->query->LastInsert()])->one();
 			
 			if($res){
 				$this->data = $res;

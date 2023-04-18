@@ -59,7 +59,7 @@ class MainController extends Controller
 			if($res = $reg->execute())
 				if(is_string($res)) {
 					$this->getError($res);
-					$this->toPage('registration');
+					//$this->toPage('registration');
 				} else $this->toPage('main');
 			
 			$this->getError('error');

@@ -22,7 +22,7 @@ class Validator
 	
 	function lenght($field, $limit)
 	{
-		return (strlen($this->Data[$field]) > $limit);
+		return (strlen($this->Data[$field]) >= $limit);
 	}
 	
 	function content($field, $key)
