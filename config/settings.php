@@ -45,6 +45,11 @@ $database = [
 	'db' => 'mydatabase'
 ];
 
+$cache = [
+	'dir' => 'cache',
+	'expired' => 3600 * 1000
+];
+
 $plugins = [
 	'table',
 	'menu',

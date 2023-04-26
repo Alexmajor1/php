@@ -11,9 +11,9 @@ class User extends Model
 	function getRole($id)
 	{
 		$model = new \models\Role();
-		if($id != 0)
+		if($id != 0){
 			return $model->read(['name' => 'Role_name'], ['id' => $id])->name;
-		else
+		}else
 			return $model->read(['name' => 'Role_name'])->name;
 	}
 }

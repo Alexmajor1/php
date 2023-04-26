@@ -11,6 +11,9 @@ class Application
 	{
 		$this->cfg = kernel\Config::getInstance($conf);
 		DB::getInstance($this->cfg->getSetting('database'));
+		$cache = Cache::getInstance($this->cfg);
+		$cache->clear(true);
+		
 		$alias = new kernel\Alias();
 		$req = (new Request())->get();
 		

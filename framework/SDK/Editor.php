@@ -29,13 +29,13 @@ trait Editor
 			return $this->delete(['id' => $req->get('id')]);
 		elseif($req->get('id')){
 			$data = $this->read($fields, ['id' => $req->get('id')]);
-			
-			foreach($fields as $id => $value)
+			foreach($fields as $value){
 				if(method_exists($this, 'get'.ucfirst($mods['form']['fields'][$value]['name']))) {
 					$method = 'get'.ucfirst($mods['form']['fields'][$value]['name']);
 					$mods['form']['fields'][$value]['value'] = $this->$method($data->$value);
 				} else
 					$mods['form']['fields'][$value]['value'] = $data->$value;
+			}
 			
 			$mods['form']['fields']['id'] = [
 				'field_type' => 'hidden',

@@ -1,7 +1,8 @@
 <?php
 namespace framework\PDO;
 
-class DB {
+class DB 
+{
 	private static $instances;
 	private $cursor;
 	

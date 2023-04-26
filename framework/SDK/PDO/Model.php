@@ -8,10 +8,12 @@ class Model
 	protected $rows;
 	protected $iter;
 	protected $data;
+	protected $cache;
 	
 	function __construct()
 	{
 		$this->builder = new QueryBuilder();
+		$this->cache = Cache::getInstance();
 		$arr = explode('\\', get_called_class());
 		$this->table = strtolower(end($arr)).'s';
 	}
@@ -24,6 +26,7 @@ class Model
 			$res = $this->builder->select($this->table, ['*'])->where(['id' => $this->builder->query->LastInsert()])->one();
 			
 			if($res){
+				$this->cache->append($this->table.'_'.$res['id'], $res);
 				$this->data = $res;
 				
 				return $this;
@@ -34,11 +37,30 @@ class Model
 	
 	function read($data, $where = [])
 	{
-		$res = $this->builder->select($this->table, $data);
-		
-		if(!empty($where)) $res->where($where,'AND');
-		
-		$data = $res->all();
+		if(key_exists('id', $where))
+			$cache = $this->cache->read($this->table.'_'.$where['id']);
+		elseif(count($where) > 0)
+			$cache = $this->cache->read($this->table.'_filter_'.array_keys($where)[0].'_'.array_values($where)[0]);
+		else
+			$cache = $this->cache->read($this->table.'_all');
+					
+		if(!$cache){
+			$res = $this->builder->select($this->table, $data);
+			
+			if(!empty($where)) $res->where($where,'AND');
+			
+			$data = $res->all();
+			
+			if($data)
+				if(key_exists('id', $where))
+					$cache = $this->cache->append($this->table.'_'.$where['id'], $data);
+				elseif(count($where) > 0)
+					$cache = $this->cache->append($this->table.'_filter_'.array_keys($where)[0].'_'.array_values($where)[0], $data);
+				else
+					$cache = $this->cache->append($this->table.'_all', $data);
+		} else {
+			$data = $cache;
+		}
 		
 		if($data){
 			if(count($data) == 1) {
@@ -67,6 +89,13 @@ class Model
 			$data = $res->one();
 			
 			if($data) {
+				if(key_exists('id', $where))
+					$cache = $this->cache->append($this->table.'_'.$where['id'], $data);
+				elseif(count($where) > 0)
+					$cache = $this->cache->append($this->table.'_filter_'.array_keys($where)[0].'_'.array_values($where)[0], $data);
+				else
+					$cache = $this->cache->append($this->table.'_all', $data);
+				
 				$this->data = $data;
 				if(isset($this->iter))
 					$this->rows[$this->iter] = $this->data;
@@ -80,6 +109,11 @@ class Model
 	
 	function delete($where)
 	{
+		if(key_exists('id', $where))
+			$cache = $this->cache->erase($this->table.'_'.$where['id']);
+		else
+			$cache = $this->cache->erase($this->table.'_filter_'.array_keys($where)[0].'_'.array_values($where)[0]);
+			
 		return $this->builder->delete($this->table)->where($where, 'AND')->change();
 	}
 	
@@ -104,7 +138,8 @@ class Model
 		return false;
 	}
 	
-	function __set($key, $value){
+	function __set($key, $value)
+	{
 		if(!key_exists($key, $this->data)) return false;
 		
 		$this->data[$key] = $value;
@@ -112,11 +147,13 @@ class Model
 		return true;
 	}
 	
-	function __isset($key){
+	function __isset($key)
+	{
 		return key_exists($key, $this->data);
 	}
 	
-	function __unset($key){
+	function __unset($key)
+	{
 		if(!key_exists($key, $this->data)) return;
 		
 		unset($this->data[$key]);
