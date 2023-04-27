@@ -47,7 +47,7 @@ $database = [
 
 $cache = [
 	'dir' => 'cache',
-	'expired' => 3600 * 1000
+	'expired' => 3600
 ];
 
 $plugins = [

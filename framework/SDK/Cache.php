@@ -59,6 +59,7 @@ class Cache
 			if($validate){
 				$lifetimeCreate = time()-filectime($file);
 				$lifetimeModify = time()-filemtime($file);
+				
 				if(($lifetimeCreate > $this->expired) || ($lifetimeModify > $this->expired))
 					unlink($file);
 			}else
