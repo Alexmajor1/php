@@ -4,6 +4,7 @@ namespace Controllers;
 use framework\Controller;
 use framework\Request;
 use framework\Session;
+use framework\Mail;
 
 use models\Authorization;
 use models\Registration;
@@ -60,7 +61,11 @@ class MainController extends Controller
 				if(is_string($res)) {
 					$this->getError($res);
 					$this->toPage('registration');
-				} else $this->toPage('main');
+				} else {
+					$mail = new Mail($this->getProperty('mail')['sender']);
+					$mail->send($req->post('email'), 'Registration success!', 'registration_success');
+					$this->toPage('main');
+				}
 			
 			$this->getError('error');
 			$this->toPage('registration');

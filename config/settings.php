@@ -50,6 +50,11 @@ $cache = [
 	'expired' => 3600
 ];
 
+$mail = [
+	'sender' => 'admin@site.net',
+	'templates_path' => 'mail'
+];
+
 $plugins = [
 	'table',
 	'menu',
