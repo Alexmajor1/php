@@ -23,7 +23,7 @@ class Model
 		$res = $this->builder->insert($this->table, $data)->change();
 		
 		if($res){
-			$res = $this->builder->select($this->table, ['*'])->where(['id' => $this->builder->query->LastInsert()])->one();
+			$res = $this->builder->select($this->table, ['*'])->where(['id' => $this->builder->LastInsert()])->one();
 			
 			if($res){
 				$this->cache->append($this->table.'_'.$res['id'], $res);
@@ -62,9 +62,9 @@ class Model
 			$data = $cache;
 		}
 		
-		if($data){
-			if(count($data) == 1) {
-				$this->data = $data[0];
+		if(is_array($data) && count($data) > 0){
+			if(!key_exists(0, $data)) {
+				$this->data = $data;
 				$this->rows = $data;
 			} else {
 				$this->iter = 0;
@@ -132,7 +132,8 @@ class Model
 		return $this->rows;
 	}
 	
-	function __get($key){
+	function __get($key)
+	{
 		if(key_exists($key, $this->data)) return $this->data[$key];
 		
 		return false;

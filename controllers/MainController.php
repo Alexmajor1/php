@@ -62,8 +62,8 @@ class MainController extends Controller
 					$this->getError($res);
 					$this->toPage('registration');
 				} else {
-					$mail = new Mail($this->getProperty('mail')['sender']);
-					$mail->send($req->post('email'), 'Registration success!', 'registration_success');
+					/*$mail = new Mail($this->getProperty('mail')['sender']);
+					$mail->send($req->post('email'), 'Registration success!', 'registration_success');*/
 					$this->toPage('main');
 				}
 			

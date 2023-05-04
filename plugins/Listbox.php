@@ -15,6 +15,7 @@ class Listbox extends Plugin
 			$model = new $name();
 			if(key_exists('value', $this->data['value']))
 				$this->data['current'] = $this->data['value']['value'];
+			
 			$this->data['value']['listitems'] = 
 				$model->read(['value' => 'id', 'name' => $this->data['value']['field']])->toArray();
 		} 

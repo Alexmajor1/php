@@ -12,9 +12,9 @@ class Forum extends Model
 	{
 		$model = new \models\User();
 		if($id != 0)
-			return $model->read(['name' => 'User_name'], ['id' => $id])->name;
+			return $model->read(['value' => 'id', 'name' => 'User_name'], ['id' => $id])->name;
 		else
-			return $model->read(['name' => 'User_name'])->name;
+			return $model->read(['value' => 'id', 'name' => 'User_name'])->name;
 	}
 }
 ?>

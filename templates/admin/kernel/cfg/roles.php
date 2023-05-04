@@ -19,7 +19,7 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, Role_name',
+		'fields' => ['id', 'Role_name'],
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['ИД', 'название'],

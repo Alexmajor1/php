@@ -1,2 +1,6 @@
 assets/*
 old/*
+vendor/*
+cache/*.json
+composer.lock
+tests/_output/*.html

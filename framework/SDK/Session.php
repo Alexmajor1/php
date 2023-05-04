@@ -76,7 +76,7 @@ class Session
 		return $this->builder->select(
 			'users', 
 			['user_name' => 'user_name']
-		)->where(['id' => $this->user], '')->value();
+		)->where(['id' => $this->user])->value();
 	}
 	
 	function getRole()

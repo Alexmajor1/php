@@ -45,14 +45,14 @@ class Migration
 	
 	function create($engine, $charset)
 	{
-		return $this->db->changeQuery('CREATE TABLE '.
+		return (new Query())->changeQuery('CREATE TABLE '.
 			$this->name.'('.$this->getFields().
 			")ENGINE=$engine DEFAULT CHARSET=$charset;");
 	}
 	
 	function delete()
 	{
-		return $this->db->changeQuery("DROP TABLE ".$this->name);
+		return (new Query())->changeQuery("DROP TABLE ".$this->name);
 	}
 }
 ?>

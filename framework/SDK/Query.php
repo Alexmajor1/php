@@ -25,7 +25,7 @@ class Query
 		
 		if(!$this->query) return [];
 		
-		return $this->query->fetch_row();
+		return $this->query->fetch_assoc();
 	}
 	
 	function ValueQuery($str)

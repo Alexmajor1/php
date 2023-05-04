@@ -33,6 +33,7 @@ class Cache
 	function append($key, $value)
 	{
 		$path = $this->cache_dir.DIRECTORY_SEPARATOR.$key.'.json';
+		
 		return file_put_contents($path, json_encode($value), LOCK_EX);
 	}
 	

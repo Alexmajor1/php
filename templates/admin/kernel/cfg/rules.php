@@ -19,13 +19,13 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'rules.id, rules.Rule_name, roles.Role_name',
+		'fields' => ['rules.id', 'rules.Rule_name', 'roles.Role_name'],
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['ИД', 'Название', 'роль'],
 			'source' => 'rules, roles',
-			'relation' => 'Rule_role',
-			'value' => 'roles.id',
+			'relation' => ['Rule_role'],
+			'value' => ['roles.id'],
 			'types' => [
 				'id' => ['name' => 'text'],
 				'Rule_name' => ['name' => 'link', 'url' => '&mode=form&id='],

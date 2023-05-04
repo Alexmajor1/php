@@ -19,13 +19,13 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'users.id, users.User_name, roles.Role_name',
+		'fields' => ['users.id as id', 'users.User_name as User_name', 'roles.Role_name as Role_name'],
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['ИД', 'имя', 'роль'],
 			'source' => 'users, roles',
-			'relation' => 'User_role',
-			'value' => 'roles.id',
+			'relation' => ['User_role'],
+			'value' => ['roles.id'],
 			'types' => [
 				'id' => ['name' => 'text'],
 				'User_name' => ['name' => 'link', 'url' => '&mode=form&id='],

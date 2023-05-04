@@ -5,6 +5,7 @@ class QueryBuilder
 {
 	private $cursor;
 	private $sql;
+	private $query;
 	
 	function __construct()
 	{
@@ -35,10 +36,11 @@ class QueryBuilder
 	{
 		$this->sql = 'SELECT';
 		
-		if($data != '*')
+		if($data != '*'){
 			foreach($data as $alias => $field)
 				if(!is_numeric($alias)) $this->sql .= " $field as $alias,";
 				else $this->sql .= " $field,";
+		}
 		
 		$this->sql = substr_replace($this->sql, " FROM $table", strlen($this->sql)-1,1);
 		
@@ -65,22 +67,51 @@ class QueryBuilder
 		return $this;
 	}
 	
-	function where($conditions, $operation = '')
+	function where($conditions, $operation = '', $rel = false)
 	{
 		$this->sql .= ' WHERE';
-		
-		foreach($conditions as $field => $value)
-			if(is_array($value)) $this->sql .= " $field=".$value[0]." $operation";
-			elseif(!is_numeric($value)) $this->sql .= " $field=\"$value\" $operation";
-			else $this->sql .= " $field=$value $operation";
+		foreach($conditions as $field => $value){
+			if(is_array($value))
+				$this->sql .= " $field=".$value[0]." $operation";
+			elseif(is_numeric($value) || $rel)
+				$this->sql .= " $field=$value $operation";
+			else{
+				$this->sql .= " $field=\"$value\" $operation";
+			}
+		}
 		
 		$this->sql = substr_replace(
 			$this->sql, 
 			'', 
 			strlen($this->sql)-strlen($operation), 
 			strlen($operation));
+		
+		return $this;
+	}
+	
+	function orderBy($fields)
+	{
+		$this->sql .= ' ORDER BY';
+		
+		foreach($fields as $field => $sort)
+			$this->sql .= " $field $sort";
 			
 		return $this;
+		
+	}
+	
+	function limit($offset, $count = 0)
+	{
+		$this->sql .= " LIMIT $offset";
+		
+		if($count > 0) $this->sql .= ", $count";
+		
+		return $this;
+	}
+	
+	function execute($sql)
+	{
+		return $this->query->DataQuery($sql);
 	}
 	
 	function all()
@@ -101,6 +132,11 @@ class QueryBuilder
 	function change()
 	{
 		return $this->query->ChangeQuery($this->sql);
+	}
+	
+	function LastInsert()
+	{
+		return $this->query->LastInsert();
 	}
 }
 ?>

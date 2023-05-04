@@ -138,29 +138,27 @@ class Table extends Plugin
 	
 	function getData($value)
 	{
-		$sql = 'select '.$value['fields'].' from '.$value[$value['mode']]['source'];
+		$query = $this->builder->select($value[$value['mode']]['source'], $value['fields']);
 		
-		if(key_exists('relation',$value[$value['mode']]) 
+		if(key_exists('relation', $value[$value['mode']]) 
 			&& is_array($value[$value['mode']]['relation'])) {
-			$where = '';
+			$where = [];
+			
 			for($row = 0; $row < count($value[$value['mode']]['relation']); $row++) {
-				$where .= $value[$value['mode']]['relation'][$row].'='.
-					$value[$value['mode']]['value'][$row].' AND ';
+				$where[$value[$value['mode']]['relation'][$row]] =
+					$value[$value['mode']]['value'][$row];
 			}
-			$sql .= ' where '.substr($where, 0, -5);
-		} elseif(key_exists('relation',$value[$value['mode']]))
-			$sql .= ' where '.$value[$value['mode']]['relation'].'='.$value[$value['mode']]['value'];
+			$query->where($where, 'AND', true);
+		} elseif(key_exists('relation', $value[$value['mode']])){
+			$query->where([$value[$value['mode']]['relation'] => $value[$value['mode']]['value']], '', true);
+		}
 		
-		$order = ' order by ';
-		$fields = explode(', ', $value['fields']);
-		
+		$order = [];
 		foreach($_REQUEST as $key => $val)
 			if($val == 'asc' or $val == 'desc')
-				$order .= 
-					$fields[$key].
-					" $val,";
+				$order[$value['fields'][$key]] = $val;
 		
-		if(strlen($order)> 10) $sql .= mb_substr($order, 0, -1);
+		if(count($order) > 0) $query->orderBy($order);
 		
 		$req = new Request(null);
 		$num = '';
@@ -170,13 +168,13 @@ class Table extends Plugin
 		if($num>0){
 			$page = $value['pageSize'];
 			$offset = ($num*$page)-$page;
-			$sql .= " limit $offset, $page";
+			$query->limit($offset, $page);
 		}else{
 			$page = $value['pager']['pageSize'];
-			$sql .= " limit $page";
+			$query->limit($page);
 		}
 		
-		return $this->builder->query->DataQuery($sql);
+		return $this->builder->all();
 	}
 	
 	function getHeaders($value)

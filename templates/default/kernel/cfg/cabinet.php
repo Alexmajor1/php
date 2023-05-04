@@ -26,7 +26,7 @@ $modules = [
 		'pager' => [
 			'pageSize' => 10
 		],
-		'fields' => 'id, name',
+		'fields' => ['id', 'name'],
 		'mode' => 'main',
 		'main' => [
 			'headers' => ['Форумы'],

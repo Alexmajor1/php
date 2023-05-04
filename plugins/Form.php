@@ -66,9 +66,10 @@ class Form extends Plugin
 					$field['groupitems'] = $res1;
 					
 				} else {
-					
-					$sql = 'SELECT '.$field['groupitems'].'_name FROM '.$field['groupitems'].'s';
-					$data = $this->data['builder']->query->DataQuery($sql);
+					$data = ($this->data['builder'])->select(
+						$field['groupitems'].'s', 
+						[$field['groupitems'].'_name' => $field['groupitems'].'_name']
+					)->all();
 					
 					foreach($data as $id => $item) {
 						$html1 = file_get_contents($root_path.'groupItem.html');

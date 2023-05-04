@@ -12,9 +12,9 @@ class Rule extends Model
 	{
 		$model = new \models\Role();
 		if($id != 0)
-			return $model->read(['name' => 'Role_name'], ['id' => $id])->name;
+			return $model->read(['value' => 'id', 'name' => 'Role_name'], ['id' => $id])->name;
 		else
-			return $model->read(['name' => 'Role_name'])->name;
+			return $model->read(['value' => 'id', 'name' => 'Role_name'])->name;
 	}
 }
 ?>
