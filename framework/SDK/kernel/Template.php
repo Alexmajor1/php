@@ -8,10 +8,14 @@ class Template
 	function __construct($cfg)
 	{
 		$page = $cfg->getSetting('template');
-		$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base')
-			.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.
-			$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR.$page.
-			'.html';
+		
+		$base_path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'
+			.$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'templates'
+			.DIRECTORY_SEPARATOR;
+		$path = $base_path.$cfg->GetSetting('site_template')
+			.DIRECTORY_SEPARATOR.$page.'.html';
+		
 		if(file_exists($path))
 			$this->content = file_get_contents($path);
 	}

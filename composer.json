@@ -1,7 +1,8 @@
 {
-    "require": {
+    "require-dev": {
         "codeception/codeception": "*",
         "codeception/module-phpbrowser": "^1.0.0",
-        "codeception/module-asserts": "^1.0.0"
+        "codeception/module-asserts": "^1.0.0",
+        "codeception/module-webdriver": "^1.4"
     }
 }

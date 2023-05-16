@@ -34,7 +34,7 @@ class Session
 			{
 				$sess_id .= substr($chars, rand(1, $len)-1, 1);
 			}
-			print_r($this->user->id);
+			
 			$res = $this->builder->insert(
 				$this->options['source'], 
 				['session_key' => $sess_id,'session_user' => $this->user->id]

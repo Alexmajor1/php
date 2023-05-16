@@ -14,7 +14,11 @@ class Widget
 	function plugin($key, $value, $cfg)
 	{
 		$name = '\\Plugins\\'.ucfirst($key);
-		$plugin = new $name(['value' => $value, 'db' => DB::getInstance(), 'cfg' => $cfg]);
+		$plugin = new $name([
+			'value' => $value, 
+			'db' => DB::getInstance(), 
+			'cfg' => $cfg
+		]);
 		
 		return $plugin->show();
 	}
@@ -30,7 +34,13 @@ class Widget
 				if(in_array($key, $cfg->GetSetting('plugins')))
 					$values = $this->plugin($key, $param, $cfg);
 				
-				$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$key.'.html';
+				$base_path = __DIR__.DIRECTORY_SEPARATOR.'..'
+					.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR
+					.$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'templates'
+					.DIRECTORY_SEPARATOR.$cfg->GetSetting('site_template')
+					.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
+				
+				$path = $base_path.$key.'.html';
 				$html = file_get_contents($path);
 				
 				foreach($param as $key => $value)
@@ -45,7 +55,8 @@ class Widget
 	
 	function show($mods)
 	{
-		$name = strtolower(str_ireplace('Widget', '',explode('\\', get_called_class())[1]));
+		$raw_name = explode('\\', get_called_class())[1];
+		$name = strtolower(str_ireplace('Widget', '', $raw_name));
 		$mods[$name] = $this->cfg;
 		
 		return $mods;

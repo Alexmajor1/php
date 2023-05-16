@@ -20,7 +20,7 @@ class Registration
 	
 	function CheckUser()
 	{
-		return $this->model->read(['id_user'], ['user_name' => $this->user]);
+		return $this->model->read(['id_user'], ['User_name' => $this->user]);
 	}
 	
 	function CheckPassword()
@@ -67,7 +67,7 @@ class Registration
 	
 	function execute()
 	{
-		if($this->CheckUser()) return 'this login is not available';
+		if(is_object($this->CheckUser())) return 'this login is not available';
 		
 		$res = $this->CheckPassword();
 		

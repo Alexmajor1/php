@@ -9,7 +9,10 @@ class Cache
 	
 	private function __construct($cfg)
 	{
-		$this->cache_dir = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').DIRECTORY_SEPARATOR.$cfg->GetSetting('cache')['dir'];
+		$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.
+			DIRECTORY_SEPARATOR.$cfg->GetSetting('base').DIRECTORY_SEPARATOR;
+		
+		$this->cache_dir = $path.$cfg->GetSetting('cache')['dir'];
 		$this->expired = $cfg->GetSetting('cache')['expired'];
 	}
 	
@@ -34,7 +37,7 @@ class Cache
 	{
 		$path = $this->cache_dir.DIRECTORY_SEPARATOR.$key.'.json';
 		
-		return file_put_contents($path, json_encode($value), LOCK_EX);
+		return file_put_contents($path, json_encode($value));
 	}
 	
 	function read($key)

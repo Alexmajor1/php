@@ -12,7 +12,12 @@ class Router
 	{
 		$this->req = new \framework\Request();
 		$this->cfg = Config::getInstance();
-		$this->path = $_SERVER['DOCUMENT_ROOT'].$this->cfg->getSetting('base').DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
+		
+		$this->path = __DIR__.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.$this->cfg->getSetting('base').DIRECTORY_SEPARATOR.'templates'
+			.DIRECTORY_SEPARATOR;
+			
 		$this->alias = $this->alias = new Alias();
 	}
 	
@@ -39,7 +44,8 @@ class Router
 		if(count($page) > 1) $tmpl = $page[0];
 		else $tmpl = $this->cfg->getSetting('site_template');
 		
-		return $this->path.$tmpl.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.end($page).".php";
+		return $this->path.$tmpl.DIRECTORY_SEPARATOR.'kernel'.
+			DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.end($page).".php";
 	}
 	
 	function alias()
@@ -57,7 +63,8 @@ class Router
 		if(count($page) > 1) $tmpl = $page[0];
 		else $tmpl = $this->cfg->getSetting('site_template');
 		
-		return $this->path.$tmpl.DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.end($page).".php";
+		return $this->path.$tmpl.DIRECTORY_SEPARATOR.'kernel'
+			.DIRECTORY_SEPARATOR.'cfg'.DIRECTORY_SEPARATOR.end($page).".php";
 	}
 }
 ?>

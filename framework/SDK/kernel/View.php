@@ -12,11 +12,15 @@ class View
 	{
 		$this->cfg = Config::getInstance();
 		$view_file = $this->cfg->getSetting('template');
-		$this->base_path = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR
-			.$this->cfg->GetSetting('base');
-		$this->tmp_path = $this->base_path.DIRECTORY_SEPARATOR.'templates'
-			.DIRECTORY_SEPARATOR.$this->cfg->GetSetting('site_template')
-			.DIRECTORY_SEPARATOR;
+		
+		$this->base_path = __DIR__.DIRECTORY_SEPARATOR
+			.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.$this->cfg->GetSetting('base')
+			.'templates'.DIRECTORY_SEPARATOR;
+			
+		$this->tmp_path = $this->base_path.
+			$this->cfg->GetSetting('site_template').DIRECTORY_SEPARATOR;
+			
 		$path = $this->tmp_path.'kernel'.DIRECTORY_SEPARATOR.$view_file.'.html';
 		
 		if(file_exists($path))

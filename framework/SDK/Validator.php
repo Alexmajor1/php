@@ -54,7 +54,7 @@ class Validator
 	
 	function email($field)
 	{
-		return filter_var($this->Data[$field], FILTER_VALIDATE_EMAIL);
+		return filter_var($this->Data[$field], FILTER_VALIDATE_EMAIL) == $this->Data[$field];
 	}
 	
 	function checkWithMsg($valid, $msg)

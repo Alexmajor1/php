@@ -11,8 +11,13 @@ class Localization
 		$req = new \framework\Request();
 		$this->lang = $req->get('lang');
 		
+		$base_path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'languages'
+			.DIRECTORY_SEPARATOR;
+		
 		if(strlen($this->lang) > 0){
-			$path = $_SERVER['DOCUMENT_ROOT'].$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'languages'.DIRECTORY_SEPARATOR.$this->lang.'.html';
+			$path = $base_path.$this->lang.'.html';
 			
 			if(file_exists($path)){
 				$content = file_get_contents($path);
