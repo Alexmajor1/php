@@ -1,59 +1,89 @@
 <?php
 namespace framework\kernel;
 
+use framework\QueryBuilder;
+
 class View
 {
-	public $content;
+	public $html;
+	private $view;
 	private $cfg;
 	private $base_path;
-	private $tmp_path;
 
-	function __construct()
+	function __construct($base_path)
 	{
 		$this->cfg = Config::getInstance();
 		$view_file = $this->cfg->getSetting('template');
-		
-		$this->base_path = __DIR__.DIRECTORY_SEPARATOR
-			.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
-			.DIRECTORY_SEPARATOR.$this->cfg->GetSetting('base')
-			.'templates'.DIRECTORY_SEPARATOR;
 			
-		$this->tmp_path = $this->base_path.
-			$this->cfg->GetSetting('site_template').DIRECTORY_SEPARATOR;
-			
-		$path = $this->tmp_path.'kernel'.DIRECTORY_SEPARATOR.$view_file.'.html';
+		$this->base_path = $base_path;
+		$path = $this->base_path.'kernel'.DIRECTORY_SEPARATOR.$view_file.'.html';
+		$this->view = explode(';', file_get_contents($path));
 		
-		if(file_exists($path))
-			$this->content = file_get_contents($path);
+		$path = $this->base_path.$view_file.'.html';
+		
+		$this->html = new Html($path);
 	}
 	
-	function SetTarget($target)
+
+	function plugin($key, $value)
 	{
-		$this->content = str_replace('{target}',$target, $this->content);
+		$name = '\\plugins\\'.ucfirst($key);
+		$plugin = new $name([
+			'value' => $value,
+			'builder' => new QueryBuilder(),
+			'cfg' => $this->cfg
+		]);
+
+		return $plugin->show();
 	}
 	
-	function LoadModule($module, $params)
+	function getHtml()
 	{
-		$data = explode(':', $module)[0];
-		$path = $this->tmp_path.'modules'.DIRECTORY_SEPARATOR.$data.'.html';
+		$content = [];
 		
-		if(!file_exists($path)) 
-			$path = $this->base_path.DIRECTORY_SEPARATOR.'framework'
-				.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR
-				.$data.'.html';
+		$alias = new Alias();
 		
-		$html = file_get_contents($path);
+		foreach($this->view as $element)
+		{
+			if($element == '') continue;
+			$rel = explode('->', $element);
+			$module = explode(':', $rel[0])[0];
+			$module = str_replace(['{', '}'], '', $module);
+			$module = trim($module);
+			
+			$path = $this->base_path.'modules'
+				.DIRECTORY_SEPARATOR.$module.'.html';
+			
+			$key = str_replace(['{', '}'], '', $rel[0]);
+			$key = trim($key);
+			
+			$keys = explode(':', $key);
+			if(count($keys) > 1)
+				$params = $this->cfg->GetSetting('modules')[$keys[0]][$keys[1]];
+			else
+				$params = $this->cfg->GetSetting('modules')[$key];
+			
+			if(in_array($module, $this->cfg->GetSetting('plugins')))
+					$params = $this->plugin($module, $params);
+				
+			$html = new Html($path);
+			
+			if(key_exists('target', $params))
+				$params['target'] = $alias->encode($params['target']);
+			
+			$html->setData($params);
+			
+			$position = explode(':', $rel[1])[0];
+			$position = str_replace(['{', '}'], '', $position);
+			$position = trim($position);
+			$content[$position] = $html->content;
+		}
 		
-		if(isset($params))
-			foreach($params as $key => $value)
-				if(is_array($value)){
-					foreach($value as $param => $val)
-						if(!is_array($val)) 
-							$html = 
-								str_replace('{'.$param.':'.$key.'}', $val, $html);
-				}else $html = str_replace('{'.$key.'}', $value, $html);
+		$this->html->setData([
+			'target' => $alias->encode($this->cfg->getSetting('target'))
+		]);
 		
-		$this->content = str_replace('{'.$module.'}',$html, $this->content);
+		$this->html->setData($content);
 	}
 }
 ?>

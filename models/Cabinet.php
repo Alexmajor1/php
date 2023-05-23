@@ -63,8 +63,8 @@ class Cabinet
 			$this->mods['table']['mode'] = 'main';
 		}
 		
-		$this->mods['text:user']['text'] = $this->sess->getLogin();
-		$this->mods['text:role']['text'] = $this->sess->getRole();
+		$this->mods['text']['user']['text'] = $this->sess->getLogin();
+		$this->mods['text']['role']['text'] = $this->sess->getRole();
 		$this->mods['form']['fields']['author']['value'] = $this->sess->get_user_id();
 		
 		if(count($req->get()) > 0)

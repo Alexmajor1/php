@@ -4,35 +4,32 @@ namespace framework\kernel;
 class Template
 {
 	public $content;
+	private $path;
+	private $layout;
+	private $view;
 	
 	function __construct($cfg)
 	{
-		$page = $cfg->getSetting('template');
-		
-		$base_path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
-			.DIRECTORY_SEPARATOR.'..'
-			.$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'templates'
-			.DIRECTORY_SEPARATOR;
-		$path = $base_path.$cfg->GetSetting('site_template')
-			.DIRECTORY_SEPARATOR.$page.'.html';
-		
-		if(file_exists($path))
-			$this->content = file_get_contents($path);
+		$this->path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'.$cfg->GetSetting('base')
+			.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR
+			.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR;
+			
+		$this->layout = new Layout($this->path);
+		$this->view = new View($this->path);
 	}
 	
-	function apply($html)
+	function apply()
 	{
-		$arr = explode(';', $html);
+		$this->layout->getHtml();
+		$this->view->getHtml();
 		
-		foreach($arr as $value) {
-			$temp = [];
-			if(strlen($value) > 0)
-				$temp = explode('->', $value);
-			
-			if(sizeof($temp) <= 1)break;
-			
-			$this->content = str_replace($temp[1], $temp[0], $this->content);
-		}
+		$this->content = $this->layout->html->content;
+		$this->content = str_ireplace(
+			'{content}', 
+			$this->view->html->content, 
+			$this->layout->html->content
+		);
 	}
 }
 ?>

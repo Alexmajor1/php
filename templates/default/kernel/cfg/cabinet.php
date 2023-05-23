@@ -2,15 +2,17 @@
 $name = "cabinet";
 $template = "cabinet";
 $modules = [
-	'text:user' => [
-		'id' => 'login',
-		'class' => 'margin',
-		'text' => ''
-	],
-	'text:role' => [
-		'id' => 'role',
-		'class' => 'margin',
-		'text' => ''
+	'text' => [
+		'user' => [
+			'id' => 'login',
+			'class' => 'margin',
+			'text' => ''
+		],
+		'role' => [
+			'id' => 'role',
+			'class' => 'margin',
+			'text' => ''
+		]
 	],
 	'link' => [
 		'id' => 'logout_link',

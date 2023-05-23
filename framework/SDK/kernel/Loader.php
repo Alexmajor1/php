@@ -1,55 +1,40 @@
 <?php
 namespace framework\kernel;
 
-use framework\QueryBuilder;
-
 class Loader
 {
 	private $cfg;
-	private $page;
-	private $modules;
+	private $template;
 
 	function __construct($page)
 	{
 		$this->page = $page;
 		$this->modules = array();
 		$this->cfg = Config::getInstance();
-	}
-
-	function GetContent()
-	{
-		$this->page->LoadLayout();
-		$this->page->LoadView();
-
-		$page = explode('\\', $this->page->name);
+		
+		$page = explode('\\', $this->page->getName());
 
 		if($this->cfg->getSetting('site_template') != '')
-			$temp = new Template($this->cfg);
+			$this->template = new Template($this->cfg);
 		else
-			$temp = new Template('default', end($page));
-
-		$temp->apply($this->page->getView());
-		$this->page->updView($temp->content);
-		$this->page->LoadModules($this->modules);
+			$this->template = new Template('default', end($page));
 	}
 
-	function GetModule($name, $settings)
+	function setContent()
 	{
-		$this->modules[$name] = $settings;
+		$page = explode('\\', $this->page->getName());
+		
+		if(count($page) > 1)
+			$this->cfg->setSetting('site_template', $page[0]);
+		
+		$this->template = new Template($this->cfg);
+
+		$this->template->apply();
 	}
-
-	function plugin($key, $value)
+	
+	function getContent()
 	{
-		$name = '\\plugins\\'.ucfirst($key);
-		$plugin = new $name(['value' => $value, 'builder' => new QueryBuilder(), 'cfg' => $this->cfg]);
-
-		return $plugin->show();
-	}
-
-	function LoadContent()
-	{
-		$this->page->SetView();
-		$this->page->PrintPage();
+		return $this->template->content;
 	}
 }
 ?>

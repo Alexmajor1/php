@@ -3,41 +3,21 @@ namespace framework\kernel;
 
 class Html
 {
-	private $ldr;
 	private $cfg;
+	public $content;
 	
-	function __construct($page)
+	function __construct($path)
 	{
-		$this->ldr = new Loader($page);
 		$this->cfg = Config::getInstance();
+		$this->content = file_get_contents($path);
 	}
 	
-	function draw($cfg, $alias, $mods)
-	{	
-		foreach($mods as $key => $value)
-		{
-			if($this->cfg->GetSetting('alias')['mode'] == 'alias')
-				if(key_exists('target', $value))
-					$value['target'] = $alias->encode($value['target']);
-				else
-					foreach($value as $mod => $params)
-						if(is_array($params) and key_exists('target', $params)){
-							$params['target'] = $alias->encode($params['target']);
-							$value[$mod] = $params;
-						}
-			
-			if(in_array($key, $this->cfg->GetSetting('plugins'))) $value = $this->ldr->plugin($key, $value);
-			
-			$this->ldr->GetModule($key, $value);
+	function setData($data)
+	{
+		foreach($data as $key => $value){
+			if(!is_array($value))
+				$this->content = str_replace('{'.$key.'}', $value, $this->content);
 		}
-		
-		if($this->cfg->getSetting('target'))
-			$this->cfg->setSetting
-				('target', $alias->encode
-					($this->cfg->getSetting('target')));
-
-		$this->ldr->GetContent();
-		$this->ldr->LoadContent();
 	}
 }
 ?>

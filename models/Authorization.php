@@ -67,7 +67,7 @@ class Authorization
 		$sess = new Session($conf, $this->user);
 		$sess->create();
 		
-		return strcmp($sess->getRole(), 'Admin') == 0;
+		return $sess->getRole() == 'Admin';
 	}
 	
 	function Execute($cfg)

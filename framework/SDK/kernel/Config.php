@@ -9,7 +9,7 @@ class Config
 	
 	protected function __construct($src)
 	{
-		$this->src = $src;
+		$this->src = [$src];
 	}
 	
 	protected function __clone(){}
@@ -28,6 +28,16 @@ class Config
 		return self::$instances[$subclass];
 	}
 	
+	function addSource($src)
+	{
+		$this->src[] = $src;
+	}
+	
+	function changeSource($src)
+	{
+		$this->src[-1] = $src;
+	}
+	
 	function setSetting($key, $value)
 	{
 		$this->buf[$key] = $value;
@@ -35,11 +45,17 @@ class Config
 	
 	function getSetting($key)
 	{
-		include ((__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$this->src);
-		
 		if(!empty($this->buf) && key_exists($key, $this->buf))
 			return $this->buf[$key];
-		elseif(isset($$key)) return $$key;
+		
+		foreach($this->src as $file)
+		{
+			include $file;
+			
+			if(!isset($$key)) continue;
+		}
+		
+		if(isset($$key)) return $$key;
 		else return false;
 	}
 }

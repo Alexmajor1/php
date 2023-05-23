@@ -5,13 +5,17 @@ use framework\QueryBuilder;
 
 class Alias
 {
-	public $cfg;
-	public $builder;
+	private $cfg;
+	private $builder;
+	private $path;
 	
 	function __construct()
 	{
 		$this->cfg = Config::getInstance();
 		$this->builder = new QueryBuilder();
+		$this->path = (__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR
+			.'..'.DIRECTORY_SEPARATOR.'aliases'.DIRECTORY_SEPARATOR
+			.$this->cfg->getSetting('alias')['source'].'.php';
 	}
 	
 	function encode($data)
@@ -32,8 +36,7 @@ class Alias
 	
 	function fileEncode($data)
 	{
-		$path = (__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'aliases'.DIRECTORY_SEPARATOR.$this->cfg->getSetting('alias')['source'].'.php';
-		$aliasesDB = file_get_contents($path);
+		$aliasesDB = file_get_contents($this->path);
 		$aliases = split(';', $aliasesDB);
 		
 		foreach($data as $key => $value)
@@ -60,8 +63,7 @@ class Alias
 	
 	function fileDecode($data)
 	{
-		$path = (__DIR__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'aliases'.DIRECTORY_SEPARATOR.$this->cfg->getSetting('alias')['source'].'.php';
-		$aliasesDB = file_get_contents($path);
+		$aliasesDB = file_get_contents($this->path);
 		$aliases = split(';', $aliasesDB);
 		$data = array();
 		

@@ -7,9 +7,9 @@ class Layout
 	private $style;
 	private $scripts;
 	private $cfg;
-	public $content;
+	public $html;
 	
-	function __construct()
+	function __construct($base_path)
 	{
 		$this->cfg = Config::getInstance();
 		$this->title = $this->cfg->GetSetting('layout')['title'];
@@ -21,33 +21,25 @@ class Layout
 			.$this->cfg->GetSetting('layout')['style'].'.css';
 		$this->scripts = $this->cfg->GetSetting('layout')['scripts'];
 		
-		$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
-			.DIRECTORY_SEPARATOR.'..'.$this->cfg->GetSetting('base')
-			.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR
-			.$this->cfg->GetSetting('site_template').DIRECTORY_SEPARATOR
-			.'layouts'.DIRECTORY_SEPARATOR.
-			$this->cfg->getSetting('layout')['name'].'.html';
-			
-		$this->content = file_get_contents($path);
+		$path = $base_path.'layouts'.DIRECTORY_SEPARATOR
+			.$this->cfg->getSetting('layout')['name'].'.html';
+		
+		$this->html = new Html($path);
 	}
 	
-	function LoadView($temp)
+	function getHtml()
 	{
-		$this->content = str_replace('{title}', $this->title, $this->content);
-		$this->content = str_replace('{style}', $this->style, $this->content);
-		$this->content = str_replace(
-			'{scripts}', 
-			'<script src="assets/js/script.js"></script>', 
-			$this->content
-		);
+		$script_html = '';
+		foreach($this->scripts as $script)
+		{
+			$script_html .= '<script src="assets/js/'.$script.'.js"></script>';
+		}
 		
-		$temp->SetTarget($this->cfg->getSetting('target'));
-		
-		$this->content = str_replace(
-			'{content}', 
-			$temp->content, 
-			$this->content
-		);
+		$this->html->setData([
+			'title' => $this->title,
+			'style' => $this->style,
+			'scripts' => $script_html
+		]);
 	}
 }
 ?>

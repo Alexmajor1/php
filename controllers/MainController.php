@@ -49,7 +49,7 @@ class MainController extends Controller
 		
 		$req = new Request();
 		
-		if((strcmp($this->page->name, 'registration') == 0) and $req->post('login')) {
+		if($req->post('login')) {
 			$reg = new Registration($req->post());
 			
 			if($reg->validate($req->post())) {
