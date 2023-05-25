@@ -32,6 +32,7 @@ class Model
 				return $this;
 			}
 		}
+		die;
 		return $res;
 	}
 	
@@ -51,13 +52,16 @@ class Model
 			
 			$data = $res->all();
 			
-			if($data)
+			if(count($data) > 0){
 				if(key_exists('id', $where))
 					$cache = $this->cache->append($this->table.'_'.$where['id'], $data);
 				elseif(count($where) > 0)
 					$cache = $this->cache->append($this->table.'_filter_'.array_keys($where)[0].'_'.array_values($where)[0], $data);
 				else
 					$cache = $this->cache->append($this->table.'_all', $data);
+			} else {
+				false;
+			}
 		} else {
 			$data = $cache;
 		}

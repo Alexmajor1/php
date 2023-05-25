@@ -40,7 +40,7 @@ class SmokeUnitTest extends \Codeception\Test\Unit
 			'password' => 'Lordyargut1',
 			'role' => 'Customer'
 		]);
-		$this->assertTrue(is_object($reg->CheckUser()));
+		$this->assertTrue(!is_bool($reg->CheckUser()));
 		$this->assertTrue($reg->CheckPassword() == 'ok');
 		$this->assertTrue(!$reg->validate([
 			'login' => 'programer',

@@ -12,17 +12,15 @@ class Localization
 		$this->lang = $req->get('lang');
 		
 		$base_path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
-			.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'
 			.$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'languages'
 			.DIRECTORY_SEPARATOR;
 		
 		if(strlen($this->lang) > 0){
 			$path = $base_path.$this->lang.'.html';
-			
 			if(file_exists($path)){
 				$content = file_get_contents($path);
 				$tmp = explode("\n", $content);
-				
 				foreach($tmp as $item){
 					$str = explode('=', $item);
 					$this->dict[$str[0]] = $str[1];
