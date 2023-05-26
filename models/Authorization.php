@@ -71,7 +71,7 @@ class Authorization
 	}
 	
 	function Execute($cfg)
-	{	
+	{
 		$sess = new Session($cfg);
 		
 		if(!$sess->checkToken($this->request->post('_csrf_token')))
@@ -89,8 +89,8 @@ class Authorization
 					'user_password' => md5($this->password)
 				]
 			);
-		
-		return ($this->user);
+			
+		return !is_bool($this->user);
 	}
 }
 ?>

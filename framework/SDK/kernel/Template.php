@@ -16,7 +16,12 @@ class Template
 			.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR;
 			
 		$this->layout = new Layout($this->path);
-		$this->view = new View($this->path);
+		
+		$path = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'.$cfg->GetSetting('base')
+			.DIRECTORY_SEPARATOR;
+			
+		$this->view = new View($path);
 	}
 	
 	function apply()

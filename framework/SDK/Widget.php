@@ -27,6 +27,10 @@ class Widget
 	{
 		$content = '';
 		
+		$root_path = __DIR__.DIRECTORY_SEPARATOR.'..'
+			.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR
+			.$cfg->GetSetting('base').DIRECTORY_SEPARATOR;
+		
 		foreach($this->positions as $position){
 			foreach($this->cfg[$position] as $key => $param){
 				$html = '';
@@ -34,11 +38,19 @@ class Widget
 				if(in_array($key, $cfg->GetSetting('plugins')))
 					$values = $this->plugin($key, $param, $cfg);
 				
-				$base_path = __DIR__.DIRECTORY_SEPARATOR.'..'
-					.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR
-					.$cfg->GetSetting('base').DIRECTORY_SEPARATOR.'templates'
-					.DIRECTORY_SEPARATOR.$cfg->GetSetting('site_template')
-					.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
+				$base_path = $root_path.'templates'.DIRECTORY_SEPARATOR
+					.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR
+					.'modules'.DIRECTORY_SEPARATOR;
+					
+				if(!file_exists($base_path.$key.'.html')){
+					$base_path = $root_path.'templates'.DIRECTORY_SEPARATOR
+						.'default'.DIRECTORY_SEPARATOR.'modules'
+						.DIRECTORY_SEPARATOR;
+					if(!file_exists($base_path.$key.'.html')){
+						$base_path = $root_path.'framework'.DIRECTORY_SEPARATOR
+							.'modules'.DIRECTORY_SEPARATOR;
+					}
+				}
 				
 				$path = $base_path.$key.'.html';
 				$html = file_get_contents($path);

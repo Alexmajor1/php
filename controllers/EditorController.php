@@ -6,7 +6,7 @@ use framework\Request;
 
 class EditorController extends Controller
 {
-	public $rules = ['Editor'];
+	public $rules = ['Admin', 'Editor'];
 	public $widgets = ['Menu', 'PageFooter'];
 	
 	function index()

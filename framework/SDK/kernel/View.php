@@ -10,16 +10,22 @@ class View
 	private $cfg;
 	private $base_path;
 
-	function __construct($base_path)
+	function __construct($root_path)
 	{
 		$this->cfg = Config::getInstance();
 		$view_file = $this->cfg->getSetting('template');
 			
-		$this->base_path = $base_path;
-		$path = $this->base_path.'kernel'.DIRECTORY_SEPARATOR.$view_file.'.html';
+		$this->root_path = $root_path;
+		
+		$path = $this->root_path.'templates'.DIRECTORY_SEPARATOR
+			.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR.'kernel'
+			.DIRECTORY_SEPARATOR.$view_file.'.html';
+		
 		$this->view = explode(';', file_get_contents($path));
 		
-		$path = $this->base_path.$view_file.'.html';
+		$path = $this->root_path.'templates'.DIRECTORY_SEPARATOR
+			.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR
+			.$view_file.'.html';
 		
 		$this->html = new Html($path);
 	}
@@ -51,8 +57,21 @@ class View
 			$module = str_replace(['{', '}'], '', $module);
 			$module = trim($module);
 			
-			$path = $this->base_path.'modules'
-				.DIRECTORY_SEPARATOR.$module.'.html';
+			$base_path = $this->root_path.'templates'.DIRECTORY_SEPARATOR
+				.$cfg->GetSetting('site_template').DIRECTORY_SEPARATOR
+				.'modules'.DIRECTORY_SEPARATOR;
+			
+			if(!file_exists($base_path.$key.'.html')){
+					$base_path = $this->root_path.'templates'
+					.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR
+					.'modules'.DIRECTORY_SEPARATOR;
+					if(!file_exists($base_path.$key.'.html')){
+						$base_path = $root_path.'framework'.DIRECTORY_SEPARATOR
+							.'modules'.DIRECTORY_SEPARATOR;
+					}
+				}
+			
+			$path = $base_path.$module.'.html';
 			
 			$key = str_replace(['{', '}'], '', $rel[0]);
 			$key = trim($key);
